@@ -11,45 +11,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
-class MembreForm extends AbstractType{
+class ConnexionForm extends AbstractType{
     /**
      * @param FormBuilderInterface $builder
      * @param array $option
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-                ->add('nom', TextType::class, [
-                    'label'=>'Nom'
-                ])
-                ->add('prenom', TextType::class, [
-                    'label'=>'Prénom'
-                ])
-                ->add('mail', TextType::class, [
+                 ->add('mail', TextType::class, [
                     'label'=>'E-mail'
                 ])
-                ->add('description', TextareaType::class, [
-                    'label'=>'Description',
-                    'attr'=>[
-                        'placeholder'=>'ecrire votre description ici ..',
-                        'class'=>'form-control'
-                    ],
-                ])
-                ->add('mdp', PasswordType::class, [
-                    'label'=>'Mot de passe',
-                    'attr'=>[
-                        'class'=>'form-control'
-                    ],
-                ])
-                ->add('confirm', PasswordType::class, [
-                    'label'=>'Confirmation',
-                    'attr'=>[
-                        'class'=>'form-control'
-                    ],
+                 ->add('mdp', TextType::class, [
+                    'label'=>'Mot de passe'
                 ]);
-        
     }
     public function configureOption(OptionsResolver $resolver) {
         $resolver->setDefaults(['data_class'=>'AppBundle\Entity\Membre']);

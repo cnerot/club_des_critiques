@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Membre;
 use AppBundle\Form\MembreForm;
-
+use AppBundle\Form\ConnexionForm;
 class MembreController extends Controller
 {
     /** 
@@ -15,23 +15,20 @@ class MembreController extends Controller
      */
     public function indexAction()
     {
-
-        return $this->render('membre\index.html.twig',[
-               'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        ]);
+       
     }
     /** 
-     * @Route("/show/{id}", name="membre_show")
+     * @Route("/profil", name="membre_profil")
      */
-    public function showAction(Membre $membre)
+    public function showAction(Request $request)
     {
-      
+        return $this->render('membre\profil.html.twig');
     }
     /**
-     * @Route("/create", name="membre_create")
+     * @Route("/edit", name="membre_edit")
      */
     
-    public function createAction(Request $request)
+    public function editAction(Request $request)
     {
         $membre = new Membre();
         $form = $this->createForm(MembreForm::class, $membre);
@@ -47,6 +44,23 @@ class MembreController extends Controller
            return $this->redirectToRoute('membre_show', ['id'=>$membre->getId()]);      
         }
         return $this->render('membre\create.html.twig',[
+            'membre' => $membre,
+            'form' => $form->createView(),
+        ]);
+    }
+     /**
+     * @Route("/login", name="membre_login")
+     */
+    public function loginAction(Request $request)
+    {
+        $membre = new Membre();
+        $form = $this->createForm(ConnexionForm::class, $membre);
+        $form->handleRequest($request);
+        if($form->isValid()){
+           
+           return $this->redirectToRoute('membre_profil', ['id'=>$membre->getId()]);      
+        }
+        return $this->render('membre/login.html.twig',[
             'membre' => $membre,
             'form' => $form->createView(),
         ]);

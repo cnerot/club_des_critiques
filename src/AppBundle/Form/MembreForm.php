@@ -27,9 +27,6 @@ class MembreForm extends AbstractType{
                 ->add('prenom', TextType::class, [
                     'label'=>'Prénom'
                 ])
-                ->add('mail', TextType::class, [
-                    'label'=>'E-mail'
-                ])
                 ->add('description', TextareaType::class, [
                     'label'=>'Description',
                     'attr'=>[
