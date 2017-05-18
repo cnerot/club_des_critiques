@@ -11,7 +11,6 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-    
         <div>
         <ul id="dropdown1" class="dropdown-content">
         <li>
@@ -61,11 +60,11 @@
     <nav class="teal lighten-4" role="navigation">
         <div class="nav-wrapper ">
             <div class="nav-wrapper container">
-                <a id="logo-container" href="" class="brand-logo">
+                <a id="logo-container" href="/" class="brand-logo">
                      <img class="logo" src="{{ asset('images/logo.png') }}">
                 </a>
                     <div class="right">
-                        <a href="">
+                        <a href="#oModal" id="">
                             <i class="material-icons">perm_identity </i> 
                         </a>
                     </div>
@@ -86,9 +85,20 @@
 
     </nav>
 </div>
+<div id="oModal" class="oModal">
+  <div>
+    <header>
+      <a href="#fermer" title="Fermer la fenêtre" class="droite">X</a>
+     </header>
+     <section>
+           {% include 'membre/login.html.twig'  %}
+     </section>
+  </div>
+</div>
+
 
 {% block body %}
-    
+
 {% endblock %}                    
 <footer class="page-footer teal lighten-4">
     <div class="container">
