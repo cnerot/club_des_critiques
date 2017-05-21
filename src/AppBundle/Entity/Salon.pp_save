@@ -1,0 +1,83 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity()
+ */
+Class Salon {
+    protected $id;
+    protected $titre;
+    protected $resume;
+    protected $urlVendeur;
+    protected $statut;
+    protected $laune;
+    protected $idMembre;
+    protected $idCategorie;
+    
+	public function getId(){
+		return $this->id;
+	}
+
+	public function setId($id){
+		$this->id = $id;
+	}
+
+	public function getTitre(){
+		return $this->titre;
+	}
+
+	public function setTitre($titre){
+		$this->titre = $titre;
+	}
+
+	public function getResume(){
+		return $this->resume;
+	}
+
+	public function setResume($resume){
+		$this->resume = $resume;
+	}
+
+	public function getUrlVendeur(){
+		return $this->urlVendeur;
+	}
+
+	public function setUrlVendeur($urlVendeur){
+		$this->urlVendeur = $urlVendeur;
+	}
+
+	public function getStatut(){
+		return $this->statut;
+	}
+
+	public function setStatut($statut){
+		$this->statut = $statut;
+	}
+
+	public function getLaune(){
+		return $this->laune;
+	}
+
+	public function setLaune($laune){
+		$this->laune = $laune;
+	}
+
+	public function getIdMembre(){
+		return $this->idMembre;
+	}
+
+	public function setIdMembre($idMembre){
+		$this->idMembre = $idMembre;
+	}
+
+	public function getIdCategorie(){
+		return $this->idCategorie;
+	}
+
+	public function setIdCategorie($idCategorie){
+		$this->idCategorie = $idCategorie;
+	}
+}

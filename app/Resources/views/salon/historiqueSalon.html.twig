@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Inscription de nouveau membre
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+    <input type="hidden" value="{{ salon.id }}" id="idSalon">
+		<!-- Modal Trigger -->
+		  <a id="alert" class="waves-effect waves-light btn hide" href="#modal2">Modal</a>
+
+		  <!-- Modal Structure -->
+		  <div id="modal2" class="modal">
+			<div class="modal-content">
+			  <div class="col s8 rateAbook left">
+				<div id="nameAlert"></div>
+			  </div>
+			</div>
+			<div class="modal-footer">
+			  <a href="#!" class="closeWindowRateAbook modal-action modal-close waves-effect waves-green btn-flat">OK</a>
+			</div>
+		  </div>
+		  
+		<!-- Modal Structure -->
+		<div id="modal1" class="modal">
+			<div class="modal-content">
+				<div id="myContacts" class="col s12 margin-top">
+					<h4>Inviter des contacts</h4>
+					<form method="POST" action="">
+						<table class="table">
+						  <thead>
+							<tr class="<?php echo $themeApplicated->getPageStat(); ?>">
+							  <th>Ajouter</th>
+							  <th>Nom</th>
+							</tr>
+						  </thead>
+						  <tbody class="">
+							  <!--
+							  <tr>
+								  <td>
+									<p>
+									  <input type="checkbox" id="test5" name="myContacts[]">
+									  <label for="test5"></label>
+									</p>
+								  </td>
+								  <td>Paul Durand</td>
+							  </tr>
+							  
+							  <tr>
+								  <td>
+									<p>
+									  <input type="checkbox" id="test6" name="myContacts[]">
+									  <label for="test6"></label>
+									</p>
+								  </td>
+								  <td>Paul Durand</td>
+							  </tr>
+							  
+							  <tr>
+								  <td>
+									<p>
+									  <input type="checkbox" id="test7" name="myContacts[]">
+									  <label for="test7"></label>
+									</p>
+								  </td>
+								  <td>Paul Durand</td>
+							  </tr>
+							 -->
+						  </tbody>
+						</table>
+						<input type="button" class="btn btn-primary" id="invitContact" value="Inviter">
+					</form>
+				</div>
+			</div>
+			
+		<div class="modal-footer">
+		  <a href="#!" class="closeWindowRateAbook modal-action modal-close waves-effect waves-green btn-flat">Annuler</a>
+		</div>
+		
+	  </div>
+	  
+		<div class="row">
+			<div class="col s12">
+				<h1>Salon : {{ salon.titreSalon }} - <span id="nbParticipants">6</span> participants</h1>
+			</div>
+			<div id="chat" class="col l12 m12 s12 margin-top">
+				<div id="posts" class="col s12 margin-top">
+					{% for chat in chats %}
+						<div class="post">
+							<span class="name">
+								{{ chat.prenom }} {{ chat.nom }}
+							</span>							
+							<div class="text">&nbsp;&nbsp;&nbsp; <!-- alinéa -->
+								{{ chat.msg }}
+							</div>
+							<div class="date right">
+								{{ chat.date.date|date('d/m/Y h:i:s') }}
+							</div>
+							<hr>
+						</div>
+					{% endfor %}
+					{% if chats is empty %}
+						<h2>Aucune discussion</h2>
+					{% endif %}									
+				</div>						
+			</div>
+		</div>         
+    </div>
+{% endblock %}

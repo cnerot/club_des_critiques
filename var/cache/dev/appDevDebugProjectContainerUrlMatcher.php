@@ -114,6 +114,84 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
         }
 
+        // membre_index
+        if (rtrim($pathinfo, '/') === '') {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'membre_index');
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::indexAction',  '_route' => 'membre_index',);
+        }
+
+        // membre_show
+        if (0 === strpos($pathinfo, '/show') && preg_match('#^/show/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_show')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::showAction',));
+        }
+
+        // membre_create
+        if ($pathinfo === '/create') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::createAction',  '_route' => 'membre_create',);
+        }
+
+        if (0 === strpos($pathinfo, '/note')) {
+            // note
+            if ($pathinfo === '/note') {
+                return array (  '_controller' => 'AppBundle\\Controller\\NoteController::indexAction',  '_route' => 'note',);
+            }
+
+            // note_vote
+            if ($pathinfo === '/note/vote') {
+                return array (  '_controller' => 'AppBundle\\Controller\\NoteController::voteAction',  '_route' => 'note_vote',);
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/salon')) {
+            // salon
+            if ($pathinfo === '/salon') {
+                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::indexAction',  '_route' => 'salon',);
+            }
+
+            // salon_addToContacts
+            if ($pathinfo === '/salon/addToContacts') {
+                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::addToContactsAction',  '_route' => 'salon_addToContacts',);
+            }
+
+            // salon_chargeContacts
+            if ($pathinfo === '/salon/chargeContacts') {
+                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::chargeContactsAction',  '_route' => 'salon_chargeContacts',);
+            }
+
+            // salon_invitContacts
+            if ($pathinfo === '/salon/invitContacts') {
+                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::invitContactsAction',  '_route' => 'salon_invitContacts',);
+            }
+
+            // salon_historique
+            if ($pathinfo === '/salon/historique') {
+                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::historiqueAction',  '_route' => 'salon_historique',);
+            }
+
+            if (0 === strpos($pathinfo, '/salons')) {
+                // salons
+                if ($pathinfo === '/salons') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::indexAction',  '_route' => 'salons',);
+                }
+
+                // salons_popupRejoindre
+                if ($pathinfo === '/salons/popupRejoindre') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::popupRejoindreAction',  '_route' => 'salons_popupRejoindre',);
+                }
+
+                // salons_vote
+                if ($pathinfo === '/salons/vote') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::voteAction',  '_route' => 'salons_vote',);
+                }
+
+            }
+
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }
