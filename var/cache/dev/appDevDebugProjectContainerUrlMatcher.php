@@ -123,14 +123,19 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\MembreController::indexAction',  '_route' => 'membre_index',);
         }
 
-        // membre_show
-        if (0 === strpos($pathinfo, '/show') && preg_match('#^/show/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_show')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::showAction',));
+        // membre_profil
+        if ($pathinfo === '/profil') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::showAction',  '_route' => 'membre_profil',);
         }
 
-        // membre_create
-        if ($pathinfo === '/create') {
-            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::createAction',  '_route' => 'membre_create',);
+        // membre_edit
+        if ($pathinfo === '/edit') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::editAction',  '_route' => 'membre_edit',);
+        }
+
+        // membre_login
+        if ($pathinfo === '/login') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::loginAction',  '_route' => 'membre_login',);
         }
 
         if (0 === strpos($pathinfo, '/note')) {
@@ -190,6 +195,16 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
             }
 
+        }
+
+        // login
+        if ($pathinfo === '/login') {
+            return array (  '_controller' => 'AppBundle:Security:login',  '_route' => 'login',);
+        }
+
+        // login_check
+        if ($pathinfo === '/membre_profil') {
+            return array('_route' => 'login_check');
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
