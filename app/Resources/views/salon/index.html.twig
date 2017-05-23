@@ -82,63 +82,41 @@
 	  
 		<div class="row">
 			<div class="col s12">
-				<h1>Salon : {{ salon.titreSalon }} - <span id="nbParticipants">6</span> participants</h1>
+				<h1>Salon : {{ salon.titreSalon|e }} - <span id="nbParticipants">6</span> participants</h1>
 			</div>
 			<div id="chat" class="col l8 m12 s12 margin-top">
 				<div id="posts" class="col s12 margin-top">
+				{% for message in messages %}
 					<div class="post">
+						<input type="hidden" value="{{ message.idMembre }}" class="idMembreMessage">
 						<span class="name">
-							Paul Durand
+							{% if message.idMembre == idMembre  %}
+								<span style="color: #0000ec">
+							{% endif %}
+							
+							{{ message.prenom_et_nom|e }}
+							
+							{% if message.idMembre == idMembre %}
+								</span>
+							{% endif %}
 						</span>
 						<span class="alertAbuse right">
-							<a href="#">Signaler un abus</a>
+							Signaler un abus
 						</span>
 						<div class="clearfix"></div>
 						<div class="text">&nbsp;&nbsp;&nbsp; <!-- alinéa -->
-							Je trouve votre livre remarquable de part sa tendresse et son attendrissement devant les généalogies évidentes d'une population sincère et désordonnée.
+							{{ message.msg|e }}
 						</div>
 						<div class="date right">
-							10/01/2016
+							{{ message.date.date|date('d/m/Y H:i:s') }}
 						</div>
 						<hr>
 					</div>
-					
-					<div class="post">
-						<span class="name">
-							Paul Durand
-						</span>
-						<span class="alertAbuse right">
-							<a href="#">Signaler un abus</a>
-						</span>
-						<div class="clearfix"></div>
-						<div class="text">&nbsp;&nbsp;&nbsp; <!-- alinéa -->
-							Je trouve votre livre remarquable de part sa tendresse et son attendrissement devant les généalogies évidentes d'une population sincère et désordonnée.
-						</div>
-						<div class="date right">
-							10/01/2016
-						</div>
-						<hr>
-					</div>
-					
-					<div class="post">
-						<span class="name">
-							Paul Durand
-						</span>
-						<span class="alertAbuse right">
-							<a href="#">Signaler un abus</a>
-						</span>
-						<div class="clearfix"></div>
-						<div class="text">&nbsp;&nbsp;&nbsp; <!-- alinéa -->
-							Je trouve votre livre remarquable de part sa tendresse et son attendrissement devant les généalogies évidentes d'une population sincère et désordonnée.
-						</div>
-						<div class="date right">
-							10/01/2016
-						</div>
-						<hr>
-					</div>
+				{% endfor %}
+				<input type="hidden" value="{{ messages|last.id }}" id="lastIdMsg">
 				</div>
 				<div id="message" class="col s12 margin-top">
-					<textarea></textarea>
+					<textarea id="msg"></textarea>
 					
 					<button id="send" class="col s12 btn-large right darken-3">
 						Envoyer
@@ -160,7 +138,7 @@
 						  {% for participant in participants %}
 							  <tr>
 								  <td>
-									  <a href="#/{{ participant.idMembre }}" title="Voir le profil">{{ participant.nom }}</a>
+									  <a href="#/{{ participant.idMembre }}" title="Voir le profil">{{ participant.nom|e }}</a>
 									  <div>
 										  <a href="#/{{ participant.idMembre }}" title="Participant pertinent dans ses propos" class="thumb_up"><i class="tiny material-icons">thumb_up</i></a>
 										  <a href="#/{{ participant.idMembre }}" title="Participant non pertinent dans ses propos" class="thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></a>
@@ -262,7 +240,7 @@
 				var contacts = $.parseJSON(msg);
 				$("#myContacts tbody").html("");			
 				for(var i = 0; i<contacts.length; i++){
-					$("#myContacts tbody").append("<tr><td><p><input type='checkbox' id='contact_"+contacts[i]['id']+"' name='myContacts[]'><label for='contact_"+contacts[i]['id']+"'></label></p></td><td>"+contacts[i]['nom']+"</td></tr>");
+					$("#myContacts tbody").append("<tr><td><p><input type='checkbox' id='contact_"+contacts[i]['id']+"' name='myContacts[]'><label for='contact_"+contacts[i]['id']+"'></label></p></td><td>"+htmlEntities(contacts[i]['nom'])+"</td></tr>");
 				}
 			});
 		}
@@ -276,6 +254,66 @@
 					}			
 			}).done(function(msg){
 				console.log("contacts invités");
+			});
+		}
+		
+		function sendMessage(idSalon, message){
+			$.ajax({
+				url: "{{ path('salon_envoyerMessage') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					message: message,
+					}			
+			}).done(function(msg){
+				console.log("Message enregistré en bdd");
+				$("#msg").val("");
+			});
+		}
+		
+		function receiveLastMessages(idSalon, lastIdMsg){
+			$.ajax({
+				url: "{{ path('salon_recupererDerniersMessages') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					lastIdMsg: lastIdMsg,
+					}			
+			}).done(function(msg){
+				console.log(msg);
+				if(msg != "no changement"){
+					var message = $.parseJSON(msg);
+					var a;
+					for(var i = 0; i<message.length; i++){
+						a = '<div class="post">';
+						a += '<input type="hidden" value="'+message[i]['idMembre']+'" class="idMembreMessage">';
+						a += '<span class="name">';
+						if(message[i]['me'] == "true")
+							a += '<span style="color: #0000ec">';
+						a += htmlEntities(message[i]['prenom_et_nom']);
+						if(message[i]['me'] == "true")
+							a += '</span>';
+						a += '</span>';
+						a += '<span class="alertAbuse right">';
+						a += 'Signaler un abus';
+						a += '</span>';
+						a += '<div class="clearfix"></div>';
+						a += '<div class="text">&nbsp;&nbsp;&nbsp;';
+						a += htmlEntities(message[i]['msg']);
+						a += '</div>';
+						a += '<div class="date right">';
+						a += message[i]['date'];
+						a += '</div>';
+						a += '<hr>';
+						a += '</div>';
+						$("#posts").append(a);
+					}
+					
+					var lastIdMsg = message[message.length-1]['id'];
+					console.log(lastIdMsg);
+					
+					$("#lastIdMsg").val(lastIdMsg);
+				}
 			});
 		}
     </script>

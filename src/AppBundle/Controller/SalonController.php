@@ -65,11 +65,145 @@ class SalonController extends Controller
 				$participantsWithInfos[] = $participant;
 			}
 		}
-        
+         
+         // récupérer messages
+         
+         $idSalon = $request->get('salon')->getId();
+         
+         $em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+			"SELECT c
+			FROM AppBundle:Chatsalon c
+			WHERE c.id_salon = :id_salon
+			ORDER BY c.date"
+		)->setParameter('id_salon', $idSalon);
+		
+		$messages = $query->getResult();
+		
+		foreach($messages as $message){
+			 $membre = $this->getDoctrine()
+			->getRepository('AppBundle:Membre')
+			->findOneBy([
+				"id" => $message->getIdMembre(),
+			]);
+			
+			$message->prenom_et_nom = $membre->getPrenom()." ".$membre->getNom();						
+		}			
+         //echo "<pre>";
+         //print_r($messages);
+         //echo "</pre>";
+        //$encoders = array(new XmlEncoder(), new JsonEncoder());
+		//$normalizers = array(new ObjectNormalizer());
+		//$serializer = new Serializer($normalizers, $encoders);
+		
+		//$jsonContent = $serializer->serialize($messages, 'json');
+             
+             //print_r($jsonContent);
+             
          return $this->render('salon\index.html.twig',[
             'salon' => $request->get('salon'),
             'participants' => $participantsWithInfos,
+            'messages' => $messages,
+            'idMembre' => $idMembre,
         ]);
+    }
+    
+    /**
+     * @Route("/salon/recupererDerniersMessages", name="salon_recupererDerniersMessages")
+     */
+    public function recupererDerniersMessagesAction(Request $request)
+    {
+	   $idMembre = 1; // à récupérer en $_SESSION
+	   //$idSalon = 9;	   
+	   $idSalon = $request->get('idSalon');
+	   $lastIdMsg = $request->get('lastIdMsg');
+	   //$lastIdMsg = 12;
+		
+		$em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+			"SELECT c
+			FROM AppBundle:Chatsalon c
+			WHERE c.id_salon = :id_salon AND c.id > :id
+			ORDER BY c.date"
+		)->setParameter('id_salon', $idSalon)
+		->setParameter('id', $lastIdMsg);
+		
+		$messages = $query->getResult();
+		
+		$i = 0;
+		$content = [];
+		foreach($messages as $message){
+			 $membre = $this->getDoctrine()
+			->getRepository('AppBundle:Membre')
+			->findOneBy([
+				"id" => $message->getIdMembre(),
+			]);
+			
+			//$message->prenom_et_nom = $membre->getPrenom()." ".$membre->getNom();						
+			
+			$content[$i]['id'] = $message->getId();
+			$content[$i]['id_salon'] = $idSalon;
+			if($message->getIdMembre() == $idMembre)
+				$content[$i]['me'] = "true";
+			else
+				$content[$i]['me'] = "false";
+			$content[$i]['id_membre'] = $message->getIdMembre();
+			$content[$i]['msg'] = $message->getMsg();
+			$content[$i]['date'] = $message->getDate()->format('d/m/Y H:i:s');
+			$content[$i]['prenom_et_nom'] = $membre->getPrenom()." ".$membre->getNom();
+			$i++;
+		}                
+        
+        //echo "<pre>";
+			//print_r($messages);
+        //echo "</pre>";
+        
+        //echo "<pre>";
+			//print_r($content);
+        //echo "</pre>";
+        
+        if(!empty($content)){
+			$encoders = array(new XmlEncoder(), new JsonEncoder());
+			$normalizers = array(new ObjectNormalizer());
+			$serializer = new Serializer($normalizers, $encoders);
+			
+			$jsonContent = $serializer->serialize($content, 'json');
+			
+			return new JsonResponse([$jsonContent]);
+		}else{
+			return new Response("no changement");
+		}
+    }
+    
+    /**
+     * @Route("/salon/envoyerMessage", name="salon_envoyerMessage")
+     */
+    public function envoyerMessageAction(Request $request)
+    {
+	   $idMembre = 1; // à récupérer en $_SESSION
+	   $idSalon = $request->get('idSalon');
+       $chatSalon = new Chatsalon();
+       
+        $membre = $this->getDoctrine()
+		->getRepository('AppBundle:Membre')
+		->findOneBy([
+			"id" => $idMembre,
+		]);
+        
+        $name = $membre->getPrenom()." ".$membre->getNom();
+        
+        $message = $request->get('message');
+        //$message = "mon message";
+        
+        $chatSalon->setIdSalon($idSalon);
+		$chatSalon->setIdMembre($idMembre);
+		$chatSalon->setMsg($message);
+		
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($chatSalon);
+		$em->flush();
+        
+         return new Response("ok");
     }
     
     /**

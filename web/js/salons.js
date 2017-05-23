@@ -13,7 +13,7 @@ $(document).ready(function(){
 	  var idSalon = $(this).parent().parent().find('[name=idSalon]').val();
 	  $("#idSalon").val(idSalon);
 	  historiqueSalon(idSalon);
-	});
+	});		
 	
 	$(".closeWindowRateAbook").click(function(){ // remet les action par défaut
 		$(".action select").val("selected");
@@ -57,6 +57,23 @@ $(document).ready(function(){
 		var idSalon = $('#idSalon').val();
 		var noteChosen = $('#noteChosen').val();
 		refreshStars(idSalon, noteChosen);
+	});
+	
+	$("#send").click(function(){
+		var idSalon = $("#idSalon").val();
+		var msg = $("#msg").val().trim();
+		sendMessage(idSalon, msg);
+	});
+	
+	// changer par un setinterval
+	setInterval(function(){
+		var idSalon = $("#idSalon").val();
+		var lastIdMsg = $("#lastIdMsg").val();
+		receiveLastMessages(idSalon, lastIdMsg);
+	}, 4000);
+	
+	$(".alertAbuse").click(function(){
+		
 	});
 	
 	var datatable = $('.listing');
@@ -107,4 +124,8 @@ $(document).ready(function(){
 		 split_date = englishDate.split("/");
 		 $("abbr").eq(i).html(split_date[2].trim()+'/'+split_date[1].trim()+'/'+split_date[0].trim());
 	  }
+  }
+  
+  function htmlEntities(str){
+	  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }

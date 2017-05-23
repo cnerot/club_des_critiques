@@ -157,6 +157,16 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                 return array (  '_controller' => 'AppBundle\\Controller\\SalonController::indexAction',  '_route' => 'salon',);
             }
 
+            // salon_recupererDerniersMessages
+            if ($pathinfo === '/salon/recupererDerniersMessages') {
+                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::recupererDerniersMessagesAction',  '_route' => 'salon_recupererDerniersMessages',);
+            }
+
+            // salon_envoyerMessage
+            if ($pathinfo === '/salon/envoyerMessage') {
+                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::envoyerMessageAction',  '_route' => 'salon_envoyerMessage',);
+            }
+
             // salon_addToContacts
             if ($pathinfo === '/salon/addToContacts') {
                 return array (  '_controller' => 'AppBundle\\Controller\\SalonController::addToContactsAction',  '_route' => 'salon_addToContacts',);

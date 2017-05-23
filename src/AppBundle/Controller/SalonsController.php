@@ -23,9 +23,9 @@ class SalonsController extends Controller
         ->getRepository('AppBundle:Salon')
         ->findAll();
        
-       echo "<pre>";
-       print_r($salonsReceived);
-       echo "</pre>";
+       //echo "<pre>";
+       //print_r($salonsReceived);
+       //echo "</pre>";
         
         // replace this example code with whatever you need
         //return $this->render('salons\index.html.twig', [
