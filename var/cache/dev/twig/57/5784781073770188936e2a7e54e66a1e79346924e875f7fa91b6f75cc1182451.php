@@ -22,49 +22,49 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_d9a68a72da82c816aee966ad5046c592d52b4322102361d1d7848202899e63a5 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
-        $__internal_d9a68a72da82c816aee966ad5046c592d52b4322102361d1d7848202899e63a5->enter($__internal_d9a68a72da82c816aee966ad5046c592d52b4322102361d1d7848202899e63a5_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "salon\\index.html.twig"));
+        $__internal_62c4e46a2f418edb58d5ca63d1e5fb953422fcd2110d1671323897f7a1be894c = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
+        $__internal_62c4e46a2f418edb58d5ca63d1e5fb953422fcd2110d1671323897f7a1be894c->enter($__internal_62c4e46a2f418edb58d5ca63d1e5fb953422fcd2110d1671323897f7a1be894c_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "salon\\index.html.twig"));
 
-        $__internal_904ced285ac814a98ad540b4923c8923c51abb7cf59304778194f22697cecf47 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_904ced285ac814a98ad540b4923c8923c51abb7cf59304778194f22697cecf47->enter($__internal_904ced285ac814a98ad540b4923c8923c51abb7cf59304778194f22697cecf47_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "salon\\index.html.twig"));
+        $__internal_c2c47a7c30406cdecd2e22b154efc0b3e5ec1114064fbe7f69cc4344994a1926 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_c2c47a7c30406cdecd2e22b154efc0b3e5ec1114064fbe7f69cc4344994a1926->enter($__internal_c2c47a7c30406cdecd2e22b154efc0b3e5ec1114064fbe7f69cc4344994a1926_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "salon\\index.html.twig"));
 
         $this->parent->display($context, array_merge($this->blocks, $blocks));
         
-        $__internal_d9a68a72da82c816aee966ad5046c592d52b4322102361d1d7848202899e63a5->leave($__internal_d9a68a72da82c816aee966ad5046c592d52b4322102361d1d7848202899e63a5_prof);
+        $__internal_62c4e46a2f418edb58d5ca63d1e5fb953422fcd2110d1671323897f7a1be894c->leave($__internal_62c4e46a2f418edb58d5ca63d1e5fb953422fcd2110d1671323897f7a1be894c_prof);
 
         
-        $__internal_904ced285ac814a98ad540b4923c8923c51abb7cf59304778194f22697cecf47->leave($__internal_904ced285ac814a98ad540b4923c8923c51abb7cf59304778194f22697cecf47_prof);
+        $__internal_c2c47a7c30406cdecd2e22b154efc0b3e5ec1114064fbe7f69cc4344994a1926->leave($__internal_c2c47a7c30406cdecd2e22b154efc0b3e5ec1114064fbe7f69cc4344994a1926_prof);
 
     }
 
     // line 3
     public function block_title($context, array $blocks = array())
     {
-        $__internal_ab09ebc834918815abe8c30b1659164775e004c291b920206cf507a86b36a63f = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
-        $__internal_ab09ebc834918815abe8c30b1659164775e004c291b920206cf507a86b36a63f->enter($__internal_ab09ebc834918815abe8c30b1659164775e004c291b920206cf507a86b36a63f_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "title"));
+        $__internal_c09cb84c0d99eecbe2f4668316c295524969d1ede4ea6de06ac3dc5e37b33c72 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
+        $__internal_c09cb84c0d99eecbe2f4668316c295524969d1ede4ea6de06ac3dc5e37b33c72->enter($__internal_c09cb84c0d99eecbe2f4668316c295524969d1ede4ea6de06ac3dc5e37b33c72_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "title"));
 
-        $__internal_6a369b18bdb611ee2b578cb2800625b09a754a8e262fe7e057fc3aa02e6f2e7d = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_6a369b18bdb611ee2b578cb2800625b09a754a8e262fe7e057fc3aa02e6f2e7d->enter($__internal_6a369b18bdb611ee2b578cb2800625b09a754a8e262fe7e057fc3aa02e6f2e7d_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "title"));
+        $__internal_4719137f50de6a6b5ba8486c7056e2f2fd5754c6ebfc28c3cc657cb3079485bc = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_4719137f50de6a6b5ba8486c7056e2f2fd5754c6ebfc28c3cc657cb3079485bc->enter($__internal_4719137f50de6a6b5ba8486c7056e2f2fd5754c6ebfc28c3cc657cb3079485bc_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "title"));
 
         // line 4
         echo "    Inscription de nouveau membre
 ";
         
-        $__internal_6a369b18bdb611ee2b578cb2800625b09a754a8e262fe7e057fc3aa02e6f2e7d->leave($__internal_6a369b18bdb611ee2b578cb2800625b09a754a8e262fe7e057fc3aa02e6f2e7d_prof);
+        $__internal_4719137f50de6a6b5ba8486c7056e2f2fd5754c6ebfc28c3cc657cb3079485bc->leave($__internal_4719137f50de6a6b5ba8486c7056e2f2fd5754c6ebfc28c3cc657cb3079485bc_prof);
 
         
-        $__internal_ab09ebc834918815abe8c30b1659164775e004c291b920206cf507a86b36a63f->leave($__internal_ab09ebc834918815abe8c30b1659164775e004c291b920206cf507a86b36a63f_prof);
+        $__internal_c09cb84c0d99eecbe2f4668316c295524969d1ede4ea6de06ac3dc5e37b33c72->leave($__internal_c09cb84c0d99eecbe2f4668316c295524969d1ede4ea6de06ac3dc5e37b33c72_prof);
 
     }
 
     // line 7
     public function block_body($context, array $blocks = array())
     {
-        $__internal_7dbcfa237a2f6e0270814e46d2b5d45a79bfb0ff851b8658365e9b7598645fd4 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
-        $__internal_7dbcfa237a2f6e0270814e46d2b5d45a79bfb0ff851b8658365e9b7598645fd4->enter($__internal_7dbcfa237a2f6e0270814e46d2b5d45a79bfb0ff851b8658365e9b7598645fd4_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+        $__internal_e1cc61cf583aa32bad0dfadfddd64340df079ec15098a7e2cf5c546747c16652 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
+        $__internal_e1cc61cf583aa32bad0dfadfddd64340df079ec15098a7e2cf5c546747c16652->enter($__internal_e1cc61cf583aa32bad0dfadfddd64340df079ec15098a7e2cf5c546747c16652_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
 
-        $__internal_9e7ff7bf7e1f61c50a6241e48ed0f82b1302be97b866a273f8dea1e8d5a2c2bb = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_9e7ff7bf7e1f61c50a6241e48ed0f82b1302be97b866a273f8dea1e8d5a2c2bb->enter($__internal_9e7ff7bf7e1f61c50a6241e48ed0f82b1302be97b866a273f8dea1e8d5a2c2bb_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+        $__internal_c55917b3f43aacc3c2c4a638dd2caec9e132a9010a3825a6253a22a64f1bf45f = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_c55917b3f43aacc3c2c4a638dd2caec9e132a9010a3825a6253a22a64f1bf45f->enter($__internal_c55917b3f43aacc3c2c4a638dd2caec9e132a9010a3825a6253a22a64f1bf45f_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
 
         // line 8
         echo "    <div class=\"container\">
@@ -189,19 +189,26 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
             }
             // line 102
             echo "\t\t\t\t\t\t</span>
-\t\t\t\t\t\t<span class=\"alertAbuse right\">
-\t\t\t\t\t\t\tSignaler un abus
-\t\t\t\t\t\t</span>
-\t\t\t\t\t\t<div class=\"clearfix\"></div>
+\t\t\t\t\t\t";
+            // line 103
+            if ((twig_get_attribute($this->env, $this->getSourceContext(), $context["message"], "idMembre", array()) != (isset($context["idMembre"]) || array_key_exists("idMembre", $context) ? $context["idMembre"] : (function () { throw new Twig_Error_Runtime('Variable "idMembre" does not exist.', 103, $this->getSourceContext()); })()))) {
+                // line 104
+                echo "\t\t\t\t\t\t\t<span class=\"alertAbuse right\">
+\t\t\t\t\t\t\t\tSignaler un abus
+\t\t\t\t\t\t\t</span>
+\t\t\t\t\t\t";
+            }
+            // line 108
+            echo "\t\t\t\t\t\t<div class=\"clearfix\"></div>
 \t\t\t\t\t\t<div class=\"text\">&nbsp;&nbsp;&nbsp; <!-- alinéa -->
 \t\t\t\t\t\t\t";
-            // line 108
+            // line 110
             echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->getSourceContext(), $context["message"], "msg", array()));
             echo "
 \t\t\t\t\t\t</div>
 \t\t\t\t\t\t<div class=\"date right\">
 \t\t\t\t\t\t\t";
-            // line 111
+            // line 113
             echo twig_escape_filter($this->env, twig_date_format_filter($this->env, twig_get_attribute($this->env, $this->getSourceContext(), twig_get_attribute($this->env, $this->getSourceContext(), $context["message"], "date", array()), "date", array()), "d/m/Y H:i:s"), "html", null, true);
             echo "
 \t\t\t\t\t\t</div>
@@ -212,9 +219,9 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['message'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 116
+        // line 118
         echo "\t\t\t\t<input type=\"hidden\" value=\"";
-        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->getSourceContext(), twig_last($this->env, (isset($context["messages"]) || array_key_exists("messages", $context) ? $context["messages"] : (function () { throw new Twig_Error_Runtime('Variable "messages" does not exist.', 116, $this->getSourceContext()); })())), "id", array()), "html", null, true);
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->getSourceContext(), twig_last($this->env, (isset($context["messages"]) || array_key_exists("messages", $context) ? $context["messages"] : (function () { throw new Twig_Error_Runtime('Variable "messages" does not exist.', 118, $this->getSourceContext()); })())), "id", array()), "html", null, true);
         echo "\" id=\"lastIdMsg\">
 \t\t\t\t</div>
 \t\t\t\t<div id=\"message\" class=\"col s12 margin-top\">
@@ -238,25 +245,25 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 \t\t\t\t\t  </thead>
 \t\t\t\t\t  <tbody class=\"\">
 \t\t\t\t\t\t  ";
-        // line 138
+        // line 140
         $context['_parent'] = $context;
-        $context['_seq'] = twig_ensure_traversable((isset($context["participants"]) || array_key_exists("participants", $context) ? $context["participants"] : (function () { throw new Twig_Error_Runtime('Variable "participants" does not exist.', 138, $this->getSourceContext()); })()));
+        $context['_seq'] = twig_ensure_traversable((isset($context["participants"]) || array_key_exists("participants", $context) ? $context["participants"] : (function () { throw new Twig_Error_Runtime('Variable "participants" does not exist.', 140, $this->getSourceContext()); })()));
         foreach ($context['_seq'] as $context["_key"] => $context["participant"]) {
-            // line 139
+            // line 141
             echo "\t\t\t\t\t\t\t  <input type=\"hidden\" value=\"";
             echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->getSourceContext(), $context["participant"], "idMembre", array()), "html", null, true);
             echo "\" class=\"idMembreParticipant\">
 \t\t\t\t\t\t\t  <tr>
 \t\t\t\t\t\t\t\t  <td>
 \t\t\t\t\t\t\t\t\t  <a href=\"#/";
-            // line 142
+            // line 144
             echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->getSourceContext(), $context["participant"], "idMembre", array()), "html", null, true);
             echo "\" title=\"Voir le profil\">";
             echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->getSourceContext(), $context["participant"], "nom", array()));
             echo "</a>
 \t\t\t\t\t\t\t\t\t  <div>
 \t\t\t\t\t\t\t\t\t\t  <span href=\"#/";
-            // line 144
+            // line 146
             echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->getSourceContext(), $context["participant"], "idMembre", array()), "html", null, true);
             echo "\" title=\"Participant pertinent dans ses propos\" class=\"thumb_up\"><i class=\"tiny material-icons\">thumb_up</i></span>
 \t\t\t\t\t\t\t\t\t\t  <span title=\"Participant non pertinent dans ses propos\" class=\"thumb_down\"><i class=\"verticalMiddle tiny material-icons\">thumb_down</i></span>
@@ -265,15 +272,15 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 \t\t\t\t\t\t\t\t  <td>
 \t\t\t\t\t\t\t\t\t  <div class=\"\">
 \t\t\t\t\t\t\t\t\t\t";
-            // line 150
+            // line 152
             if ((twig_get_attribute($this->env, $this->getSourceContext(), $context["participant"], "ami", array()) == "false")) {
-                // line 151
+                // line 153
                 echo "\t\t\t\t\t\t\t\t\t\t  <span title=\"Ajouter aux contact\" class=\"btn-floating btn-small orange lighten-2 addToContacts\" id=\"idMembre_";
                 echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->getSourceContext(), $context["participant"], "idMembre", array()), "html", null, true);
                 echo "\"><i class=\"large material-icons\">add</i></span>
 \t\t\t\t\t\t\t\t\t\t";
             }
-            // line 153
+            // line 155
             echo "\t\t\t\t\t\t\t\t\t  </div>
 \t\t\t\t\t\t\t\t  </td>
 \t\t\t\t\t\t\t\t  <td>
@@ -287,7 +294,7 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['participant'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 162
+        // line 164
         echo "\t\t\t\t\t\t  <!-- <tr>
 \t\t\t\t\t\t\t  <td>
 \t\t\t\t\t\t\t\t  <a href=\"#\" title=\"Voir le profil\">Paul Durand</a>
@@ -347,7 +354,7 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 \t\tfunction addtoContacts(idContact, currentElement){
 \t\t\t\$.ajax({
 \t\t\t\turl: \"";
-        // line 220
+        // line 222
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("salon_addToContacts");
         echo "\",
 \t\t\t\tmethod: \"post\",
@@ -364,7 +371,7 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 \t\tfunction popupInvitContacts(idSalon){
 \t\t\t\$.ajax({
 \t\t\t\turl: \"";
-        // line 234
+        // line 236
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("salon_chargeContacts");
         echo "\",
 \t\t\t\tmethod: \"post\",
@@ -384,7 +391,7 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 \t\tfunction invitContacts(idContacts){
 \t\t\t\$.ajax({
 \t\t\t\turl: \"";
-        // line 251
+        // line 253
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("salon_invitContacts");
         echo "\",
 \t\t\t\tmethod: \"post\",
@@ -399,7 +406,7 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 \t\tfunction sendMessage(idSalon, message){
 \t\t\t\$.ajax({
 \t\t\t\turl: \"";
-        // line 263
+        // line 265
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("salon_envoyerMessage");
         echo "\",
 \t\t\t\tmethod: \"post\",
@@ -418,7 +425,7 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 \t\tfunction wantBanFromSalon(idSalon, idMembreParticipant){
 \t\t\t\$.ajax({
 \t\t\t\turl: \"";
-        // line 279
+        // line 281
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("salon_wantBanFromSalon");
         echo "\",
 \t\t\t\tmethod: \"post\",
@@ -439,7 +446,7 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 \t\tfunction receiveLastMessages(idSalon, lastIdMsg){
 \t\t\t\$.ajax({
 \t\t\t\turl: \"";
-        // line 297
+        // line 299
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("salon_recupererDerniersMessages");
         echo "\",
 \t\t\t\tmethod: \"post\",
@@ -462,9 +469,11 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 \t\t\t\t\t\tif(message[i]['me'] == \"true\")
 \t\t\t\t\t\t\ta += '</span>';
 \t\t\t\t\t\ta += '</span>';
-\t\t\t\t\t\ta += '<span class=\"alertAbuse right\">';
-\t\t\t\t\t\ta += 'Signaler un abus';
-\t\t\t\t\t\ta += '</span>';
+\t\t\t\t\t\tif(message[i]['me'] != \"true\"){
+\t\t\t\t\t\t\ta += '<span class=\"alertAbuse right\">';
+\t\t\t\t\t\t\ta += 'Signaler un abus';
+\t\t\t\t\t\t\ta += '</span>';
+\t\t\t\t\t\t}
 \t\t\t\t\t\ta += '<div class=\"clearfix\"></div>';
 \t\t\t\t\t\ta += '<div class=\"text\">&nbsp;&nbsp;&nbsp;';
 \t\t\t\t\t\ta += htmlEntities(message[i]['msg']);
@@ -487,10 +496,10 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
     </script>
 ";
         
-        $__internal_9e7ff7bf7e1f61c50a6241e48ed0f82b1302be97b866a273f8dea1e8d5a2c2bb->leave($__internal_9e7ff7bf7e1f61c50a6241e48ed0f82b1302be97b866a273f8dea1e8d5a2c2bb_prof);
+        $__internal_c55917b3f43aacc3c2c4a638dd2caec9e132a9010a3825a6253a22a64f1bf45f->leave($__internal_c55917b3f43aacc3c2c4a638dd2caec9e132a9010a3825a6253a22a64f1bf45f_prof);
 
         
-        $__internal_7dbcfa237a2f6e0270814e46d2b5d45a79bfb0ff851b8658365e9b7598645fd4->leave($__internal_7dbcfa237a2f6e0270814e46d2b5d45a79bfb0ff851b8658365e9b7598645fd4_prof);
+        $__internal_e1cc61cf583aa32bad0dfadfddd64340df079ec15098a7e2cf5c546747c16652->leave($__internal_e1cc61cf583aa32bad0dfadfddd64340df079ec15098a7e2cf5c546747c16652_prof);
 
     }
 
@@ -506,7 +515,7 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 
     public function getDebugInfo()
     {
-        return array (  443 => 297,  422 => 279,  403 => 263,  388 => 251,  368 => 234,  351 => 220,  291 => 162,  277 => 153,  271 => 151,  269 => 150,  260 => 144,  253 => 142,  246 => 139,  242 => 138,  216 => 116,  205 => 111,  199 => 108,  191 => 102,  187 => 100,  185 => 99,  180 => 97,  177 => 96,  173 => 94,  171 => 93,  166 => 91,  163 => 90,  159 => 89,  152 => 85,  73 => 9,  70 => 8,  61 => 7,  50 => 4,  41 => 3,  11 => 1,);
+        return array (  450 => 299,  429 => 281,  410 => 265,  395 => 253,  375 => 236,  358 => 222,  298 => 164,  284 => 155,  278 => 153,  276 => 152,  267 => 146,  260 => 144,  253 => 141,  249 => 140,  223 => 118,  212 => 113,  206 => 110,  202 => 108,  196 => 104,  194 => 103,  191 => 102,  187 => 100,  185 => 99,  180 => 97,  177 => 96,  173 => 94,  171 => 93,  166 => 91,  163 => 90,  159 => 89,  152 => 85,  73 => 9,  70 => 8,  61 => 7,  50 => 4,  41 => 3,  11 => 1,);
     }
 
     public function getSourceContext()
@@ -613,9 +622,11 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 \t\t\t\t\t\t\t\t</span>
 \t\t\t\t\t\t\t{% endif %}
 \t\t\t\t\t\t</span>
-\t\t\t\t\t\t<span class=\"alertAbuse right\">
-\t\t\t\t\t\t\tSignaler un abus
-\t\t\t\t\t\t</span>
+\t\t\t\t\t\t{% if message.idMembre != idMembre %}
+\t\t\t\t\t\t\t<span class=\"alertAbuse right\">
+\t\t\t\t\t\t\t\tSignaler un abus
+\t\t\t\t\t\t\t</span>
+\t\t\t\t\t\t{% endif %}
 \t\t\t\t\t\t<div class=\"clearfix\"></div>
 \t\t\t\t\t\t<div class=\"text\">&nbsp;&nbsp;&nbsp; <!-- alinéa -->
 \t\t\t\t\t\t\t{{ message.msg|e }}
@@ -828,9 +839,11 @@ class __TwigTemplate_824f545025dba69cea2d657e41f5e62ae723ec68381517aa07baf66ef2c
 \t\t\t\t\t\tif(message[i]['me'] == \"true\")
 \t\t\t\t\t\t\ta += '</span>';
 \t\t\t\t\t\ta += '</span>';
-\t\t\t\t\t\ta += '<span class=\"alertAbuse right\">';
-\t\t\t\t\t\ta += 'Signaler un abus';
-\t\t\t\t\t\ta += '</span>';
+\t\t\t\t\t\tif(message[i]['me'] != \"true\"){
+\t\t\t\t\t\t\ta += '<span class=\"alertAbuse right\">';
+\t\t\t\t\t\t\ta += 'Signaler un abus';
+\t\t\t\t\t\t\ta += '</span>';
+\t\t\t\t\t\t}
 \t\t\t\t\t\ta += '<div class=\"clearfix\"></div>';
 \t\t\t\t\t\ta += '<div class=\"text\">&nbsp;&nbsp;&nbsp;';
 \t\t\t\t\t\ta += htmlEntities(message[i]['msg']);

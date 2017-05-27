@@ -100,9 +100,11 @@
 								</span>
 							{% endif %}
 						</span>
-						<span class="alertAbuse right">
-							Signaler un abus
-						</span>
+						{% if message.idMembre != idMembre %}
+							<span class="alertAbuse right">
+								Signaler un abus
+							</span>
+						{% endif %}
 						<div class="clearfix"></div>
 						<div class="text">&nbsp;&nbsp;&nbsp; <!-- alinéa -->
 							{{ message.msg|e }}
@@ -315,9 +317,11 @@
 						if(message[i]['me'] == "true")
 							a += '</span>';
 						a += '</span>';
-						a += '<span class="alertAbuse right">';
-						a += 'Signaler un abus';
-						a += '</span>';
+						if(message[i]['me'] != "true"){
+							a += '<span class="alertAbuse right">';
+							a += 'Signaler un abus';
+							a += '</span>';
+						}
 						a += '<div class="clearfix"></div>';
 						a += '<div class="text">&nbsp;&nbsp;&nbsp;';
 						a += htmlEntities(message[i]['msg']);
