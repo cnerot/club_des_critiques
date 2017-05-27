@@ -15,6 +15,7 @@ use AppBundle\Entity\Salon;
 use AppBundle\Entity\Note;
 use AppBundle\Entity\Amis;
 use AppBundle\Entity\Chatsalon;
+use AppBundle\Entity\Participant;
 
 class SalonController extends Controller
 {
@@ -23,7 +24,25 @@ class SalonController extends Controller
      */
     public function indexAction(Request $request)
     {
-	   $idMembre = 1; // à récupérer en $_SESSION                      
+	   $idMembre = 1; // à récupérer en $_SESSION   
+	   $idSalon = $request->get('salon')->getId();              
+        
+        // vérifier non banni
+		$participantMe = $this->getDoctrine()
+		 ->getRepository('AppBundle:Participant')
+		 ->findOneBy([
+			"id_salon" => $idSalon,
+			"id_membre" => $idMembre,
+		 ]);
+	   
+		if($participantMe->getBan() == 1){
+			$response = new Response();
+			
+			$response->setStatusCode(200);
+			$response->headers->set('Refresh', '1; url=/?ban=1');
+			
+			$response->send();
+		}
         
         $participants = $this->getDoctrine()
 		->getRepository('AppBundle:Participant')
@@ -36,7 +55,7 @@ class SalonController extends Controller
 			->getRepository('AppBundle:Membre')
 			->findOneBy([
 				"id" => $participant->getIdMembre(),
-			]);
+			]);								
 			
 			$amis = $this->getDoctrine()
 			->getRepository('AppBundle:Amis')
@@ -184,6 +203,18 @@ class SalonController extends Controller
 	   $idSalon = $request->get('idSalon');
        $chatSalon = new Chatsalon();
        
+       // vérifier non banni
+       $participantMe = $this->getDoctrine()
+		->getRepository('AppBundle:Participant')
+		->findOneBy([
+			"id_salon" => $idSalon,
+			"id_membre" => $idMembre,
+		]);
+       
+       if($participantMe->getBan() == 1){
+			return new Response("banni");
+	   }
+       
         $membre = $this->getDoctrine()
 		->getRepository('AppBundle:Membre')
 		->findOneBy([
@@ -202,6 +233,58 @@ class SalonController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($chatSalon);
 		$em->flush();
+        
+         return new Response("ok");
+    }
+    
+    /**
+     * @Route("/salon/wantBanFromSalon", name="salon_wantBanFromSalon")
+     */
+    public function wantBanFromSalonAction(Request $request)
+    {
+	   $nbBanMax = 2;
+	   $idMembre = 1; // à récupérer en $_SESSION
+	   //$idSalon = $request->get('idSalon');
+	   $idSalon = 9;
+	   //$idMembreParticipant = $request->get('idMembreParticipant');
+	   $idMembreParticipant = 2;
+       
+        $participants = $this->getDoctrine()
+		->getRepository('AppBundle:Participant')
+		->findOneBy([
+			"id_salon" => $idSalon,
+			"id_membre" => $idMembreParticipant,
+		]);
+		
+        $idMembresWhoBan = explode(",", trim($participants->getIdMembresWhoBan(), ","));
+        
+        if(!in_array($idMembre, $idMembresWhoBan)){ // si l'idMembre ne l'a pas encore banni
+			$participants->setIdSalon($idSalon);
+			$participants->setIdMembre($idMembreParticipant);
+			if(count($idMembresWhoBan) >= $nbBanMax){
+				$participants->setBan(1); // bannissement				
+			}
+			$participants->setIdMembresWhoBan($participants->getIdMembresWhoBan().$idMembre.",");
+			
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($participants);
+			$em->flush();
+			
+			return new Response("ok");
+		}
+		else{ // si déjà banni
+			return new Response("Vous avez déjà fait une demande de bannissement pour ce contact.");
+		}
+        
+        echo "<pre>";
+			print_r($participants);
+        echo "</pre>";
+        
+        echo "<pre>";
+			print_r($idMembresWhoBan);
+        echo "</pre>";
+        
+        die();                
         
          return new Response("ok");
     }

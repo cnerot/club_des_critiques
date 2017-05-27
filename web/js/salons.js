@@ -65,6 +65,12 @@ $(document).ready(function(){
 		sendMessage(idSalon, msg);
 	});
 	
+	$(".banFromSalon").click(function(){
+		var idSalon = $("#idSalon").val();
+		var idMembreParticipant = $(this).parent().parent().parent().parent().find(".idMembreParticipant").val();
+		wantBanFromSalon(idSalon, idMembreParticipant);
+	});
+	
 	// changer par un setinterval
 	setInterval(function(){
 		var idSalon = $("#idSalon").val();

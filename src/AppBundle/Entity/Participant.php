@@ -35,6 +35,20 @@ class Participant
      */
     private $id_membre;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="ban", type="integer", length=1)
+     */
+    private $ban;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="id_membres_who_ban", type="string", length=250)
+     */
+    private $id_membres_who_ban;
+
 
     /**
      * Get id
@@ -87,11 +101,59 @@ class Participant
     /**
      * Get idMembre
      *
-     * @return \membre
+     * @return int
      */
     public function getIdMembre()
     {
         return $this->id_membre;
+    }
+
+    /**
+     * Set ban
+     *
+     * @param integer $ban
+     *
+     * @return Participant
+     */
+    public function setBan($ban)
+    {
+        $this->ban = $ban;
+
+        return $this;
+    }
+
+    /**
+     * Get ban
+     *
+     * @return int
+     */
+    public function getBan()
+    {
+        return $this->ban;
+    }
+
+    /**
+     * Set idMembresWhoBan
+     *
+     * @param string $idMembresWhoBan
+     *
+     * @return Participant
+     */
+    public function setIdMembresWhoBan($idMembresWhoBan)
+    {
+        $this->id_membres_who_ban = $idMembresWhoBan;
+
+        return $this;
+    }
+
+    /**
+     * Get idMembresWhoBan
+     *
+     * @return string
+     */
+    public function getIdMembresWhoBan()
+    {
+        return $this->id_membres_who_ban;
     }
 }
 

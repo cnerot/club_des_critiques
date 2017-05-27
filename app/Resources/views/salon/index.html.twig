@@ -136,12 +136,13 @@
 					  </thead>
 					  <tbody class="">
 						  {% for participant in participants %}
+							  <input type="hidden" value="{{ participant.idMembre }}" class="idMembreParticipant">
 							  <tr>
 								  <td>
 									  <a href="#/{{ participant.idMembre }}" title="Voir le profil">{{ participant.nom|e }}</a>
 									  <div>
-										  <a href="#/{{ participant.idMembre }}" title="Participant pertinent dans ses propos" class="thumb_up"><i class="tiny material-icons">thumb_up</i></a>
-										  <a href="#/{{ participant.idMembre }}" title="Participant non pertinent dans ses propos" class="thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></a>
+										  <span href="#/{{ participant.idMembre }}" title="Participant pertinent dans ses propos" class="thumb_up"><i class="tiny material-icons">thumb_up</i></span>
+										  <span title="Participant non pertinent dans ses propos" class="thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></span>
 									  </div>
 								  </td>
 								  <td>
@@ -153,7 +154,7 @@
 								  </td>
 								  <td>
 									  <div class="">
-										  <a title="Demande de bannissement" class="btn-floating btn-small red lighten-1" href="#/{{ participant.idMembre }}"><i class="large material-icons">block</i></a>
+										  <span title="Demande de bannissement" class="btn-floating btn-small red lighten-1 banFromSalon"><i class="large material-icons">block</i></span>
 									  </div>
 								  </td>
 							  </tr>
@@ -266,8 +267,27 @@
 					message: message,
 					}			
 			}).done(function(msg){
+				if(msg == "banni")
+					document.location.href = "/?ban=1";
 				console.log("Message enregistré en bdd");
 				$("#msg").val("");
+			});
+		}
+		
+		function wantBanFromSalon(idSalon, idMembreParticipant){
+			$.ajax({
+				url: "{{ path('salon_wantBanFromSalon') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					idMembreParticipant: idMembreParticipant,
+					}			
+			}).done(function(msg){
+				if(msg == "ok"){
+					
+				}else{
+					
+				}
 			});
 		}
 		
