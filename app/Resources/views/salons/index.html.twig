@@ -159,6 +159,22 @@
 		});*/
 	}
 	
+	function getIdSalonPossible(idSalon, noteChosen){
+		$.ajax({
+			url: "{{ path('salons_recupIdSalonPossible') }}",
+			method: "post",
+			data: {
+				idSalon: idSalon,
+				noteChosen: noteChosen,
+				}			
+		}).done(function(msg){
+			console.log("id : "+msg);
+			$('#idSalon').val(msg);
+			var noteChosen = $('#noteChosen').val();
+			refreshStars(msg, noteChosen);
+		});
+	}
+	
 	function popupRejoindre(idSalon){
 		$.ajax({
 			url: "{{ path('salons_popupRejoindre') }}",

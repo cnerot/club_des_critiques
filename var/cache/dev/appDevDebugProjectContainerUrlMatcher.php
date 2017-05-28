@@ -203,6 +203,11 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                     return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::popupRejoindreAction',  '_route' => 'salons_popupRejoindre',);
                 }
 
+                // salons_recupIdSalonPossible
+                if ($pathinfo === '/salons/recupIdSalonPossible') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::recupIdSalonPossibleAction',  '_route' => 'salons_recupIdSalonPossible',);
+                }
+
                 // salons_vote
                 if ($pathinfo === '/salons/vote') {
                     return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::voteAction',  '_route' => 'salons_vote',);

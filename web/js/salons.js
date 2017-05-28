@@ -53,10 +53,10 @@ $(document).ready(function(){
 		popupInvitContacts(idSalon);	
 	});
 	
-	$('#rejoindreSalon').click(function(){
+	$('#rejoindreSalon').click(function(){		
 		var idSalon = $('#idSalon').val();
 		var noteChosen = $('#noteChosen').val();
-		refreshStars(idSalon, noteChosen);
+		getIdSalonPossible(idSalon, noteChosen);
 	});
 	
 	$("#send").click(function(){

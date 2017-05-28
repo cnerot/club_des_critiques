@@ -115,7 +115,11 @@
 						<hr>
 					</div>
 				{% endfor %}
-				<input type="hidden" value="{{ messages|last.id }}" id="lastIdMsg">
+				{% if messages is not empty %}
+					<input type="hidden" value="{{ messages|last.id }}" id="lastIdMsg">
+				{% else %}
+					<input type="hidden" value="0" id="lastIdMsg">
+				{% endif %}
 				</div>
 				<div id="message" class="col s12 margin-top">
 					<textarea id="msg"></textarea>

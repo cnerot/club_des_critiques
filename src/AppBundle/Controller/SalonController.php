@@ -25,24 +25,39 @@ class SalonController extends Controller
     public function indexAction(Request $request)
     {
 	   $idMembre = 1; // à récupérer en $_SESSION   
-	   $idSalon = $request->get('salon')->getId();              
+	   $idSalon = $request->get('salon')->getId();
+	   $participantsWithInfos = [];          
+	   $participant_ = new Participant();   	   	    
         
         // vérifier non banni
+        $participantMe = [];
 		$participantMe = $this->getDoctrine()
 		 ->getRepository('AppBundle:Participant')
 		 ->findOneBy([
 			"id_salon" => $idSalon,
 			"id_membre" => $idMembre,
 		 ]);
-	   
-		if($participantMe->getBan() == 1){
-			$response = new Response();
+		 
+		 if(empty($participantMe)){
+			$participant_->setIdSalon($idSalon);
+			$participant_->setIdMembre($idMembre);
+			$participant_->setBan(0);
 			
-			$response->setStatusCode(200);
-			$response->headers->set('Refresh', '1; url=/?ban=1');
-			
-			$response->send();
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($participant_);
+			$em->flush();
 		}
+	    
+	    if(!empty($participantMe)){
+			if($participantMe->getBan() == 1){
+				$response = new Response();
+				
+				$response->setStatusCode(200);
+				$response->headers->set('Refresh', '1; url=/?ban=1');
+				
+				$response->send();
+			}
+        }
         
         $participants = $this->getDoctrine()
 		->getRepository('AppBundle:Participant')
