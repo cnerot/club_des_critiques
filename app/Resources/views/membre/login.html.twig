@@ -1,26 +1,28 @@
 
 
-
+<div id="oModal" class="oModal">
+  <div>
+    <header>
+      <a href="#fermer" title="Fermer la fenêtre" class="droite">X</a>
+     </header>
+     <section>
 
 
     <div class="row">
         <div  class="col s12 center-align">
-            <form method="POST" action="{{path('membre_profil')}}">
                 <div class="left-align">
-                        <div>
-                            <label>E-mail</label>
-                            <input type="text" name="email">
-                        </div>
-                        <div>
-                            <label>Mot de passe</label>
-                            <input type="text" name="mdp">
-                        </div>
+                       {{ form_start(form) }}
+                            {{ form_rest(form) }}
+                            <div class="right">
+                                <button class="btn-large" type="submit">Valider</button>
+                            </div>
+                        {{ form_end(form) }}
                 </div>
-                <div class="right-align">
-                    <button class="btn waves-effect waves-light" type="submit">valider</button>
-                </div>
-            </form>
         </div>
     </div>
     
+     </section>
+  </div>
+</div>
 
+    

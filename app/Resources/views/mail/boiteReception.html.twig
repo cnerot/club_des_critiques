@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+   Envoyer un message
+{% endblock %}
+
+{% block body %}
+      <div class="row">
+    <div class="col s12">
+      <ul class="tabs center ">
+        <li class="tab col s3"><a class="active brown-text" href="#recu1">Boite reception</a></li>
+        <li class="tab col s3"><a  href="#envoye2">Message envoyé</a></li>
+      </ul>
+    </div>
+    <div id="recu1" class="col s12">
+        <div class="container">
+        <div class="row">
+            <div class="card" >
+                {% for mail in messagerie %}
+                 <div class="card-content" style="padding: 0; margin: 0">
+                     <table class="responsive-table" style="padding: 0; margin: 0">
+                         <tr>
+                             {% if mail.vu == false %}
+                                 <td><a href="" class=" black-text right-align"><i class="material-icons">email</i></a></td>
+                             {% elseif mail.vu == true %}
+                                 <td><a href="" class=" black-text right-align"><i class="material-icons">drafts</i></a></td>
+                             {% endif %}
+                             {% for m in membre %}
+                                {% if m.id == mail.id_sender %}
+                                    <td><a href="" class="marg-left padd-left black-text left-align"><b> {{m.prenom}} {{ m.nom}} </b></a></td>
+                                {% endif %}
+                             {% endfor %}
+                             <td><a href="{{ path("messagerie_lire", {'id': mail.id})}}" class="marg-left padd-left black-text left-align"><b>{{ mail.objet|upper }}</b></a></td>
+                             <td><a href="" class="marg-left padd-left black-text"><b>{{ mail.date|date("m/d/Y à H:m") }}</b></a></td>
+                         </tr>
+                     </table>  
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+      </div>
+    </div>
+    <div id="envoye2" class="col s12">
+        <div class="container">
+           <div class="row">
+               <div class="card" >
+                   {% for mailSent in messagerieSent %}
+                    <div class="card-content" style="padding: 0; margin: 0">
+                        <table style="padding-bottom: 0; margin: 0">
+                            <tr>
+                                <td><a href="" class=" black-text right-align"><i class="material-icons">forward</i></a></td>
+                                {% for m in membre %}
+                                    {% if m.id == mailSent.id_recever %}
+                                        <td width="10"><a href="" class="marg-left padd-left black-text left-align"><b> {{m.prenom}} {{ m.nom}} </b></a></td>
+                                    {% endif %}
+                                 {% endfor %}
+                                <td><a href="{{ path("messagerie_lire", {'id': mailSent.id})}}" class="marg-left padd-left black-text"><b>{{ mailSent.objet|upper }}</b></a></td>
+                                <td><a href="" class="marg-left padd-left black-text right-align"><b>{{ mailSent.date|date("m/d/Y à H:m") }}</b></a></td>
+                            </tr>
+                        </table>  
+                   </div>
+                   <hr>
+                   {% endfor %}
+               </div>
+           </div>
+         </div>
+    </div>
+
+  </div>
+      
+{% endblock %}

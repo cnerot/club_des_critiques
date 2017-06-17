@@ -2,6 +2,17 @@ body{
     
     
 }
+.centerer{
+    display: block;
+    margin:auto;
+    padding:auto;
+}
+.padd-left{
+    padding-left: 3%;
+}
+.marg-left{
+    margin-left: 3%;
+}
 .logo{
     width: 130px;
 }
@@ -90,5 +101,11 @@ div{
  
 .oModal > div section,.oModal > div > header, .oModal > div > footer {
   padding:15px;
+}
+.skin{
+     background: #D99E7E 
+}
+.skin-text{
+     color: #D99E7E 
 }
 

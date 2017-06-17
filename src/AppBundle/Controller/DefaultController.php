@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Membre;
 use AppBundle\Form\MembreForm;
+use AppBundle\Form\ConnexionForm;
 use AppBundle\Form\InscriptionForm;
 use AppBundle\Helper\Helper;
 
@@ -33,7 +34,7 @@ class DefaultController extends Controller
                      . '<br> Votre Mot de passe : '.$mdp .'',
              'text/html'
              );
-             $this->get('mailer')->send($message);
+            $this->get('mailer')->send($message);
             $em = $this->getDoctrine()->getManager();
             $em->persist($membre);
             $em->flush();
@@ -42,7 +43,8 @@ class DefaultController extends Controller
 
            //return $this->redirectToRoute('membre_show', ['id'=>$membre->getId()]);      
         }
-        return $this->render('home\index.html.twig',[
+
+        return $this->render('home/index.html.twig',[
             'membre' => $membre,
             'email' => $form->createView(),
         ]);

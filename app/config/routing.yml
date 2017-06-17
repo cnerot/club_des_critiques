@@ -5,5 +5,5 @@ login:
     path: /login
     defaults: { _controller: AppBundle:Security:login}    
         
-login_check:
-    path: /membre_profil
+#login_check:
+   # path: /membre_profil

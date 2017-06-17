@@ -1,14 +1,46 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-    <div id="wrapper">
-            <div id="status">
-                <p>
-                    Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un peintre anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.
-                </p>
+  
+    <h3><center> Profil Utilisateur</center></h3>
+   
+      <div class="row">
+        <div class="col s3 m3">
+          <div class="card">
+            <div class="centerer">
+                <form action="{{ path("membre_picture")}}">
+                    <a href="">
+                        <img width="150" class="centerer" src="images/profil.png"><input type="file" nom="picture" placeholder="Modifier votre photo">
+                    </a>
+                    <input type="submit">
+                <form>
             </div>
-    </div>
+          </div>
+        </div>
+        <div class="col s5 m5">
+          <div class="card">
+            <div class="card-content">
+                <div><b>{{ membre.nom }} {{ membre.prenom }}</b></div>
+                <div>{{ membre.mail }} </div>
+                <div>{{ membre.description }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col s4 m4">
+          <div class="card">
+            <div class="card-content">
+                <a href="#">Modifier mis information</a>
+                <a href="#">Modifier mon mot de passe</a>
+                <a href="#">Gérer mes contacts</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-content">
+                <a href="#" class="btn waves-effect waves-light centerer">Contacter</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
 {% endblock %}
 

@@ -114,6 +114,70 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
         }
 
+        // membre_all
+        if ($pathinfo === '/all') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::peopleAction',  '_route' => 'membre_all',);
+        }
+
+        // membre_profil
+        if (0 === strpos($pathinfo, '/profil') && preg_match('#^/profil/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_profil')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::showAction',));
+        }
+
+        // membre_edit
+        if ($pathinfo === '/edit') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::editAction',  '_route' => 'membre_edit',);
+        }
+
+        // membre_invite
+        if (0 === strpos($pathinfo, '/invite') && preg_match('#^/invite/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_invite')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::inviteAction',));
+        }
+
+        // membre_picture
+        if ($pathinfo === '/editPicture') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::editpictureAction',  '_route' => 'membre_picture',);
+        }
+
+        // membre_login
+        if ($pathinfo === '/login') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::loginAction',  '_route' => 'membre_login',);
+        }
+
+        // membre_index
+        if (rtrim($pathinfo, '/') === '') {
+            if (substr($pathinfo, -1) !== '/') {
+                return $this->redirect($pathinfo.'/', 'membre_index');
+            }
+
+            return array (  '_controller' => 'AppBundle\\Controller\\MessagerieController::indexAction',  '_route' => 'membre_index',);
+        }
+
+        // messagerie_reception
+        if ($pathinfo === '/reception') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MessagerieController::receptionAction',  '_route' => 'messagerie_reception',);
+        }
+
+        // messagerie_lire
+        if (0 === strpos($pathinfo, '/lire') && preg_match('#^/lire/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'messagerie_lire')), array (  '_controller' => 'AppBundle\\Controller\\MessagerieController::lireAction',));
+        }
+
+        // messagerie_nouscontacter
+        if ($pathinfo === '/nousContacter') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MessagerieController::contactAction',  '_route' => 'messagerie_nouscontacter',);
+        }
+
+        // messagerie_send
+        if (0 === strpos($pathinfo, '/send') && preg_match('#^/send/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'messagerie_send')), array (  '_controller' => 'AppBundle\\Controller\\MessagerieController::sendAction',));
+        }
+
+        // login
+        if ($pathinfo === '/login') {
+            return array (  '_controller' => 'AppBundle:Security:login',  '_route' => 'login',);
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+   Message de 
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <div class="col s7">
+                {% for m in membre%}
+                    {% if m.id == message.id_sender %}
+                        <p>de : <b>{{ m.prenom }} {{ m.nom }}</b> <span style="font-size:11px">({{ m.mail }})</span> </p>
+                    {% endif %}
+                {% endfor %}
+                <p>à  : moi</p>
+                </div>
+                <div class="col s4 right-align">
+                    <p> </p>
+                    <p style="font-size:13px" class="grey-text">{{message.date|date("m/d/Y à H:m")}}</p>
+                </div>
+                <div class="col s1 right-align">
+                    <p></p>
+                    <a href="{{ path("messagerie_send", {'id': message.id_sender})}}" class="skin-text" ><i  class="material-icons">reply</i></a>
+                </div>
+            </div>
+            <div class="col s12"><hr/></div>
+             <div class="col s12">
+                 <p>{{message.objet|raw}}</p>
+                <p>{{message.message|raw}}</p>
+             </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

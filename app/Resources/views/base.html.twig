@@ -63,11 +63,28 @@
                 <a id="logo-container" href="/" class="brand-logo">
                      <img class="logo" src="{{ asset('images/logo.png') }}">
                 </a>
-                    <div class="right">
-                        <a href="#oModal" id="">
+                    <div class="right padd-left">
+                        <a href="{{ path("membre_all")}}" id="">
+                            <i class="material-icons">people </i> 
+                        </a>
+                   </div>
+                    <div class="right padd-left">
+                        <a href="" id="">
+                            <i class="material-icons">public </i> 
+                        </a>
+                   </div>
+
+                    <div class="right padd-left">
+                        <a href="{{ path("messagerie_reception")}}" id="">
+                            <i class="material-icons">chat </i> 
+                        </a>
+                    </div>
+                    <div class="right padd-left">
+                        <a href="{{ path("membre_login")}}" id="">
                             <i class="material-icons">perm_identity </i> 
                         </a>
                     </div>
+
                     <ul class="right hide-on-med-and-down">
                         <li><a class="dropdown-button" href="#!" data-activates="dropdown1"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administrateur<span><i
                                             class="material-icons right">arrow_drop_down</i></a></li>
@@ -85,16 +102,7 @@
 
     </nav>
 </div>
-<div id="oModal" class="oModal">
-  <div>
-    <header>
-      <a href="#fermer" title="Fermer la fenêtre" class="droite">X</a>
-     </header>
-     <section>
-           {% include 'membre/login.html.twig'  %}
-     </section>
-  </div>
-</div>
+
 
 
 {% block body %}
