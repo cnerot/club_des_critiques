@@ -1,0 +1,75 @@
+#chat{
+	
+}
+
+#invitContacts{
+	text-align: center;
+}
+
+.alertAbuse{
+	color: #5197ff;
+	cursor: pointer;
+}
+
+#posts{
+	height: 50%;
+    min-height: 150px;
+    max-height: 300px;
+    overflow: auto;
+    background: RGBA(212, 212, 212, 0.51);
+}
+
+.post .name{
+	font-size: 12px;
+	font-weight: blold;
+}
+
+.post .alertAbuse{
+	font-size: 10px;
+}
+
+.post .text{
+	font-size: 11px;
+}
+
+.post .date{
+	font-size: 10px;
+}
+
+#message{
+	margin-bottom: 10px;
+}
+
+#message textarea{
+	resize: none;
+	margin-top: 5px;
+}
+
+#message #send{
+	margin-top: 5px;
+}
+
+#contact{
+	
+}
+
+#participants{
+	height: 50%;
+    min-height: 150px;
+    max-height: 300px;
+    overflow: auto;
+    background: RGBA(217, 158, 126, 0.51);
+}
+
+#participants table{
+	font-size: 10px;
+}
+
+#participants table td, #participants table th{
+	text-align: center;
+}
+
+#invitContact{
+	margin-top: 10px;
+    text-align: center;
+}

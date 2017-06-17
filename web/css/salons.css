@@ -1,0 +1,36 @@
+#salons table td, #salons table th{
+	text-align: center;
+}
+
+#salons tr.next{
+	background: white;
+}
+
+#salons tr.current{
+	background: #008000;
+}
+
+#salons tr.past{
+	background: #FFA500;
+}
+
+.action input{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.rateAbook{
+	background: white;
+	margin-left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
+@media screen and (min-width: 980px) {
+	.action select{
+		display: block !important;
+	}
+	
+	.action input{
+		display: none !important;
+	}
+}

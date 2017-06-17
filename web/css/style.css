@@ -1,6 +1,5 @@
 body{
-    
-    
+    background: #70BEB1;    
 }
 .centerer{
     display: block;
@@ -13,6 +12,31 @@ body{
 .marg-left{
     margin-left: 3%;
 }
+
+.row{
+	background: rgba(255, 255, 255, 0.64) none repeat scroll 0 0;
+}
+
+.display_none{ /* contrairement à .hide qui est en !important */
+	display: none;
+}
+
+.no-margin{
+	margin: 0;
+}
+
+.verticalMiddle{
+	vertical-align: middle;
+}
+
+.thumb_up i{
+	color: #039BE5; /* bleu ciel */
+}
+
+.thumb_down i{
+	color: #F00; /* rouge vif */
+}
+
 .logo{
     width: 130px;
 }

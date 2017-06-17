@@ -1,0 +1,349 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Inscription de nouveau membre
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+    <input type="hidden" value="{{ salon.id }}" id="idSalon">
+		<!-- Modal Trigger -->
+		  <a id="alert" class="waves-effect waves-light btn hide" href="#modal2">Modal</a>
+
+		  <!-- Modal Structure -->
+		  <div id="modal2" class="modal">
+			<div class="modal-content">
+			  <div class="col s8 rateAbook left">
+				<div id="nameAlert"></div>
+			  </div>
+			</div>
+			<div class="modal-footer">
+			  <a href="#!" class="closeWindowRateAbook modal-action modal-close waves-effect waves-green btn-flat">OK</a>
+			</div>
+		  </div>
+		  
+		<!-- Modal Structure -->
+		<div id="modal1" class="modal">
+			<div class="modal-content">
+				<div id="myContacts" class="col s12 margin-top">
+					<h4>Inviter des contacts</h4>
+					<form method="POST" action="">
+						<table class="table">
+						  <thead>
+							<tr class="<?php echo $themeApplicated->getPageStat(); ?>">
+							  <th>Ajouter</th>
+							  <th>Nom</th>
+							</tr>
+						  </thead>
+						  <tbody class="">
+							  <!--
+							  <tr>
+								  <td>
+									<p>
+									  <input type="checkbox" id="test5" name="myContacts[]">
+									  <label for="test5"></label>
+									</p>
+								  </td>
+								  <td>Paul Durand</td>
+							  </tr>
+							  
+							  <tr>
+								  <td>
+									<p>
+									  <input type="checkbox" id="test6" name="myContacts[]">
+									  <label for="test6"></label>
+									</p>
+								  </td>
+								  <td>Paul Durand</td>
+							  </tr>
+							  
+							  <tr>
+								  <td>
+									<p>
+									  <input type="checkbox" id="test7" name="myContacts[]">
+									  <label for="test7"></label>
+									</p>
+								  </td>
+								  <td>Paul Durand</td>
+							  </tr>
+							 -->
+						  </tbody>
+						</table>
+						<input type="button" class="btn btn-primary" id="invitContact" value="Inviter">
+					</form>
+				</div>
+			</div>
+			
+		<div class="modal-footer">
+		  <a href="#!" class="closeWindowRateAbook modal-action modal-close waves-effect waves-green btn-flat">Annuler</a>
+		</div>
+		
+	  </div>
+	  
+		<div class="row">
+			<div class="col s12">
+				<h1>Salon : {{ salon.titreSalon|e }} - <span id="nbParticipants">6</span> participants</h1>
+			</div>
+			<div id="chat" class="col l8 m12 s12 margin-top">
+				<div id="posts" class="col s12 margin-top">
+				{% for message in messages %}
+					<div class="post">
+						<input type="hidden" value="{{ message.idMembre }}" class="idMembreMessage">
+						<span class="name">
+							{% if message.idMembre == idMembre  %}
+								<span style="color: #0000ec">
+							{% endif %}
+							
+							{{ message.prenom_et_nom|e }}
+							
+							{% if message.idMembre == idMembre %}
+								</span>
+							{% endif %}
+						</span>
+						{% if message.idMembre != idMembre %}
+							<span class="alertAbuse right">
+								Signaler un abus
+							</span>
+						{% endif %}
+						<div class="clearfix"></div>
+						<div class="text">&nbsp;&nbsp;&nbsp; <!-- alinéa -->
+							{{ message.msg|e }}
+						</div>
+						<div class="date right">
+							{{ message.date.date|date('d/m/Y H:i:s') }}
+						</div>
+						<hr>
+					</div>
+				{% endfor %}
+				{% if messages is not empty %}
+					<input type="hidden" value="{{ messages|last.id }}" id="lastIdMsg">
+				{% else %}
+					<input type="hidden" value="0" id="lastIdMsg">
+				{% endif %}
+				</div>
+				<div id="message" class="col s12 margin-top">
+					<textarea id="msg"></textarea>
+					
+					<button id="send" class="col s12 btn-large right darken-3">
+						Envoyer
+					</button>
+				</div>					
+			</div>
+			
+			<div id="contacts" class="col l4 m12 s12 margin-top">
+				<div id="participants" class="col s12 margin-top">
+					<table class="table">
+					  <thead>
+						<tr class="<?php echo $themeApplicated->getPageStat(); ?>">
+						  <th>Participants</th>
+						  <th>Ajouter aux contact</th>
+						  <th>Signaler un abus</th>
+						</tr>
+					  </thead>
+					  <tbody class="">
+						  {% for participant in participants %}
+							  <input type="hidden" value="{{ participant.idMembre }}" class="idMembreParticipant">
+							  <tr>
+								  <td>
+									  <a href="#/{{ participant.idMembre }}" title="Voir le profil">{{ participant.nom|e }}</a>
+									  <div>
+										  <span href="#/{{ participant.idMembre }}" title="Participant pertinent dans ses propos" class="thumb_up"><i class="tiny material-icons">thumb_up</i></span>
+										  <span title="Participant non pertinent dans ses propos" class="thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></span>
+									  </div>
+								  </td>
+								  <td>
+									  <div class="">
+										{% if participant.ami == "false" %}
+										  <span title="Ajouter aux contact" class="btn-floating btn-small orange lighten-2 addToContacts" id="idMembre_{{ participant.idMembre }}"><i class="large material-icons">add</i></span>
+										{% endif %}
+									  </div>
+								  </td>
+								  <td>
+									  <div class="">
+										  <span title="Demande de bannissement" class="btn-floating btn-small red lighten-1 banFromSalon"><i class="large material-icons">block</i></span>
+									  </div>
+								  </td>
+							  </tr>
+						  {% endfor %}
+						  <!-- <tr>
+							  <td>
+								  <a href="#" title="Voir le profil">Paul Durand</a>
+								  <div>
+									  <a href="#" title="Participant pertinent dans ses propos" class="thumb_up"><i class="tiny material-icons">thumb_up</i></a>
+									  <a href="#" title="Participant non pertinent dans ses propos" class="thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></a>
+								  </div>
+							  </td>
+							  <td>
+								  <div class="">
+									  <a title="Ajouter aux contact" class="btn-floating btn-small orange lighten-2" href="#"><i class="large material-icons">add</i></a>
+								  </div>
+							  </td>
+							  <td>
+								  <div class="">
+									  <a title="Demande de bannissement" class="btn-floating btn-small red lighten-1" href="#"><i class="large material-icons">block</i></a>
+								  </div>
+							  </td>
+						  </tr>
+						  
+						  
+						  <tr>
+							  <td>
+								  <a href="#" title="Voir le profil">Paul Durand</a>
+								  <div>
+									  <a href="#" title="Participant pertinent dans ses propos" class="thumb_up"><i class="tiny material-icons">thumb_up</i></a>
+									  <a href="#" title="Participant non pertinent dans ses propos" class="thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></a>
+								  </div>
+							  </td>
+							  <td>
+								  <div class="">
+									  <a title="Ajouter aux contact" class="btn-floating btn-small orange lighten-2" href="#"><i class="large material-icons">add</i></a>
+								  </div>
+							  </td>
+							  <td>
+								  <div class="">
+									  <a title="Demande de bannissement" class="btn-floating btn-small red lighten-1" href="#"><i class="large material-icons">block</i></a>
+								  </div>
+							  </td>
+						  </tr> -->
+					  </tbody>
+					</table>
+				</div>
+				<div id="invitContacts" class="col s12 margin-top">
+					<!-- Modal Trigger -->
+					<a id="joinSalon" class="waves-effect waves-light" href="#modal1">
+						Inviter un contact
+						<div title="Inviter un contact" class="btn-floating btn-small red lighten-1">
+							<i class="large material-icons">add</i>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>         
+    </div>
+    <script>
+		function addtoContacts(idContact, currentElement){
+			$.ajax({
+				url: "{{ path('salon_addToContacts') }}",
+				method: "post",
+				data: {
+					idContact: idContact,
+					}			
+			}).done(function(msg){
+				$("#nameAlert").html("Contact enregistré");
+				$("#alert").click();
+				currentElement.css("visibility", "hidden");
+			});
+		}
+		
+		function popupInvitContacts(idSalon){
+			$.ajax({
+				url: "{{ path('salon_chargeContacts') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					}			
+			}).done(function(msg){
+				console.log(msg);
+				var contacts = $.parseJSON(msg);
+				$("#myContacts tbody").html("");			
+				for(var i = 0; i<contacts.length; i++){
+					$("#myContacts tbody").append("<tr><td><p><input type='checkbox' id='contact_"+contacts[i]['id']+"' name='myContacts[]'><label for='contact_"+contacts[i]['id']+"'></label></p></td><td>"+htmlEntities(contacts[i]['nom'])+"</td></tr>");
+				}
+			});
+		}
+		
+		function invitContacts(idContacts){
+			$.ajax({
+				url: "{{ path('salon_invitContacts') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					}			
+			}).done(function(msg){
+				console.log("contacts invités");
+			});
+		}
+		
+		function sendMessage(idSalon, message){
+			$.ajax({
+				url: "{{ path('salon_envoyerMessage') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					message: message,
+					}			
+			}).done(function(msg){
+				if(msg == "banni")
+					document.location.href = "/?ban=1";
+				console.log("Message enregistré en bdd");
+				$("#msg").val("");
+			});
+		}
+		
+		function wantBanFromSalon(idSalon, idMembreParticipant){
+			$.ajax({
+				url: "{{ path('salon_wantBanFromSalon') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					idMembreParticipant: idMembreParticipant,
+					}			
+			}).done(function(msg){
+				if(msg == "ok"){
+					$("#nameAlert").html("Demande de bannissement effectuée");					
+				}else{
+					$("#nameAlert").html(msg);
+				}
+				$("#alert").click();
+			});
+		}
+		
+		function receiveLastMessages(idSalon, lastIdMsg){
+			$.ajax({
+				url: "{{ path('salon_recupererDerniersMessages') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					lastIdMsg: lastIdMsg,
+					}			
+			}).done(function(msg){
+				console.log(msg);
+				if(msg != "no changement"){
+					var message = $.parseJSON(msg);
+					var a;
+					for(var i = 0; i<message.length; i++){
+						a = '<div class="post">';
+						a += '<input type="hidden" value="'+message[i]['idMembre']+'" class="idMembreMessage">';
+						a += '<span class="name">';
+						if(message[i]['me'] == "true")
+							a += '<span style="color: #0000ec">';
+						a += htmlEntities(message[i]['prenom_et_nom']);
+						if(message[i]['me'] == "true")
+							a += '</span>';
+						a += '</span>';
+						if(message[i]['me'] != "true"){
+							a += '<span class="alertAbuse right">';
+							a += 'Signaler un abus';
+							a += '</span>';
+						}
+						a += '<div class="clearfix"></div>';
+						a += '<div class="text">&nbsp;&nbsp;&nbsp;';
+						a += htmlEntities(message[i]['msg']);
+						a += '</div>';
+						a += '<div class="date right">';
+						a += message[i]['date'];
+						a += '</div>';
+						a += '<hr>';
+						a += '</div>';
+						$("#posts").append(a);
+					}
+					
+					var lastIdMsg = message[message.length-1]['id'];
+					console.log(lastIdMsg);
+					
+					$("#lastIdMsg").val(lastIdMsg);
+				}
+			});
+		}
+    </script>
+{% endblock %}

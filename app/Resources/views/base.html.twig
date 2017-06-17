@@ -7,8 +7,13 @@
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
             <link rel="stylesheet" href="{{ asset('css/materialize.min.css') }}">
             <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/salons.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/salon.css') }}">
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
     </head>
     <body>
         <div>
@@ -134,6 +139,9 @@
             <script src="{{ asset('js/jquery-3.1.1.min.js') }}"></script>
             <script src="{{ asset('js/materialize.min.js') }}"></script>
             <script src="{{ asset('js/init.js') }}"></script>
+            <script src="{{ asset('js/salons.js') }}"></script>
+            <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
+			<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
         {% endblock %}
     </body>
 </html>
