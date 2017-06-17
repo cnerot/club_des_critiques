@@ -52,13 +52,26 @@ Class Membre {
      * 
      * @ORM\Column(type="string")
      */
-    protected $statut;
+    protected $statut; 
     /**
      * @var string 
      * 
      * @ORM\Column(type="blob")
      */
     protected $picture;
+    /**
+     * @var integer 
+     * 
+     * @ORM\Column(type="integer")
+     */
+    protected $nbBonMembre;
+    
+    /**
+     * @var integer 
+     * 
+     * @ORM\Column(type="integer")
+     */
+    protected $nbMauvaisMembre;
 
     protected $confirm;
     /*
@@ -113,6 +126,21 @@ Class Membre {
     function getPicture() {
         return $this->picture;
     }
+    
+    /*
+     * @return integer
+     */
+    function getNbBonMembre() {
+        return $this->nbBonMembre;
+    }
+    
+    /*
+     * @return integer
+     */
+    function getNbMauvaisMembre() {
+        return $this->nbMauvaisMembre;
+    }
+    
     /**
      * @var int 
      * 
@@ -177,6 +205,24 @@ Class Membre {
      */
     function setPicture($picture) {
         $this->picture = $picture;
+    }
+    
+    /**
+     * @var integer 
+     * 
+     * @return integer
+     */
+    function setNbBonMembre($nbBonMembre) {
+        $this->nbBonMembre = $nbBonMembre;
+    }
+    
+    /**
+     * @var integer 
+     * 
+     * @return integer
+     */
+    function setNbMauvaisMembre($nbMauvaisMembre) {
+        $this->nbMauvaisMembre = $nbMauvaisMembre;
     }
 
     function setConfirm($confirm) {
