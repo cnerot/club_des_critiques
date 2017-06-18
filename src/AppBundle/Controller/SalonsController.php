@@ -109,7 +109,7 @@ class SalonsController extends Controller
      */
     public function recupIdSalonPossibleAction(Request $request)
     {
-		$nbMaxParticipants = 2;
+		$nbMaxParticipants = 20;
 		$salons = new Salon();
 		$notes = new Note();
 		$idSalon = $request->get('idSalon');
@@ -195,7 +195,7 @@ class SalonsController extends Controller
      */
     public function voteAction(Request $request)
     {
-		$nbMaxParticipants = 1;
+		$nbMaxParticipants = 20;
 		$salons = new Salon();
 		$notes = new Note();
 		$idMembre = 1; // à récupérer en $_SESSION

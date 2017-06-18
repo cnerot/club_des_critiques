@@ -82,7 +82,7 @@
 	  
 		<div class="row">
 			<div class="col s12">
-				<h1>Salon : {{ salon.titreSalon|e }} - <span id="nbParticipants">6</span> participants</h1>
+				<h1>Salon : {{ salon.titreSalon|e }} - <span id="nbParticipants">{{ participants|length }}</span> participant(s)</h1>
 			</div>
 			<div id="chat" class="col l8 m12 s12 margin-top">
 				<div id="posts" class="col s12 margin-top">
@@ -145,10 +145,16 @@
 							  <input type="hidden" value="{{ participant.idMembre }}" class="idMembreParticipant">
 							  <tr>
 								  <td>
-									  <a href="#/{{ participant.idMembre }}" title="Voir le profil">{{ participant.nom|e }}</a>
+									  <a href="#/{{ participant.idMembre }}" title="Voir le profil">{{ participant.nom|e }}
+									  {% if participant.good == "diamant" %}
+										<img title="Très bon membre du site" src="{{ asset('images/diamant.png') }}">
+									  {% elseif participant.good == "couronne" %}
+										<img title="Excellent membre du site" src="{{ asset('images/Couronne.png') }}">
+									   {% endif %}
+									</a>
 									  <div>
-										  <span href="#/{{ participant.idMembre }}" title="Participant pertinent dans ses propos" class="thumb_up"><i class="tiny material-icons">thumb_up</i></span>
-										  <span title="Participant non pertinent dans ses propos" class="thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></span>
+										  <span style="cursor: pointer" title="Participant pertinent dans ses propos" class="goodMember thumb_up"><i class="tiny material-icons">thumb_up</i></span>
+										  <span style="cursor: pointer" title="Participant non pertinent dans ses propos" class="badMember thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></span>
 									  </div>
 								  </td>
 								  <td>
@@ -293,6 +299,44 @@
 					$("#nameAlert").html("Demande de bannissement effectuée");					
 				}else{
 					$("#nameAlert").html(msg);
+				}
+				$("#alert").click();
+			});
+		}
+		
+		function goodMembre(idSalon, idMembreParticipant){
+			$.ajax({
+				url: "{{ path('salon_goodMembre') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					idMembreParticipant: idMembreParticipant,
+					note: 1
+					}			
+			}).done(function(msg){
+				if(msg == "ok"){
+					$("#nameAlert").html("Vous avez voté ce membre comme étant positif pour le site. Vous pouvez encore changer d'opinion en cliquant sur le pouce rouge.");					
+				}else{
+					$("#nameAlert").html("Vote impossible");
+				}
+				$("#alert").click();
+			});
+		}
+		
+		function badMembre(idSalon, idMembreParticipant){
+			$.ajax({
+				url: "{{ path('salon_goodMembre') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					idMembreParticipant: idMembreParticipant,
+					note: -1
+					}			
+			}).done(function(msg){
+				if(msg == "ok"){
+					$("#nameAlert").html("Vous avez voté ce membre comme étant négatif pour le site. Vous pouvez encore changer d'opinion en cliquant sur le pouce bleu.");
+				}else{
+					$("#nameAlert").html("Vote impossible");
 				}
 				$("#alert").click();
 			});

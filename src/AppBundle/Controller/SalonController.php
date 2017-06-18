@@ -16,6 +16,7 @@ use AppBundle\Entity\Note;
 use AppBundle\Entity\Amis;
 use AppBundle\Entity\Chatsalon;
 use AppBundle\Entity\Participant;
+use AppBundle\Entity\bon_mauvais_membre;
 
 class SalonController extends Controller
 {
@@ -26,6 +27,7 @@ class SalonController extends Controller
     {
 	   $idMembre = 1; // à récupérer en $_SESSION   
 	   $idSalon = $request->get('salon')->getId();
+	   //$idSalon = 9; //////////
 	   $participantsWithInfos = [];          
 	   $participant_ = new Participant();   	   	    
         
@@ -62,7 +64,7 @@ class SalonController extends Controller
         $participants = $this->getDoctrine()
 		->getRepository('AppBundle:Participant')
 		->findBy([
-			"id_salon" => $request->get('salon')->getId(),
+			"id_salon" => $idSalon,
 		]);						
 		
 		foreach($participants as $participant){
@@ -95,11 +97,35 @@ class SalonController extends Controller
 			$participant->nom = $membres->getNom();
 			$participant->prenom = $membres->getPrenom();
 			
+			// couronne ou diamant
+			
+			$bon_mauvais_membre = $this->getDoctrine()
+			->getRepository('AppBundle:bon_mauvais_membre')
+			->findBy([
+				"id_membre_recoit" => $participant->getIdMembre(),
+			]);
+			
+			$somme = 0;
+			
+			foreach($bon_mauvais_membre as $bon_mauvais){
+				$somme += $bon_mauvais->getNote();
+			}
+						
+			if($somme >= 20){
+				$participant->good = "couronne";
+			}
+			else if($somme >= 10){
+				$participant->good = "diamant";
+			}
+			else{
+				$participant->good = "";
+			}
+			
 			if($idMembre != $participant->getIdMembre()){ // s'il ne s'agit pas de nous
 				$participantsWithInfos[] = $participant;
 			}
-		}
-         
+		}                  
+
          // récupérer messages
          
          $idSalon = $request->get('salon')->getId();
@@ -259,10 +285,9 @@ class SalonController extends Controller
     {
 	   $nbBanMax = 2;
 	   $idMembre = 1; // à récupérer en $_SESSION
-	   //$idSalon = $request->get('idSalon');
-	   $idSalon = 9;
-	   //$idMembreParticipant = $request->get('idMembreParticipant');
-	   $idMembreParticipant = 2;
+	   $idSalon = $request->get('idSalon');
+	   $idMembreParticipant = $request->get('idMembreParticipant');
+	   //$idMembreParticipant = 2;
        
         $participants = $this->getDoctrine()
 		->getRepository('AppBundle:Participant')
@@ -289,19 +314,50 @@ class SalonController extends Controller
 		}
 		else{ // si déjà banni
 			return new Response("Vous avez déjà fait une demande de bannissement pour ce contact.");
+		}            
+        
+        return new Response("ok");
+    }
+    
+    /**
+     * @Route("/salon/goodMembre", name="salon_goodMembre")
+     */
+    public function goodMembreAction(Request $request)
+    {
+	   $bon_mauvais_membres = new bon_mauvais_membre();
+	   $idMembre = 1; // à récupérer en $_SESSION
+	   //$idMembreRecoit = $request->get('idSalon');
+	   $idMembreRecoit = $request->get('idMembreParticipant');
+	   $idSalon = $request->get('idSalon');
+       
+        $bon_mauvais_membre = $this->getDoctrine()
+		->getRepository('AppBundle:bon_mauvais_membre')
+		->findOneBy([
+			"id_membre_recoit" => $idMembreRecoit,
+			"id_membre_donne" => $idMembre,
+		]);
+		
+        if(!empty($bon_mauvais_membre)){
+			// update
+			$bon_mauvais_membre->setIdMembreRecoit($idMembreRecoit);
+			$bon_mauvais_membre->setIdMembreDonne($idMembre);
+			$bon_mauvais_membre->setNote($request->get('note'));
+			
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($bon_mauvais_membre);
+			$em->flush();
+		}else{
+			// insert
+			$bon_mauvais_membres->setIdMembreRecoit($idMembreRecoit);
+			$bon_mauvais_membres->setIdMembreDonne($idMembre);
+			$bon_mauvais_membres->setNote($request->get('note'));
+			
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($bon_mauvais_membres);
+			$em->flush();
 		}
         
-        echo "<pre>";
-			print_r($participants);
-        echo "</pre>";
-        
-        echo "<pre>";
-			print_r($idMembresWhoBan);
-        echo "</pre>";
-        
-        die();                
-        
-         return new Response("ok");
+        return new Response("ok");
     }
     
     /**

@@ -77,6 +77,18 @@ $(document).ready(function(){
 		wantBanFromSalon(idSalon, idMembreParticipant);
 	});
 	
+	$(".goodMember").click(function(){
+		var idSalon = $("#idSalon").val();
+		var idMembreParticipant = $(this).parent().parent().parent().parent().find(".idMembreParticipant").val();
+		goodMembre(idSalon, idMembreParticipant);
+	});
+	
+	$(".badMember").click(function(){
+		var idSalon = $("#idSalon").val();
+		var idMembreParticipant = $(this).parent().parent().parent().parent().find(".idMembreParticipant").val();
+		badMembre(idSalon, idMembreParticipant);
+	});
+	
 	// changer par un setinterval
 	setInterval(function(){
 		var idSalon = $("#idSalon").val();
