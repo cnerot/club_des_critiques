@@ -41,6 +41,7 @@ $(document).ready(function(){
 		}
 		
 		$('#noteChosen').val(idStar);
+		$("#rejoindreSalon").css("visibility", "visible");
 	});
 	
 	$(".addToContacts").click(function(){
