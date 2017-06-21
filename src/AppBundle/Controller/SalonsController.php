@@ -42,6 +42,7 @@ class SalonsController extends Controller
         foreach($salonsReceived as $salonReceived){
 			$i = 0;
 			$found = false;
+			$foundAncien = false;
 			foreach($salonsReceived as $salonReceived2){
 				if($found == false && $salonReceived->getId() != $salonReceived2->getId()){
 					if(
@@ -50,26 +51,29 @@ class SalonsController extends Controller
 					$salonReceived->getIdArticle() == $salonReceived2->getIdArticle()					
 					){
 						$found = true;
+						
+						if(strtotime(date('Y-m-d')) > strtotime($salonReceived->getDateFin()->format('Y-m-d'))){
+							$found = false;							
+						}						
 						if(!in_array($salonReceived->getId(), $tabIdDoublons) && !in_array($salonReceived2->getId(), $tabIdDoublons)){
 							$salons[] = $salonReceived;
+							$foundAncien = true;
 							$tabIdDoublons[] = $salonReceived->getId();
 							$tabIdDoublons[] = $salonReceived2->getId();
 						}
-						$idSalonsDoublons[$a][0] = $salonReceived->getId();
-						$idSalonsDoublons[$a][0] = $salonReceived2->getId();
-					}else{
-						
 					}
 				}
 				$i++;
 			}
-			if($found == false){
+			if($found == false && $foundAncien == false){
 				$salons[] = $salonReceived;
 			}
 		}
        //echo "<pre>";
        //print_r($salons);
        //echo "</pre>";
+       
+       //die();
         
         // replace this example code with whatever you need
         //return $this->render('salons\index.html.twig', [
