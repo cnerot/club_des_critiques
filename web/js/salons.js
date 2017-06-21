@@ -1,19 +1,39 @@
 $(document).ready(function(){
+	if(document.getElementById("posts") != null){
+		var posts = document.getElementById("posts");
+		posts.scrollTop = posts.scrollHeight;
+	}
+	
     // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
     $('.modal').modal();
     
-    $(".join").click(function(){
-	  $("#joinSalon").click();
-	  var idSalon = $(this).parent().parent().find('[name=idSalon]').val();
-	  $("#idSalon").val(idSalon);
-	  popupRejoindre(idSalon);
+    $(".selectAction").on("change", function(){
+		var idSalon = $(this).parent().find('[name=idSalon]').val();
+		$("#idSalon").val(idSalon);
+		if($(this).val() == "Rejoindre"){
+			$("#joinSalon").click();
+			popupRejoindre(idSalon);
+		}
+		else if($(this).val() == "Thème"){
+			
+		}
+		else if($(this).val() == "Voir"){
+			historiqueSalon(idSalon);
+		}
 	});
+    
+    //$(".join").click(function(){		
+	  //$("#joinSalon").click();
+	  //var idSalon = $(this).parent().parent().find('[name=idSalon]').val();
+	  //$("#idSalon").val(idSalon);
+	  //popupRejoindre(idSalon);
+	//});
 	
-	$(".historiqueSalon").click(function(){
-	  var idSalon = $(this).parent().parent().find('[name=idSalon]').val();
-	  $("#idSalon").val(idSalon);
-	  historiqueSalon(idSalon);
-	});		
+	//$(".historiqueSalon").click(function(){
+	  //var idSalon = $(this).parent().parent().find('[name=idSalon]').val();
+	  //$("#idSalon").val(idSalon);
+	  //historiqueSalon(idSalon);
+	//});		
 	
 	$(".closeWindowRateAbook").click(function(){ // remet les action par défaut
 		$(".action select").val("selected");
@@ -44,12 +64,12 @@ $(document).ready(function(){
 		$("#rejoindreSalon").css("visibility", "visible");
 	});
 	
-	$(".addToContacts").click(function(){
+	$(".addToContacts").on("click", function(){
 		var idContact = $(this).attr("id").split("_")[1];
 		addtoContacts(idContact, $(this));		
 	});
 	
-	$("#invitContacts").click(function(){
+	$("#invitContacts").on("click", function(){
 		var idSalon = $("#idSalon").val();
 		popupInvitContacts(idSalon);	
 	});
@@ -66,27 +86,27 @@ $(document).ready(function(){
 		sendMessage(idSalon, msg);
 	});
 	
-	$(".banFromSalon").click(function(){
+	$(document).on("click", ".banFromSalon", function(){
 		var idSalon = $("#idSalon").val();
-		var idMembreParticipant = $(this).parent().parent().parent().parent().find(".idMembreParticipant").val();
+		var idMembreParticipant = $(this).parent().parent().parent().find(".idMembreParticipant").val();
 		wantBanFromSalon(idSalon, idMembreParticipant);
 	});
 	
-	$(".alertAbuse").click(function(){
+	$(document).on("click", ".alertAbuse", function(){
 		var idSalon = $("#idSalon").val();
 		var idMembreParticipant = $(this).parent().find(".idMembreMessage").val();
 		wantBanFromSalon(idSalon, idMembreParticipant);
 	});
 	
-	$(".goodMember").click(function(){
+	$(document).on("click", ".goodMember", function(){
 		var idSalon = $("#idSalon").val();
-		var idMembreParticipant = $(this).parent().parent().parent().parent().find(".idMembreParticipant").val();
+		var idMembreParticipant = $(this).parent().parent().parent().find(".idMembreParticipant").val();
 		goodMembre(idSalon, idMembreParticipant);
 	});
 	
-	$(".badMember").click(function(){
+	$(document).on("click", ".badMember", function(){
 		var idSalon = $("#idSalon").val();
-		var idMembreParticipant = $(this).parent().parent().parent().parent().find(".idMembreParticipant").val();
+		var idMembreParticipant = $(this).parent().parent().parent().find(".idMembreParticipant").val();
 		badMembre(idSalon, idMembreParticipant);
 	});
 	

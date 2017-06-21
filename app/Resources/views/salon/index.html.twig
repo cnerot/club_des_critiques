@@ -82,7 +82,7 @@
 	  
 		<div class="row">
 			<div class="col s12">
-				<h1>Salon : {{ salon.titreSalon|e }} - <span id="nbParticipants">{{ participants|length }}</span> participant(s)</h1>
+				<h1>Salon : {{ salon.titreSalon|e }} - <span id="nbParticipants">{{ participants|length + 1 }}</span> participant(s)</h1>
 			</div>
 			<div id="chat" class="col l8 m12 s12 margin-top">
 				<div id="posts" class="col s12 margin-top">
@@ -119,7 +119,8 @@
 					<input type="hidden" value="{{ messages|last.id }}" id="lastIdMsg">
 				{% else %}
 					<input type="hidden" value="0" id="lastIdMsg">
-				{% endif %}
+				{% endif %}								
+				
 				</div>
 				<div id="message" class="col s12 margin-top">
 					<textarea id="msg"></textarea>
@@ -141,9 +142,16 @@
 						</tr>
 					  </thead>
 					  <tbody class="">
-						  {% for participant in participants %}
-							  <input type="hidden" value="{{ participant.idMembre }}" class="idMembreParticipant">
+					  
+						  {% if participants is not empty %}
+							  <input type="hidden" value="{{ participants|last.id }}" id="lastIdParticipant">
+						  {% else %}
+							  <input type="hidden" value="0" id="lastIdParticipant">
+						  {% endif %}
+						  
+						  {% for participant in participants %}							  
 							  <tr>
+								  <input type="hidden" value="{{ participant.idMembre }}" class="idMembreParticipant">
 								  <td>
 									  <a href="#/{{ participant.idMembre }}" title="Voir le profil">{{ participant.nom|e }}
 									  {% if participant.good == "diamant" %}
@@ -351,8 +359,13 @@
 					lastIdMsg: lastIdMsg,
 					}			
 			}).done(function(msg){
-				console.log(msg);
 				if(msg != "no changement"){
+					var posts = document.getElementById("posts");
+					var scroll = 0;
+					if(posts.clientHeight+posts.scrollTop === posts.scrollHeight){
+						scroll = 1;
+					}
+					
 					var message = $.parseJSON(msg);
 					var a;
 					for(var i = 0; i<message.length; i++){
@@ -386,7 +399,94 @@
 					console.log(lastIdMsg);
 					
 					$("#lastIdMsg").val(lastIdMsg);
+					
+					if(scroll == 1){
+						posts.scrollTop = posts.scrollHeight;
+					}
 				}
+				
+				var listIdParticipant = [];
+				
+				for(var i = 0; i<$(".idMembreParticipant").length; i++){
+					listIdParticipant[i] = $(".idMembreParticipant").eq(i).val();
+				}
+				updateListeParticipants(idSalon, listIdParticipant);
+			});
+		}
+		
+		function updateListeParticipants(idSalon, listIdParticipant){
+			var listIdMembresParticipants = listIdParticipant.join(',');
+			$.ajax({
+				url: "{{ path('salon_updateListeParticipants') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					listIdParticipant: listIdMembresParticipants
+					}			
+			}).done(function(msg){
+				console.log(":"+msg);
+				
+				if(msg != "no changement"){
+					var participant = $.parseJSON(msg);
+					var a;
+					for(var i = 0; i<participant.length; i++){						
+						a = '<tr>';
+						a += '<input type="hidden" value="'+participant[i]['idMembre']+'" class="idMembreParticipant">';
+						a += '<td><a href="#/'+participant[i]['idMembre']+'" title="Voir le profil">'+htmlEntities(participant[i]['nom']);
+									  if(participant[i]['good'] == "diamant"){
+										a += '<img title="Très bon membre du site" src="/images/diamant.png">';
+									  }
+									  else if(participant[i]['good'] == "couronne"){									  
+										a += '<img title="Excellent membre du site" src="/images/Couronne.png">';
+									  }
+						a += '</a>';
+						a += '<div>';
+						a += '<span style="cursor: pointer" title="Participant pertinent dans ses propos" class="goodMember thumb_up"><i class="tiny material-icons">thumb_up</i></span>';
+						a += '<span style="cursor: pointer" title="Participant non pertinent dans ses propos" class="badMember thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></span>';
+						a += '</div>';
+						a += '</td>';
+						a += '<td>';
+						a += '<div class="">';
+										if(participant[i]['ami'] == "false"){
+										  a += '<span title="Ajouter aux contact" class="btn-floating btn-small orange lighten-2 addToContacts" id="idMembre_'+participant[i]['idMembre']+'"><i class="large material-icons">add</i></span>';
+										}
+						a += '</div>';
+						a += '</td>';
+						a += '<td>';
+						a += '<div class="">';
+						a += '<span title="Demande de bannissement" class="btn-floating btn-small red lighten-1 banFromSalon"><i class="large material-icons">block</i></span>';
+						a += '</div>';
+						a += '</td>';
+						a += '</tr>';
+												
+						$("#participants tbody").append(a);
+					}
+				}
+				
+				// enlever participants non actifs
+				
+				$.ajax({
+					url: "{{ path('salon_enleverParticipantsNonActifs') }}",
+					method: "post",
+					data: {
+						idSalon: idSalon,
+						}			
+				}).done(function(msg){
+					console.log("::"+msg);
+					
+					if(msg != "no changement"){
+					
+						var idAnePasInclure = msg.split(",");
+						console.log(idAnePasInclure);
+						for(var j = 0; j<idAnePasInclure.length; j++){
+							for(var i = 0; i<$(".idMembreParticipant").length; i++){
+								if($(".idMembreParticipant").eq(i).attr("value") == idAnePasInclure[j]){
+									$(".idMembreParticipant").eq(i).parent().remove();
+								}
+							}
+						}
+					}
+				});
 			});
 		}
     </script>
