@@ -18,6 +18,7 @@ use AppBundle\Entity\Chatsalon;
 use AppBundle\Entity\Participant;
 use AppBundle\Entity\bon_mauvais_membre;
 use AppBundle\Entity\Send_request_salon;
+use AppBundle\Entity\Moderateur;
 
 class SalonController extends Controller
 {
@@ -156,7 +157,21 @@ class SalonController extends Controller
 			]);
 			
 			$message->prenom_et_nom = $membre->getPrenom()." ".$membre->getNom();						
-		}			
+		}
+		
+		$moderateur = $this->getDoctrine()
+		->getRepository('AppBundle:Moderateur')
+		->findOneBy([
+			"id_membre" => $idMembre,
+			"moderateur" => "1",
+		]);
+		
+		if(!empty($moderateur)){
+			$IamModerateur = 1;
+		}else{
+			$IamModerateur = 0;
+		}
+						
          //echo "<pre>";
          //print_r($messages);
          //echo "</pre>";
@@ -173,8 +188,41 @@ class SalonController extends Controller
             'participants' => $participantsWithInfos,
             'messages' => $messages,
             'idMembre' => $idMembre,
+            'IamModerateur' => $IamModerateur,
         ]);
     }
+    
+    /**
+     * @Route("/salon/deleteMessage", name="salon_deleteMessage")
+     */
+    public function deleteMessageAction(Request $request)
+    {
+		$idMembre = 1; // à récupérer en $_SESSION   
+		$idMessage = $request->get('idMessage');
+		
+		$moderateur = $this->getDoctrine()
+		->getRepository('AppBundle:Moderateur')
+		->findOneBy([
+			"id_membre" => $idMembre,
+			"moderateur" => "1",
+		]);
+		
+		if(empty($moderateur)){
+			return new Response("no moderator");
+		}
+		
+		$chatsalon = $this->getDoctrine()
+		->getRepository('AppBundle:Chatsalon')
+		->findOneBy([
+			"id" => $idMessage,			
+		]);
+		
+		$em = $this->getDoctrine()->getManager();
+		$em->remove($chatsalon);
+		$em->flush();
+		
+		return new Response("ok");
+	}
     
     /**
      * @Route("/salon/recupererDerniersMessages", name="salon_recupererDerniersMessages")
@@ -257,7 +305,7 @@ class SalonController extends Controller
 				$em->persist($pariticipant__);
 				$em->flush();
 			}
-		}				
+		}								
 		
 		// récupérer derniers messages
 				
@@ -308,6 +356,39 @@ class SalonController extends Controller
 			return new Response("no changement");
 		}
     }
+    
+    /**
+     * @Route("/salon/enleverMessagesSupprimes", name="salon_enleverMessagesSupprimes")
+     */
+    public function enleverMessagesSupprimesAction(Request $request)
+    {
+		$idMembre = 1; // à récupérer en $_SESSION   
+		$listeMessages = explode(",", $request->get('listIdMessages'));
+		
+		// ne plus afficher les messages supprimés
+		
+		$found = false;
+		
+		foreach($listeMessages as $idMessage){
+			$chatsalon = $this->getDoctrine()
+			->getRepository('AppBundle:Chatsalon')
+			->findOneBy([
+				"id" => $idMessage,			
+			]);
+			
+			if(empty($chatsalon)){
+				$listeAenlever[] = $idMessage;
+				$found = true;
+			}
+		}
+		
+		if($found == true){
+			$listeAenlever_ = implode(",", $listeAenlever);
+			return new Response($listeAenlever_);
+		}
+		
+		return new Response("no changement");
+	}
     
     /**
      * @Route("/salon/enleverParticipantsNonActifs", name="salon_enleverParticipantsNonActifs")
@@ -490,6 +571,37 @@ class SalonController extends Controller
 	   $idSalon = $request->get('idSalon');
        $chatSalon = new Chatsalon();
        
+       // vérifier si cet utilisateur envoie trop de messages en un espace-temps très court
+       
+	   $ChatsSalon = [];
+
+	   $em = $this->getDoctrine()->getManager();
+	   $query = $em->createQuery(
+			"SELECT s
+			FROM AppBundle:Chatsalon s
+			WHERE s.id_salon = :id_salon AND s.id_membre = :id_membre
+			AND s.date >= :date
+			ORDER by s.date ASC"
+	   )->setParameter('id_salon', $idSalon)
+	   ->setParameter('id_membre', $idMembre)
+	   ->setParameter('date', new \DateTime('-2 minutes'));
+	   $ChatsSalon = $query->getResult();
+       
+       if(count($ChatsSalon) >= 100){		   		   
+		   $em = $this->getDoctrine()->getManager();
+		   $query = $em->createQuery(
+				"DELETE
+				FROM AppBundle:Chatsalon s
+				WHERE s.id_salon = :id_salon AND s.id_membre = :id_membre
+				AND s.date >= :date"
+		   )->setParameter('id_salon', $idSalon)
+		   ->setParameter('id_membre', $idMembre)
+		   ->setParameter('date', new \DateTime('-2 minutes'));
+		   $ChatsSalon = $query->getResult();
+		   
+		   return new Response("banni");
+	   }  
+              
        // vérifier non banni
        $participantMe = $this->getDoctrine()
 		->getRepository('AppBundle:Participant')
@@ -513,6 +625,11 @@ class SalonController extends Controller
         $message = $request->get('message');
         //$message = "mon message";
         
+        // empêcher d'écrire plus de 2100 caractères
+        
+        if(strlen($message) > 2100 || trim($message) == "")
+			return new Response("ok");
+        
         $chatSalon->setIdSalon($idSalon);
 		$chatSalon->setIdMembre($idMembre);
 		$chatSalon->setMsg($message);
@@ -523,6 +640,43 @@ class SalonController extends Controller
         
          return new Response("ok");
     }
+    
+    /**
+     * @Route("/salon/banFromSalon", name="salon_banFromSalon")
+     */
+    public function banFromSalonAction(Request $request)
+    {
+		$idMembre = 1; // à récupérer en $_SESSION
+	    $idSalon = $request->get('idSalon');
+		$idMembreParticipant = $request->get('idMembreParticipant');
+		
+		$participant = $this->getDoctrine()
+		->getRepository('AppBundle:Participant')
+		->findOneBy([
+			"id_salon" => $idSalon,
+			"id_membre" => $idMembreParticipant,
+		]);
+		
+		$participant->setBan(1);
+		$participant->setActif(0);
+		
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($participant);
+		$em->flush();
+		
+		$moderateur = $this->getDoctrine()
+		->getRepository('AppBundle:Moderateur')
+		->findOneBy([
+			"id_membre" => $idMembre,
+			"moderateur" => "1",
+		]);
+		
+		if(empty($moderateur)){
+			return new Response("no moderator");
+		}
+		
+		return new Response("ok");
+	}
     
     /**
      * @Route("/salon/wantBanFromSalon", name="salon_wantBanFromSalon")

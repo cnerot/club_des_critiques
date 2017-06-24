@@ -6,7 +6,7 @@
 	text-align: center;
 }
 
-.alertAbuse{
+.alertAbuse, .deleteMessage{
 	color: #5197ff;
 	cursor: pointer;
 }

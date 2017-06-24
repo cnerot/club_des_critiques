@@ -156,7 +156,7 @@
 				noteChosen: noteChosen,
 				}			
 		}).done(function(msg){
-			console.log("Vote effectué");
+			//console.log("Vote effectué");
 		});*/
 	}
 	
@@ -169,7 +169,6 @@
 				noteChosen: noteChosen,
 				}			
 		}).done(function(msg){
-			console.log("id : "+msg);
 			$('#idSalon').val(msg);
 			var noteChosen = $('#noteChosen').val();
 			refreshStars(msg, noteChosen);

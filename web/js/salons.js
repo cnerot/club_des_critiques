@@ -110,15 +110,42 @@ $(document).ready(function(){
 		badMembre(idSalon, idMembreParticipant);
 	});
 	
+	$(document).on("click", ".banFromSalonDirectly", function(){
+		var idSalon = $("#idSalon").val();
+		var idMembreParticipant = $(this).parent().parent().parent().find(".idMembreParticipant").val();
+		banFromSalon(idSalon, idMembreParticipant);
+	});
+	
 	// changer par un setinterval
 	setInterval(function(){
 		var idSalon = $("#idSalon").val();
 		var lastIdMsg = $("#lastIdMsg").val();
 		receiveLastMessages(idSalon, lastIdMsg);
-	}, 4000);
-	
-	$(".alertAbuse").click(function(){
 		
+		// récupère les idMessage
+		
+		var listIdMessages = "";
+		
+		for(var i = 0; i<$(".idMessage").length; i++){
+			listIdMessages += $(".idMessage").eq(i).val()+",";
+		}				
+		
+		// supprime dernière virgule
+		
+		var listIdMessages_ = "";
+		
+		if(listIdMessages.lastIndexOf(",") == listIdMessages.length - 1 && listIdMessages.length != 0){
+			for(var i = 0; i<listIdMessages.length - 1; i++){
+				listIdMessages_ += listIdMessages[i];
+			}
+		}
+				
+		enleverMessagesSupprimes(listIdMessages_);
+	}, 4000);		
+	
+	$(document).on("click", ".deleteMessage", function(){
+		var idMessage = $(this).parent().find(".idMessage").val();
+		deleteMessage(idMessage);
 	});
 	
 	var datatable = $('.listing');

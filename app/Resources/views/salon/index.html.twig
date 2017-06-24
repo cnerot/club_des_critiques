@@ -88,6 +88,7 @@
 				<div id="posts" class="col s12 margin-top">
 				{% for message in messages %}
 					<div class="post">
+						<input type="hidden" value="{{ message.id }}" class="idMessage">
 						<input type="hidden" value="{{ message.idMembre }}" class="idMembreMessage">
 						<span class="name">
 							{% if message.idMembre == idMembre  %}
@@ -101,9 +102,15 @@
 							{% endif %}
 						</span>
 						{% if message.idMembre != idMembre %}
-							<span class="alertAbuse right">
-								Signaler un abus
-							</span>
+							{% if IamModerateur == 1 %}
+								<span class="deleteMessage right">
+									Supprimer le message
+								</span>
+							{% else %}
+								<span class="alertAbuse right">
+									Signaler un abus
+								</span>
+							{% endif %}
 						{% endif %}
 						<div class="clearfix"></div>
 						<div class="text">&nbsp;&nbsp;&nbsp; <!-- alinéa -->
@@ -123,7 +130,7 @@
 				
 				</div>
 				<div id="message" class="col s12 margin-top">
-					<textarea id="msg"></textarea>
+					<textarea maxlength="2100" id="msg"></textarea>
 					
 					<button id="send" class="col s12 btn-large right darken-3">
 						Envoyer
@@ -138,7 +145,11 @@
 						<tr class="<?php echo $themeApplicated->getPageStat(); ?>">
 						  <th>Participants</th>
 						  <th>Ajouter aux contact</th>
-						  <th>Signaler un abus</th>
+						  {% if IamModerateur == 1 %}
+							<th>Bannir</th>
+						  {% else %}
+						    <th>Signaler un abus</th>
+						  {% endif %}
 						</tr>
 					  </thead>
 					  <tbody class="">
@@ -173,9 +184,15 @@
 									  </div>
 								  </td>
 								  <td>
-									  <div class="">
-										  <span title="Demande de bannissement" class="btn-floating btn-small red lighten-1 banFromSalon"><i class="large material-icons">block</i></span>
-									  </div>
+									  {% if IamModerateur == 1 %}
+										  <div class="">
+											  <span title="Bannir" class="btn-floating btn-small red lighten-1 banFromSalonDirectly"><i class="large material-icons">block</i></span>
+										  </div>
+									  {% else %}
+										  <div class="">
+											  <span title="Demande de bannissement" class="btn-floating btn-small red lighten-1 banFromSalon"><i class="large material-icons">block</i></span>
+										  </div>
+									  {% endif %}
 								  </td>
 							  </tr>
 						  {% endfor %}
@@ -257,7 +274,6 @@
 					idSalon: idSalon,
 					}			
 			}).done(function(msg){
-				console.log(msg);
 				var contacts = $.parseJSON(msg);
 				$("#myContacts tbody").html("");			
 				for(var i = 0; i<contacts.length; i++){
@@ -274,7 +290,7 @@
 					idSalon: idSalon,
 					}			
 			}).done(function(msg){
-				console.log("contacts invités");
+				//console.log("contacts invités");
 			});
 		}
 		
@@ -289,7 +305,6 @@
 			}).done(function(msg){
 				if(msg == "banni")
 					document.location.href = "/?ban=1";
-				console.log("Message enregistré en bdd");
 				$("#msg").val("");
 			});
 		}
@@ -362,7 +377,7 @@
 				if(msg != "no changement"){
 					var posts = document.getElementById("posts");
 					var scroll = 0;
-					if(posts.clientHeight+posts.scrollTop === posts.scrollHeight){
+					if(parseInt(posts.clientHeight+posts.scrollTop) === parseInt(posts.scrollHeight)){
 						scroll = 1;
 					}
 					
@@ -396,7 +411,6 @@
 					}
 					
 					var lastIdMsg = message[message.length-1]['id'];
-					console.log(lastIdMsg);
 					
 					$("#lastIdMsg").val(lastIdMsg);
 					
@@ -414,6 +428,55 @@
 			});
 		}
 		
+		function deleteMessage(idMessage){
+			$.ajax({
+				url: "{{ path('salon_deleteMessage') }}",
+				method: "post",
+				data: {
+					idMessage: idMessage,
+					}			
+			}).done(function(msg){
+				enleverMessagesSupprimes(idMessage);
+			});
+		}
+		
+		function enleverMessagesSupprimes(listIdMessages){
+			$.ajax({
+				url: "{{ path('salon_enleverMessagesSupprimes') }}",
+				method: "post",
+				data: {
+					listIdMessages: listIdMessages,
+					}			
+			}).done(function(msg){
+				if(msg != "no changement"){
+					var split_msg = msg.split(",");
+					for(var i = 0; i<split_msg.length; i++){
+						for(var j = 0; j<$(".idMessage").length; j++){
+							if($(".idMessage").eq(j).val() == split_msg[i]){
+								$(".idMessage").eq(j).parent().remove();
+							}
+						}
+					}				
+				}				
+			});
+		}
+		
+		function banFromSalon(idSalon, idMembreParticipant){
+			$.ajax({
+				url: "{{ path('salon_banFromSalon') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					idMembreParticipant: idMembreParticipant,
+					}			
+			}).done(function(msg){
+				if(msg == "ok"){
+					$("#nameAlert").html("La personne a bien été bannie du salon");
+					$("#alert").click();
+				}
+			});
+		}
+		
 		function updateListeParticipants(idSalon, listIdParticipant){
 			var listIdMembresParticipants = listIdParticipant.join(',');
 			$.ajax({
@@ -424,7 +487,6 @@
 					listIdParticipant: listIdMembresParticipants
 					}			
 			}).done(function(msg){
-				console.log(":"+msg);
 				
 				if(msg != "no changement"){
 					var participant = $.parseJSON(msg);
@@ -472,12 +534,10 @@
 						idSalon: idSalon,
 						}			
 				}).done(function(msg){
-					console.log("::"+msg);
 					
 					if(msg != "no changement"){
 					
 						var idAnePasInclure = msg.split(",");
-						console.log(idAnePasInclure);
 						for(var j = 0; j<idAnePasInclure.length; j++){
 							for(var i = 0; i<$(".idMembreParticipant").length; i++){
 								if($(".idMembreParticipant").eq(i).attr("value") == idAnePasInclure[j]){
