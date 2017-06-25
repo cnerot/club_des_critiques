@@ -33,6 +33,24 @@ class SalonController extends Controller
 	   $participantsWithInfos = [];          
 	   $participant_ = new Participant();   	   	    
         
+        // vérifier salon ouvert
+        $participantMe = $this->getDoctrine()
+		 ->getRepository('AppBundle:Salon')
+		 ->findOneBy([
+			"id" => $idSalon,
+		 ]);
+		 
+		if(strtotime($participantMe->getDateDebut()->format('Y-m-d')) > strtotime(date('Y-m-d'))
+		|| strtotime($participantMe->getDateFin()->format('Y-m-d')) < strtotime(date('Y-m-d'))
+		){
+			$response = new Response();
+				
+			$response->setStatusCode(200);
+			$response->headers->set('Refresh', '1; url=/');
+			
+			$response->send();
+		}
+
         // vérifier non banni
         $participantMe = [];
 		$participantMe = $this->getDoctrine()
@@ -171,18 +189,29 @@ class SalonController extends Controller
 		}else{
 			$IamModerateur = 0;
 		}
-						
-         //echo "<pre>";
-         //print_r($messages);
-         //echo "</pre>";
-        //$encoders = array(new XmlEncoder(), new JsonEncoder());
-		//$normalizers = array(new ObjectNormalizer());
-		//$serializer = new Serializer($normalizers, $encoders);
 		
-		//$jsonContent = $serializer->serialize($messages, 'json');
-             
-             //print_r($jsonContent);
-             
+		// requête qui confirme notre présence sur le salon
+		
+		$sendRequestSalonNew = new Send_request_salon(); 				
+		
+		$sendRequestSalon = $this->getDoctrine()
+		->getRepository('AppBundle:Send_request_salon')
+		->findOneBy([
+			"id_salon" => $idSalon,
+			"id_membre" => $idMembre,
+		]);
+		
+		// mettre à jour date
+		if(empty($sendRequestSalon)){
+			$sendRequestSalonNew->setIdMembre($idMembre);
+			$sendRequestSalonNew->setIdSalon($idSalon);
+			$sendRequestSalonNew->setDate(new \DateTime('now'));
+			
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($sendRequestSalonNew);
+			$em->flush();
+		}
+
          return $this->render('salon\index.html.twig',[
             'salon' => $request->get('salon'),
             'participants' => $participantsWithInfos,

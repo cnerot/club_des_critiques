@@ -119,6 +119,14 @@ class SalonsController extends Controller
 		$idSalon = $request->get('idSalon');
 		$noteChosen = $request->get('noteChosen');
 		
+		$nbMaxSalon = $this->getDoctrine()
+		->getRepository('AppBundle:Parametres')
+		->findOneBy([
+			"id" => 1,
+		]);
+		
+		$nbMaxParticipants = $nbMaxSalon->getNbMaxSalon();
+		
 		$salon = $this->getDoctrine()
 		->getRepository('AppBundle:Salon')
 		->findOneBy([
@@ -129,6 +137,7 @@ class SalonsController extends Controller
 		->getRepository('AppBundle:Participant')
 		->findBy([
 			"id_salon" => $idSalon,
+			"actif" => 1,
 		]);				
 		
 		$idArticle = $salon->getIdArticle();
@@ -142,6 +151,8 @@ class SalonsController extends Controller
 			->getRepository('AppBundle:Salon')
 			->findBy([
 				"id_article" => $idArticle,
+				"titre_salon" => $salon->getTitreSalon(),
+				"description" => $salon->getDescription(),
 				"date_debut" => $salon->getDateDebut(),
 				"date_fin" => $salon->getDateFin(),
 			]);
@@ -157,6 +168,7 @@ class SalonsController extends Controller
 				->getRepository('AppBundle:Participant')
 				->findBy([
 					"id_salon" => $sameSalon->getId(),
+					"actif" => 1,
 				]);
 				
 				if(count($participantsSameSalons) < $nbMaxParticipants){
@@ -207,6 +219,15 @@ class SalonsController extends Controller
 		//$noteChosen = 4; // à récupérer en $request->get
 		$idSalon = $_GET['idSalon']; // à récupérer en $request->get
 		$noteChosen = $_GET['noteChosen']; // à récupérer en $request->get
+		
+		$nbMaxSalon = $this->getDoctrine()
+		->getRepository('AppBundle:Parametres')
+		->findOneBy([
+			"id" => 1,
+		]);
+		
+		$nbMaxParticipants = $nbMaxSalon->getNbMaxSalon();
+		
 		/*$salon = $this->getDoctrine()
 		->getRepository('AppBundle:Salon')
 		->findOneBy([
