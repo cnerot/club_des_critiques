@@ -56,7 +56,7 @@ Class Membre {
     /**
      * @var string 
      * 
-     * @ORM\Column(type="blob")
+     * @ORM\Column(type="string")
      */
     protected $picture;
 
@@ -108,7 +108,7 @@ Class Membre {
         return $this->statut;
     }
      /*
-     * @return 	blob
+     * @return 	string
      */
     function getPicture() {
         return $this->picture;
@@ -173,7 +173,7 @@ Class Membre {
     /**
      * @var string 
      * 
-     * @return blob
+     * @return string
      */
     function setPicture($picture) {
         $this->picture = $picture;

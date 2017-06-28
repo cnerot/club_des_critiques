@@ -24,7 +24,7 @@ class MailForm extends AbstractType{
                     'label'=>'Objet'
                 ])
                  ->add('message', TextareaType::class, [
-                    'label'=>'Message'
+                    'label'=>'Message',
                 ]);
     }
     public function configureOption(OptionsResolver $resolver) {

@@ -21,6 +21,7 @@ class DefaultController extends Controller
         $membre = new Membre();
         $form = $this->createForm(InscriptionForm::class, $membre);
         $form->handleRequest($request);
+        $session = $request->getSession();
         if($form->isValid()){
             $mdp = Helper::createPassword(10);//.''.base64_encode($membre->getMail());
             $hashed_password = 'RTBDSG907HGVB@@BGJGfgcgfVGHCDFVBHJhfhg0989';
@@ -43,10 +44,17 @@ class DefaultController extends Controller
 
            //return $this->redirectToRoute('membre_show', ['id'=>$membre->getId()]);      
         }
-
+        if($session->get('id')!=null){
+            $em = $this->getDoctrine()->getManager();
+            $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        }
+        $em = $this->getDoctrine()->getManager();
+        $concept = $em->getRepository('AppBundle:Concept')->find(1);
         return $this->render('home/index.html.twig',[
             'membre' => $membre,
             'email' => $form->createView(),
+            'id_membre' => $session->get('id'),
+            'concept' => $concept->getConcept(),
         ]);
     }
    

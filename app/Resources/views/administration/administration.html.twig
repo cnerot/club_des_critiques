@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+   Administration
+{% endblock %}
+
+{% block body %}
+   
+    <div class="container">
+        <div class="row">
+            <h4><center>Administration</center></h4>
+            <ul class="collapsible popout" data-collapsible="accordion">
+                <li>
+                  <div class="collapsible-header">Page d'accueil</div>
+                  <div class="collapsible-body" style="padding:3%">
+                      <form method="post" action="{{path('administration_concept')}}">
+                            <label for="">Le concept : </label>
+                            <textarea name="concept" height="10rem" rows="40" cols="70">{{ concept }}</textarea>
+                            <input type="submit" class="btn waves-effect waves-light" value="sauvgarder">
+                            <span></span>
+                      </form>
+                  </div>
+                </li>
+                <li>
+                  <div class="collapsible-header">Contenus</div>
+                  <div class="collapsible-body"><span>A ajouter par charles</span></div>
+                </li>
+                <li>
+                  <div class="collapsible-header">Contenus(2)</div>
+                  <div class="collapsible-body"><span>Ajouter par charles</span></div>
+                </li>
+                <li>
+                  <div class="collapsible-header">Pages statiques</div>
+                  <div class="collapsible-body"><span>A ajouter par charles</span></div>
+                </li>
+                <li>
+                  <div class="collapsible-header">Salons</div>
+                  <div class="collapsible-body"><span>A ajouter par gaetan</span></div>
+                </li>
+                <li>
+                  <div class="collapsible-header">Membres</div>
+                  <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

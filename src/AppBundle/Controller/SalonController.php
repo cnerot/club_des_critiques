@@ -24,7 +24,7 @@ class SalonController extends Controller
      */
     public function indexAction(Request $request)
     {
-	   $idMembre = 1; // à récupérer en $_SESSION   
+	   $idMembre = 8; // à récupérer en $_SESSION   
 	   $idSalon = $request->get('salon')->getId();
 	   $participantsWithInfos = [];          
 	   $participant_ = new Participant();   	   	    
@@ -464,7 +464,7 @@ class SalonController extends Controller
 				$participantsWithInfos[] = $ChatSalon;				
 		}
 		
-		return $this->render('salon\historiqueSalon.html.twig',[
+	return $this->render('salon\historiqueSalon.html.twig',[
             'salon' => $salon,
             'chats' => $participantsWithInfos,
         ]);

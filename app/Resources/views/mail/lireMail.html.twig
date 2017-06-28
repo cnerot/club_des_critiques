@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col s12">
                 <div class="col s7">
-                {% for m in membre%}
+                {% for m in membres%}
                     {% if m.id == message.id_sender %}
                         <p>de : <b>{{ m.prenom }} {{ m.nom }}</b> <span style="font-size:11px">({{ m.mail }})</span> </p>
                     {% endif %}
@@ -27,8 +27,8 @@
             </div>
             <div class="col s12"><hr/></div>
              <div class="col s12">
-                 <p>{{message.objet|raw}}</p>
-                <p>{{message.message|raw}}</p>
+                <p><b>Objet : </b>{{message.objet|raw}}</p>
+                <p><b>Message : </b>{{message.message|raw}}</p>
              </div>
         </div>
     </div>

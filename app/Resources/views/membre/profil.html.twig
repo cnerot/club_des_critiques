@@ -8,11 +8,36 @@
         <div class="col s3 m3">
           <div class="card">
             <div class="centerer">
-                <form action="{{ path("membre_picture")}}">
-                    <a href="">
-                        <img width="150" class="centerer" src="images/profil.png"><input type="file" nom="picture" placeholder="Modifier votre photo">
+                    <a href="#modal1">
+                        {% if picture != null %}
+                            <div><img width="150" class="centerer" src="../ressource/profil/{{picture}}"></div>
+                        {% else %}
+                            <div><img width="150" class="centerer" src="../ressource/profil/profil.png" alt="default"></div>
+                        {% endif %}
                     </a>
-                    <input type="submit">
+                      <!-- Modal Trigger -->
+
+                    <!-- Modal Structure -->
+                    <div id="modal1" class="modal">
+                      <div class="modal-content">
+                            {% if picture != null %}
+                                <div><img width="260" class="centerer" src="../ressource/profil/{{picture}}" alt="photo de profil"></div>
+                            {% else %}
+                                <div><img width="260" class="centerer" src="../ressource/profil/profil.png" alt="default"></div>
+                            {% endif %}
+                            {% if membre.id == id_membre %}
+                                <form action="{{ path("membre_picture")}}" method="POST" enctype="multipart/form-data">
+                                      <div><input type="file" name="picture"></div>
+                                      <div><input type="submit" value="Upload"></div>
+                                </form>
+                            {% endif %}
+
+                        <p></p>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Fermer</a>
+                      </div>
+                    </div>
                 <form>
             </div>
           </div>
@@ -27,18 +52,35 @@
           </div>
         </div>
         <div class="col s4 m4">
-          <div class="card">
-            <div class="card-content">
-                <a href="#">Modifier mis information</a>
-                <a href="#">Modifier mon mot de passe</a>
-                <a href="#">Gérer mes contacts</a>
+          {% if membre.id == id_membre %}
+            <div class="card">
+              <div class="card-content">
+                  <div><a href="#">Modifier mes information</a></div>
+                  <div>
+                      <a href="#modal2">Modifier mon mot de passe</a>
+                      <div id="modal2" class="modal">
+                        <div class="modal-content">
+                            {{ form_start(editPwdForm) }}
+                            {{ form_rest(editPwdForm) }}
+                                <button class="waves-effect waves-light btn" type="submit">Modifier</button>
+                            {{ form_end(editPwdForm) }}
+                          </div>
+                          <div class="modal-footer">
+                            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Fermer</a>
+                          </div>
+                      </div>
+                  </div>
+                  <div><a href="#">Gérer mes contacts</a></div>
+              </div>
             </div>
-          </div>
-          <div class="card">
-            <div class="card-content">
-                <a href="#" class="btn waves-effect waves-light centerer">Contacter</a>
+         {% endif %}
+         {% if membre.id != id_membre %}
+            <div class="card">
+              <div class="card-content">
+                  <a href="{{ path("messagerie_send", {'id': membre.id })}}" class="btn waves-effect waves-light centerer">Contacter</a>
+              </div>
             </div>
-          </div>
+          {% endif %}
         </div>
       </div>
 

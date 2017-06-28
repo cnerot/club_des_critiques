@@ -17,20 +17,9 @@ class SalonsController extends Controller
     public function indexAction(Request $request)
     {
         $salon = new Salon();
-        //$em = $this->getDoctrine()->getManager();
-        
-        //$em = $this->getDoctrine()->getManager();
-		//$query = $em->createQuery(
-			//"SELECT s
-			//FROM AppBundle:Salon s
-			//GROUP BY s.id_article"
-		//);
-		
-		//$salonsReceived = $query->getResult();
-        
-        //echo "<pre>";
-			//print_r($salonsReceived);
-        //echo "</pre>";
+        $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
         
         $salonsReceived = $this->getDoctrine()
         ->getRepository('AppBundle:Salon')
@@ -40,19 +29,19 @@ class SalonsController extends Controller
         $salons = [];
         $tabIdDoublons = [];
         foreach($salonsReceived as $salonReceived){
-			$i = 0;
-			$found = false;
-			foreach($salonsReceived as $salonReceived2){
-				if($found == false && $salonReceived->getId() != $salonReceived2->getId()){
-					if(
-					$salonReceived->getDateDebut() == $salonReceived2->getDateDebut() && 
-					$salonReceived->getDateFin() == $salonReceived2->getDateFin() &&
-					$salonReceived->getIdArticle() == $salonReceived2->getIdArticle()					
-					){
-						$found = true;
-						if(!in_array($salonReceived->getId(), $tabIdDoublons) && !in_array($salonReceived2->getId(), $tabIdDoublons)){
-							$salons[] = $salonReceived;
-							$tabIdDoublons[] = $salonReceived->getId();
+	    $i = 0;
+	    $found = false;
+	    foreach($salonsReceived as $salonReceived2){
+		if($found == false && $salonReceived->getId() != $salonReceived2->getId()){
+		    if(
+			$salonReceived->getDateDebut() == $salonReceived2->getDateDebut() && 
+			$salonReceived->getDateFin() == $salonReceived2->getDateFin() &&
+			$salonReceived->getIdArticle() == $salonReceived2->getIdArticle()					
+			){
+			    $found = true;
+                            if(!in_array($salonReceived->getId(), $tabIdDoublons) && !in_array($salonReceived2->getId(), $tabIdDoublons)){
+				$salons[] = $salonReceived;
+				$tabIdDoublons[] = $salonReceived->getId();
 							$tabIdDoublons[] = $salonReceived2->getId();
 						}
 						$idSalonsDoublons[$a][0] = $salonReceived->getId();
@@ -78,6 +67,8 @@ class SalonsController extends Controller
         
          return $this->render('salons\index.html.twig',[
             'salons' => $salons,
+            'id_membre'=> $session->get('id'),
+            'membre'=> $membre,
         ]);
 
     }

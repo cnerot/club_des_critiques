@@ -23,32 +23,47 @@ class MessagerieController extends Controller
     /** 
      * @Route("/reception", name="messagerie_reception")
      */
-    public function receptionAction()
+    public function receptionAction(Request $request)
     {
+        $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
-        $membre = $em->getRepository('AppBundle:Membre')->findAll();
-        $messagerieReceve = $em->getRepository('AppBundle:Messagerie')->findBy(array('id_recever' => 5));
-        $messagerieSent = $em->getRepository('AppBundle:Messagerie')->findBy(array('id_sender' => 5));
+        $membres = $em->getRepository('AppBundle:Membre')->findAll();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        $messagerieReceve = $em->getRepository('AppBundle:Messagerie')->findBy(array('id_recever' => $session->get('id')));
+        $messagerieSent = $em->getRepository('AppBundle:Messagerie')->findBy(array('id_sender' => $session->get('id')));
         return $this->render('mail\boiteReception.html.twig', [
             'messagerieSent'=>$messagerieSent,
             'messagerie'=>$messagerieReceve,
+            'membres' => $membres,
             'membre' => $membre,
+            'id_membre' => $session->get('id')
+            
         ]);
         
     }
     /** 
      * @Route("/lire/{id}", name="messagerie_lire")
      */
-    public function lireAction($id)
+    public function lireAction($id, Request $request)
     {
+        $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $message = $em->getRepository('AppBundle:Messagerie')->findOneById($id);
+        if($session->get('id')==$message->getId_recever()){
+           $message->setVu(1);
+           $em->persist($message);
+           $em->flush();
+           $this->addFlash('success', "Lu");
+        }
        // var_dump($message.getId());
         //die;
-        $membre = $em->getRepository('AppBundle:Membre')->findAll();
+        $membres = $em->getRepository('AppBundle:Membre')->findAll();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         return $this->render('mail\lireMail.html.twig', [
             'message'=>$message,
+            'membres' => $membres,
             'membre' => $membre,
+            'id_membre' => $session->get('id')
         ]);
         
     }
@@ -57,6 +72,7 @@ class MessagerieController extends Controller
      */
     public function contactAction(Request $request)
     {
+        $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $receverAdmin = $em->getRepository('AppBundle:Membre')->findBy(array('statut'=>1));
         //var_dump($receverAdmin);
@@ -94,10 +110,12 @@ class MessagerieController extends Controller
         }
        // var_dump($message.getId());
         //die;
-        $membre = $em->getRepository('AppBundle:Membre')->findAll();
-        
+        $membres = $em->getRepository('AppBundle:Membre')->findAll();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         return $this->render('mail/nousContacter.html.twig', [
             'form'=>$form->createView(),
+            'id_membre' => $session->get('id'),
+            'membre' => $membre,
         ]);
         
     }
@@ -111,10 +129,13 @@ class MessagerieController extends Controller
         $message = new Messagerie();
         $form = $this->createForm(mailForm::class, $message);
         $form->handleRequest($request);
-     
+        $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        $membreRecever = $em->getRepository('AppBundle:Membre')->find($id);
         if($form->isValid()){
             // query for a single product matching the given name and price
-            $message->setId_Sender(5);
+            $message->setId_Sender($session->get('id'));
             $message->setId_Recever($id);
             $message->setVu(0);
             //$message->setDate(Symfony\Component\Validator\Constraints\Date('Y-m-d H:i'));
@@ -128,8 +149,10 @@ class MessagerieController extends Controller
               
         }
         return $this->render('mail/mail.html.twig',[
-           // 'membre' => $membre,
+            'membre' => $membre,
             'form' => $form->createView(),
+            'id_membre' => $session->get('id'),
+            'membreRecever' => $membreRecever,
         ]);
     }
 }

@@ -1,5 +1,5 @@
-body{
-    background: #70BEB1;    
+textarea{
+    height: 10rem;
 }
 .centerer{
     display: block;
@@ -13,9 +13,6 @@ body{
     margin-left: 3%;
 }
 
-.row{
-	background: rgba(255, 255, 255, 0.64) none repeat scroll 0 0;
-}
 
 .display_none{ /* contrairement à .hide qui est en !important */
 	display: none;

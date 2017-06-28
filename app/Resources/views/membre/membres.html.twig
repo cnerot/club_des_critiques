@@ -6,14 +6,22 @@
     <div class="container">
         <div class="row">
             <div class="card">
-                {% for membre in membres %}
+                {% for m in membres %}
                  <div class="card-content">
                      <table>
                          <tr>
-                             <td> <a href="#"><img width="40" src="images/profil.png"></a></td>
-                             <td> <a href="" class="marg-left padd-left black-text left-align"><b>{{ membre.prenom|upper }} {{membre.nom|upper}}</b></a></td>
-                             <td width="5"> <a href="{{ path("messagerie_send", {'id': membre.id})}}" class="btn waves-effect waves-light right">Message</a></td>
-                             <td width="5"> <a href="{{ path("membre_invite", {'id': membre.id})}}" class="btn waves-effect waves-light right">Inviter</a></td>
+                             <td>
+                                 <a href="{{ path("membre_profil", {'id': m.id})}}">
+                                    {% if m.picture != null %}
+                                        <div><img width="50" class="centerer" src="../ressource/profil/{{m.picture}}" alt="photo de profil"></div>
+                                    {% else %}
+                                        <div><img width="50" class="centerer" src="../ressource/profil/profil.png" alt="default"></div>
+                                    {% endif %}
+                                </a>
+                             </td>
+                             <td> <a href="{{ path("membre_profil", {'id': m.id})}}" class="marg-left padd-left black-text left-align"><b>{{ m.prenom|upper }} {{m.nom|upper}}</b></a></td>
+                             <td width="5"> <a href="{{ path("messagerie_send", {'id': m.id})}}" class="btn waves-effect waves-light right">Message</a></td>
+                             <td width="5"> <a href="{{ path("membre_invite", {'id': m.id})}}" class="btn waves-effect waves-light right">Inviter</a></td>
                          </tr>
                      </table>  
                 </div>
