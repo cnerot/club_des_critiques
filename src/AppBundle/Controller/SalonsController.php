@@ -17,20 +17,9 @@ class SalonsController extends Controller
     public function indexAction(Request $request)
     {
         $salon = new Salon();
-        //$em = $this->getDoctrine()->getManager();
-        
-        //$em = $this->getDoctrine()->getManager();
-		//$query = $em->createQuery(
-			//"SELECT s
-			//FROM AppBundle:Salon s
-			//GROUP BY s.id_article"
-		//);
-		
-		//$salonsReceived = $query->getResult();
-        
-        //echo "<pre>";
-			//print_r($salonsReceived);
-        //echo "</pre>";
+        $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
         
         $salonsReceived = $this->getDoctrine()
         ->getRepository('AppBundle:Salon')
@@ -40,6 +29,7 @@ class SalonsController extends Controller
         $salons = [];
         $tabIdDoublons = [];
         foreach($salonsReceived as $salonReceived){
+<<<<<<< HEAD
 			$i = 0;
 			$found = false;
 			$foundAncien = false;
@@ -82,6 +72,8 @@ class SalonsController extends Controller
         
          return $this->render('salons\index.html.twig',[
             'salons' => $salons,
+            'id_membre'=> $session->get('id'),
+            'membre'=> $membre,
         ]);
 
     }

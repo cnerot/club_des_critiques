@@ -1,26 +1,30 @@
+{% extends 'base.html.twig' %}
 
+{% block body %}
 
-
-
-
-    <div class="row">
-        <div  class="col s12 center-align">
-            <form method="POST" action="{{path('membre_profil')}}">
-                <div class="left-align">
-                        <div>
-                            <label>E-mail</label>
-                            <input type="text" name="email">
-                        </div>
-                        <div>
-                            <label>Mot de passe</label>
-                            <input type="text" name="mdp">
-                        </div>
-                </div>
-                <div class="right-align">
-                    <button class="btn waves-effect waves-light" type="submit">valider</button>
-                </div>
-            </form>
+    <div class="row top">
+        <div  class="col s4 center">
         </div>
+        <div  class="col s4 center">
+            <div class="card">
+                <div class="card-content">
+                       <p><b>Se connecter à votre compte</b></p>
+                       <hr>
+                       {{ form_start(form) }}
+                            {{ form_rest(form) }}
+                                <button class="waves-effect waves-light btn" type="submit">Connexion</button>
+                        {{ form_end(form) }}
+                        <br>
+                        <div class="col s6 "><a class="waves-effect waves-teal" href="">Créer un compte</a></div>
+                        <div class="col s6 "><a class="waves-effect waves-teal">Mot de passe oublié</a></div>
+                        <br>
+                </div>
+            </div>
+        </div>
+        <div  class="col s4 center">
+        </div> 
     </div>
     
 
+{% endblock %}
+    

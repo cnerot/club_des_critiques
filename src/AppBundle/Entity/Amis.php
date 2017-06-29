@@ -5,93 +5,101 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Amis
- *
- * @ORM\Table(name="amis")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\AmisRepository")
+ * @ORM\Entity()
  */
-class Amis
-{
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
+class Amis {
+    //put your code here
+    
+    
+      /**
+     * @var integer 
+     * 
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
-
+    protected $id;
+    
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_membre1", type="integer", length=11)
+     * @var int 
+     * 
+     * @ORM\Column(type="integer")
      */
-    private $id_membre1;
-
+    protected $id_membre1;
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_membre2", type="integer", length=11)
+     * @var int 
+     * 
+     * @ORM\Column(type="integer")
      */
-    private $id_membre2;
-
-
+    protected $id_membre2;
+     
     /**
-     * Get id
-     *
+     * @var boolean 
+     * 
+     * @ORM\Column(type="boolean")
+     */
+    protected $accepter = 0;
+
+
+    public function __construct() {
+    }
+    /*
      * @return int
      */
-    public function getId()
-    {
+    function getId() {
         return $this->id;
     }
-
-    /**
-     * Set idMembre1
-     *
-     * @param integer $idMembre1
-     *
-     * @return Amis
+    /*
+     * @return integer
      */
-    public function setIdMembre1($idMembre1)
-    {
-        $this->id_membre1 = $idMembre1;
-
-        return $this;
-    }
-
-    /**
-     * Get idMembre1
-     *
-     * @return int
-     */
-    public function getIdMembre1()
-    {
+    function getId_membre1() {
         return $this->id_membre1;
     }
-
-    /**
-     * Set idMembre2
-     *
-     * @param integer $idMembre2
-     *
-     * @return Amis
+    /*
+     * @return integer
      */
-    public function setIdMembre2($idMembre2)
-    {
-        $this->id_membre2 = $idMembre2;
-
-        return $this;
-    }
-
-    /**
-     * Get idMembre2
-     *
-     * @return int
-     */
-    public function getIdMembre2()
-    {
+    function getId_membre2() {
         return $this->id_membre2;
     }
-}
+    /*
+     * @return boolean
+     */
+    function getAccepter() {
+        return $this->accepter;
+    }
+  
+    /**
+     * @var int 
+     * 
+     * @return int
+     */
+    function setId($id) {
+        $this->id = $id;
+    }
+   /**
+     * @var int 
+     * 
+     * @return int
+     */
+    function setId_membre1($id_membre1) {
+        $this->id_membre1 = $id_membre1;
+    }
+    /**
+     * @var int 
+     * 
+     * @return int
+     */
+    function setId_membre2($id_membre2) {
+        $this->id_membre2 = $id_membre2;
+    }
+    /**
+     * @var boolean 
+     * 
+     * @return boolean
+     */
+    function setAccepter($accepter) {
+        $this->accepter = $accepter;
+    }
+  
 
+}

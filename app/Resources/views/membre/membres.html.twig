@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  
+    <h3><center> Tous les utilisateurs</center></h3>
+    <div class="container">
+        <div class="row">
+            <div class="card">
+                {% for m in membres %}
+                 <div class="card-content">
+                     <table>
+                         <tr>
+                             <td>
+                                 <a href="{{ path("membre_profil", {'id': m.id})}}">
+                                    {% if m.picture != null %}
+                                        <div><img width="50" class="centerer" src="../ressource/profil/{{m.picture}}" alt="photo de profil"></div>
+                                    {% else %}
+                                        <div><img width="50" class="centerer" src="../ressource/profil/profil.png" alt="default"></div>
+                                    {% endif %}
+                                </a>
+                             </td>
+                             <td> <a href="{{ path("membre_profil", {'id': m.id})}}" class="marg-left padd-left black-text left-align"><b>{{ m.prenom|upper }} {{m.nom|upper}}</b></a></td>
+                             <td width="5"> <a href="{{ path("messagerie_send", {'id': m.id})}}" class="btn waves-effect waves-light right">Message</a></td>
+                             <td width="5"> <a href="{{ path("membre_invite", {'id': m.id})}}" class="btn waves-effect waves-light right">Inviter</a></td>
+                         </tr>
+                     </table>  
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

@@ -30,43 +30,13 @@
 					<form method="POST" action="">
 						<table class="table">
 						  <thead>
-							<tr class="<?php echo $themeApplicated->getPageStat(); ?>">
+							<tr class="">
 							  <th>Ajouter</th>
 							  <th>Nom</th>
 							</tr>
 						  </thead>
 						  <tbody class="">
-							  <!--
-							  <tr>
-								  <td>
-									<p>
-									  <input type="checkbox" id="test5" name="myContacts[]">
-									  <label for="test5"></label>
-									</p>
-								  </td>
-								  <td>Paul Durand</td>
-							  </tr>
-							  
-							  <tr>
-								  <td>
-									<p>
-									  <input type="checkbox" id="test6" name="myContacts[]">
-									  <label for="test6"></label>
-									</p>
-								  </td>
-								  <td>Paul Durand</td>
-							  </tr>
-							  
-							  <tr>
-								  <td>
-									<p>
-									  <input type="checkbox" id="test7" name="myContacts[]">
-									  <label for="test7"></label>
-									</p>
-								  </td>
-								  <td>Paul Durand</td>
-							  </tr>
-							 -->
+							
 						  </tbody>
 						</table>
 						<input type="button" class="btn btn-primary" id="invitContact" value="Inviter">
@@ -142,7 +112,7 @@
 				<div id="participants" class="col s12 margin-top">
 					<table class="table">
 					  <thead>
-						<tr class="<?php echo $themeApplicated->getPageStat(); ?>">
+						<tr class="">
 						  <th>Participants</th>
 						  <th>Ajouter aux contact</th>
 						  {% if IamModerateur == 1 %}

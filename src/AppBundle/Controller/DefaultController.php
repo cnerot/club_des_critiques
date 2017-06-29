@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Membre;
 use AppBundle\Form\MembreForm;
+use AppBundle\Form\ConnexionForm;
 use AppBundle\Form\InscriptionForm;
 use AppBundle\Helper\Helper;
 
@@ -20,6 +21,7 @@ class DefaultController extends Controller
         $membre = new Membre();
         $form = $this->createForm(InscriptionForm::class, $membre);
         $form->handleRequest($request);
+        $session = $request->getSession();
         if($form->isValid()){
             $mdp = Helper::createPassword(10);//.''.base64_encode($membre->getMail());
             $hashed_password = 'RTBDSG907HGVB@@BGJGfgcgfVGHCDFVBHJhfhg0989';
@@ -33,7 +35,7 @@ class DefaultController extends Controller
                      . '<br> Votre Mot de passe : '.$mdp .'',
              'text/html'
              );
-             $this->get('mailer')->send($message);
+            $this->get('mailer')->send($message);
             $em = $this->getDoctrine()->getManager();
             $em->persist($membre);
             $em->flush();
@@ -42,9 +44,17 @@ class DefaultController extends Controller
 
            //return $this->redirectToRoute('membre_show', ['id'=>$membre->getId()]);      
         }
-        return $this->render('home\index.html.twig',[
+        if($session->get('id')!=null){
+            $em = $this->getDoctrine()->getManager();
+            $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        }
+        $em = $this->getDoctrine()->getManager();
+        $concept = $em->getRepository('AppBundle:Concept')->find(1);
+        return $this->render('home/index.html.twig',[
             'membre' => $membre,
             'email' => $form->createView(),
+            'id_membre' => $session->get('id'),
+            'concept' => $concept->getConcept(),
         ]);
     }
    
