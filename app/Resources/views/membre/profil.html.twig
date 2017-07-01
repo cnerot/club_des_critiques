@@ -2,30 +2,26 @@
 
 {% block body %}
   
-    <h3><center> Profil Utilisateur</center></h3>
-   
-      <div class="row">
-        <div class="col s3 m3">
-          <div class="card">
-            <div class="centerer">
+      <header class="header">
+        <div class="container"> 
+            <div class="row">
+                <div class="col s3 m3">
                     <a href="#modal1">
                         {% if picture != null %}
-                            <div><img width="150" class="centerer" src="../ressource/profil/{{picture}}"></div>
+                            <div><img width="170" class="profile-image img-responsive  left-align circle" src="../ressource/profil/{{picture}}"></div>
                         {% else %}
-                            <div><img width="150" class="centerer" src="../ressource/profil/profil.png" alt="default"></div>
+                            <div><img width="170"  class=" profile-image img-responsive  left-align circle" src="../ressource/profil/profil.jpg" alt="default"></div>
                         {% endif %}
                     </a>
-                      <!-- Modal Trigger -->
-
-                    <!-- Modal Structure -->
                     <div id="modal1" class="modal">
                       <div class="modal-content">
                             {% if picture != null %}
                                 <div><img width="260" class="centerer" src="../ressource/profil/{{picture}}" alt="photo de profil"></div>
                             {% else %}
-                                <div><img width="260" class="centerer" src="../ressource/profil/profil.png" alt="default"></div>
+                                <div><img width="260" class="centerer" src="../ressource/profil/profil.jpg" alt="default"></div>
                             {% endif %}
                             {% if membre.id == id_membre %}
+                                <hr>
                                 <form action="{{ path("membre_picture")}}" method="POST" enctype="multipart/form-data">
                                       <div><input type="file" name="picture"></div>
                                       <div><input type="submit" value="Upload"></div>
@@ -33,20 +29,30 @@
                             {% endif %}
 
                         <p></p>
-                      </div>
-                      <div class="modal-footer">
-                        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Fermer</a>
-                      </div>
+                        </div>
+                  </div>
+                </div>
+                <div class="col s4 m4">
+                    <div class="profile-content">
+                        <p class=""> {{ membre.prenom }} {{ membre.nom }}</p>
+                        <div>{{ membre.mail }} </div>
                     </div>
-                <form>
+                </div >
+               <div class="col s5 m5 right-align">
+                    {% if membre.id != id_membre %}
+                        <a class="btn btn-cta-primary " href="{{ path("messagerie_send", {'id': membre.id })}}" target="_blank">
+                        <i class="fa fa-paper-plane"></i> Contactez-moi</a>      
+                    {% endif %}
+                </div>
             </div>
-          </div>
         </div>
-        <div class="col s5 m5">
+     </header>  
+   
+    <div class="row">
+        <div class="col s8 m8">
           <div class="card">
             <div class="card-content">
-                <div><b>{{ membre.nom }} {{ membre.prenom }}</b></div>
-                <div>{{ membre.mail }} </div>
+                <div><b>A propos de moi: </b></div>
                 <div>{{ membre.description }}</div>
             </div>
           </div>
@@ -70,18 +76,58 @@
                           </div>
                       </div>
                   </div>
-                  <div><a href="#">Gérer mes contacts</a></div>
+                  <div>
+                        <!-- Modal Trigger -->
+                        <a class="" href="#modalAmis">mes amis</a>
+
+                        <!-- Modal Structure -->
+                        <div id="modalAmis" class="modal bottom-sheet">
+                        <ul class="collection">
+                            {% if amis|length > 0 %}
+                                {% for ami in amis %}
+                                    <li class="collection-item avatar">
+                                        <div class="row">
+                                            <div class="col s6">
+                                                {% if ami.picture != null %}
+                                                    <img  alt="" class="circle" src="../ressource/profil/{{ami.picture}}">
+                                                {% else %}
+                                                   <img  alt="" class="circle" src="../ressource/profil/profil.png" alt="default">
+                                                {% endif %}
+                                                <span class="title">{{ ami.nom }}  {{ ami.prenom }}</span>
+                                            </div>
+                                            <div class="col s6 right-align">
+                                                <a href="#!" class="btn-floating btn-large"><i class="material-icons">message</i></a>
+                                                <a href="#!" class="btn-floating btn-large red"><i class="material-icons">block</i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="collection-item avatar">
+                                        <div class="row">
+                                            <p>Vous n'avez pas encore des amis</p>
+                                            <div><a href="">Ajouter des amis</a></div>
+                                        </div>
+                                </div>
+                            {%endif%}
+                          </ul>
+                        </div>
+                  </div>
               </div>
             </div>
          {% endif %}
-         {% if membre.id != id_membre %}
-            <div class="card">
-              <div class="card-content">
-                  <a href="{{ path("messagerie_send", {'id': membre.id })}}" class="btn waves-effect waves-light centerer">Contacter</a>
-              </div>
-            </div>
-          {% endif %}
+
         </div>
+      </div>
+      <div class="row">
+          <p><b>Pour échanger :</b></p>
+          <div class="col m8">
+              <div class="col m2"></div>
+              {% if membre.id == id_membre %}
+                    <div class="col m3"><a href="#"><img src="http://www.freeiconspng.com/uploads/add-icon--line-iconset--iconsmind-29.png"  class="responsive-img"></a></div>
+              {%endif%}
+              <div class="col m3"> <img src="http://www.lecture-academy.com/wp-content/uploads/couvertures/logo_267308-500x796.jpg" class="responsive-img" ></img></div>
+          </div>
       </div>
 
 {% endblock %}

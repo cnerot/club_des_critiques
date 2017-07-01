@@ -17,41 +17,55 @@
     </head>
     <body>
         <div>
-        {% if membre.statut ==1 %}
-            <ul id="dropdown1" class="dropdown-content">
+        {% if membre != null %}
+            {% if membre.statut ==1 %}
+                <ul id="dropdown1" class="dropdown-content">
+                    <li>
+                        <a href="{{ path("membre_admin")}}" id="">
+                            <span class="">Gestion de site</span>
+                        </a>
+                    </li>
+                    <li class="divider"><span class="yellow-text text-darken-2"></span></li>
+                    <li>
+                        <a href="">
+                            <span class="">Statistiques</span>
+                        </a>
+                    </li>
+            </ul>
+                <ul id="dropdown2" class="dropdown-content ">
                 <li>
                     <a href="{{ path("membre_admin")}}" id="">
-                        <span class="">Gestion de site</span>
+                            <span class="">Gestion de site</span>
                     </a>
                 </li>
-                <li class="divider"><span class="yellow-text text-darken-2"></span></li>
+
+                <li class="divider"><span class=""></span></li>
                 <li>
                     <a href="">
-                        <span class="">label</span>
+                        <span class="">Statistiques</span>
                     </a>
                 </li>
-        </ul>
-            <ul id="dropdown2" class="dropdown-content ">
-            <li>
-                <a href="{{ path("membre_admin")}}" id="">
-                        <span class="">Gestion de site</span>
-                </a>
-            </li>
-           
-            <li class="divider"><span class=""></span></li>
-            <li>
-                <a href="">
-                    <span class="">label</span>
-                </a>
-            </li>
-        </ul>
+            </ul>
+         {% endif %}
     {% endif %}
     <nav class="teal lighten-4" role="navigation">
         <div class="nav-wrapper ">
             <div class="nav-wrapper container">
+                <div class="left">
                 <a id="logo-container" href="/" class="brand-logo">
                      <img class="logo" src="{{ asset('images/logo.png') }}">
                 </a>
+                </div>
+                 <div class="left padd-left" style="padding-left:19%">
+                    <a href="{{ path("salons")}}" id="">
+                         Salons
+                     </a>
+                </div>
+                 <div class="left padd-left">
+                    <a href="#" id="">
+                         Contenus
+                     </a>
+                </div>
                 {% if id_membre != null %}
                     <div class="right padd-left">
                         <a href="{{ path("membre_logout")}}" id="">
@@ -86,19 +100,21 @@
                             </a>
                         {% endif %}
                     </div>
-                    {% if membre.statut ==1 %}
-                        <ul class="right hide-on-med-and-down">
-                            <li><a class="dropdown-button" href="#!" data-activates="dropdown1">
-                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administration<span><i
-                                                class="material-icons right">arrow_drop_down</i></a></li>
-                        </ul>
-                        <ul id="nav-mobile" class="side-nav">
-                            <li><a class="dropdown-button" href="#!" data-activates="dropdown2">Admin<i
-                                        class="material-icons right">arrow_drop_down</i></a></li>
-                        </ul>
-                        <a href="#" data-activates="nav-mobile" class="button-collapse">
-                            <i class="material-icons">menu</i>
-                        </a>
+                    {% if membre != null %}
+                        {% if membre.statut ==1 %}
+                            <ul class="right hide-on-med-and-down">
+                                <li><a class="dropdown-button" href="#!" data-activates="dropdown1">
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Administration<span><i
+                                                    class="material-icons right">arrow_drop_down</i></a></li>
+                            </ul>
+                            <ul id="nav-mobile" class="side-nav">
+                                <li><a class="dropdown-button" href="#!" data-activates="dropdown2">Administration<i
+                                            class="material-icons right">arrow_drop_down</i></a></li>
+                            </ul>
+                            <a href="#" data-activates="nav-mobile" class="button-collapse">
+                                <i class="material-icons">menu</i>
+                            </a>
+                        {% endif %}
                     {% endif %}
             </div>
         </div>

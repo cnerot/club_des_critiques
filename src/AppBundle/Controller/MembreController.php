@@ -21,10 +21,12 @@ class MembreController extends Controller
         $em = $this->getDoctrine()->getManager();
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         $concept = $em->getRepository('AppBundle:Concept')->find(1);
+        $membres = $em->getRepository('AppBundle:Membre')->findAll();
         return $this->render('administration\administration.html.twig', [
             'id_membre' => $session->get('id'),
             'membre'=>$membre,
-            'concept'=>$concept->getConcept()
+            'concept'=>$concept->getConcept(),
+            'membres'=>$membres
         ]);
     }
     /** 
@@ -36,31 +38,65 @@ class MembreController extends Controller
         $em = $this->getDoctrine()->getManager();
         $membres = $em->getRepository('AppBundle:Membre')->findAll();
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
+        $membre1 = $repository->findBy(
+                array('id_membre1' =>$session->get('id'))
+            );
+        $membre2 = $repository->findBy(
+                array('id_membre2' =>$session->get('id'))
+            );
+        $listAmis = array();
+        if(isset($membre1)){
+            foreach ($membre1 as $amis){
+                 $listAmis[] = $amis->getId_Membre2();  
+            }
+        }
+        if(isset($membre2)){
+            foreach ($membre2 as $amis){
+                 $listAmis[] = $amis->getId_Membre1();  
+            }
+        }
         return $this->render('membre\membres.html.twig', [
             'membres'=>$membres,
             'id_membre' => $session->get('id'),
             'membre'=>$membre,
-
+            'listAmis'=> $listAmis
 
         ]);
     }
     /** 
      * @Route("/profil/{id}", name="membre_profil")
      */
-    public function showAction($id, Request $request)
+    public function profilAction($id, Request $request)
     {   
         $em = $this->getDoctrine()->getManager();
         $session = $request->getSession();
         $membre = $em->getRepository('AppBundle:Membre')->findOneById($id);
         $editPwdForm = $this->createForm(EditPwdForm::class, $membre);
-    /* if($membre->getMdp()==$_POST['confirm']){
-            $membre->setMdp($membre->getMdp());
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($membre);
-            $em->flush();
-        }*/
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
+        // query for a single product matching the given name and price
+        $membre1 = $repository->findBy(
+                array('id_membre1' =>$session->get('id'))
+            );
+           // var_dump($membre1);
+        $amisId = array();
+        foreach($membre1 as $m1){
+            $amisId[] = $m1->getId_membre2();
+        }
+        $membre2 = $repository->findBy(
+                array('id_membre2' =>$session->get('id'))
+            );
+       // var_dump($membre2);
+        foreach($membre2 as $m2){
+            $amisId[] = $m2->getId_membre1();
+        }
+        $membres_amis = array();
+        foreach ($amisId as $id){
+            $membres_amis[] =  $em->getRepository('AppBundle:Membre')->find($id);
+        }
         return $this->render('membre\profil.html.twig', [
             'membre'=>$membre,
+            'amis'=>$membres_amis,
             'picture'=>$membre->getPicture(),
             'id_membre' => $session->get('id'),
             'editPwdForm'=>$editPwdForm->createView(),
@@ -125,6 +161,32 @@ class MembreController extends Controller
         $session = $request->getSession();
         $membre = new Membre();
         $amis = new Amis();
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
+        $membre1 = $repository->findAll(
+                array('id_membre1' =>$session->get('id'),'id_membre2' =>$id)
+            );
+        $membre2 = $repository->findOneBy(
+                array('id_membre2' =>$session->get('id'),'id_membre1' =>$id)
+            );
+        if($membre1 == null && $membre2 == null){
+            $amis->setId_membre1($session->get('id'));
+            $amis->setId_membre2($id);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($amis);
+            $em->flush();
+            $this->addFlash('success', "Invitation envoyée");
+        }
+        return $this->redirectToRoute('membre_all', ['id'=>$membre->getId(),'id_membre' => $session->get('id'),'membre'=>$membre,]);      
+    }
+    /**
+     * @Route("/alerteInvite/{id}", name="membre_alerteInvite")
+     */
+    
+    public function alerteInviteAction($id, Request $request)
+    {
+        $session = $request->getSession();
+        $membre = new Membre();
+        $amis = new Amis();
        // $session->get('id');
         $amis->setId_membre1($session->get('id'));
         $amis->setId_membre2($id);
@@ -134,6 +196,35 @@ class MembreController extends Controller
         $this->addFlash('success', "Invitation envoyée");
        
         return $this->redirectToRoute('membre_all', ['id'=>$membre->getId(),'id_membre' => $session->get('id'),'membre'=>$membre,]);      
+    }
+    /**
+     * @Route("/mesAmis/{id}", name="membre_mesAmis")
+     */
+    
+    public function mesAmisAction($id, Request $request)
+    {
+        $session = $request->getSession();
+        
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
+        // query for a single product matching the given name and price
+        $membre1 = $repository->findBy(
+                array('id_membre1' =>$session->get('id'))
+            );
+        $amisId = array();
+        foreach($membre1 as $m1){
+            $amisId[] = $m1->getId_membre2();
+        }
+        $membre2 = $repository->findBy(
+                array('id_membre2' =>$session->get('id'))
+            );
+        foreach($membre1 as $m2){
+            $amisId[] = $m2->getId_membre1();
+        }
+        $em = $this->getDoctrine()->getRepository('AppBundle:Membre');
+        // query for a single product matching the given name and price
+        $membres = $repository->find($amisId);
+
+        return $this->redirectToRoute('membre_profil', ['id_membre' => $session->get('id')]);      
     }
     /**
      * @Route("/editPicture", name="membre_picture")

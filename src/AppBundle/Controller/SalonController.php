@@ -24,7 +24,10 @@ class SalonController extends Controller
      */
     public function indexAction(Request $request)
     {
-	   $idMembre = 8; // à récupérer en $_SESSION   
+	   $session = $request->getSession();
+           $idMembre = $session->get('id'); // à récupérer en $_SESSION  
+           $em = $this->getDoctrine()->getManager();
+           $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
 	   $idSalon = $request->get('salon')->getId();
 	   $participantsWithInfos = [];          
 	   $participant_ = new Participant();   	   	    
@@ -138,6 +141,8 @@ class SalonController extends Controller
             'salon' => $request->get('salon'),
             'participants' => $participantsWithInfos,
             'messages' => $messages,
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
             'idMembre' => $idMembre,
         ]);
     }
@@ -214,8 +219,11 @@ class SalonController extends Controller
      */
     public function envoyerMessageAction(Request $request)
     {
-	   $idMembre = 1; // à récupérer en $_SESSION
-	   $idSalon = $request->get('idSalon');
+       $session = $request->getSession();
+       $idMembre = $session->get('id'); // à récupérer en $_SESSION  
+       $em = $this->getDoctrine()->getManager();
+       $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
+       $idSalon = $request->get('idSalon');
        $chatSalon = new Chatsalon();
        
        // vérifier non banni
@@ -240,10 +248,11 @@ class SalonController extends Controller
         
         $message = $request->get('message');
         //$message = "mon message";
-        
+        $date = new \DateTime(date('Y-m-d H:i:s'));
         $chatSalon->setIdSalon($idSalon);
 		$chatSalon->setIdMembre($idMembre);
 		$chatSalon->setMsg($message);
+		$chatSalon->setDate($date);
 		
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($chatSalon);
@@ -258,11 +267,12 @@ class SalonController extends Controller
     public function wantBanFromSalonAction(Request $request)
     {
 	   $nbBanMax = 2;
-	   $idMembre = 1; // à récupérer en $_SESSION
+	   $session = $request->getSession();
+           $idMembre = $session->get('id'); // à récupérer en $_SESSION  
 	   //$idSalon = $request->get('idSalon');
 	   $idSalon = 9;
 	   //$idMembreParticipant = $request->get('idMembreParticipant');
-	   $idMembreParticipant = 2;
+	   $idMembreParticipant = $session->get('id');
        
         $participants = $this->getDoctrine()
 		->getRepository('AppBundle:Participant')
@@ -309,7 +319,8 @@ class SalonController extends Controller
      */
     public function addToContactsAction(Request $request)
     {
-		$idMembre = 1; // à récupérer en $_SESSION
+	        $session = $request->getSession();
+                $idMembre = $session->get('id'); // à récupérer en $_SESSION  
 		$idContact = $request->get('idContact');
 		
 		$amis__ = new Amis();
@@ -329,8 +340,8 @@ class SalonController extends Controller
 		]);
 		
 		if(empty($amis) && empty($amis_) && $idContact != $idMembre){
-			$amis__->setIdMembre1($idMembre);
-			$amis__->setIdMembre2($idContact);
+			$amis__->setId_Membre1($idMembre);
+			$amis__->setId_Membre2($idContact);
 			
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($amis__);
@@ -345,7 +356,8 @@ class SalonController extends Controller
      */
     public function chargeContactsAction(Request $request)
     {
-		$idMembre = 1; // à récupérer en $_SESSION
+	        $session = $request->getSession();
+                $idMembre = $session->get('id'); // à récupérer en $_SESSION  
 		$idSalon = $request->get('idSalon');
 		
 		$amis__ = new Amis();
@@ -376,14 +388,14 @@ class SalonController extends Controller
 		}				
 		
 		foreach($amis as $ami){
-			if(in_array($ami->getIdMembre2(), $idMembresNonParticipants)){ // si l'ami n'est pas déjà dans le salon
-				$idContactsPossibleToInvite[] = $ami->getIdMembre2();
+			if(in_array($ami->getId_Membre2(), $idMembresNonParticipants)){ // si l'ami n'est pas déjà dans le salon
+				$idContactsPossibleToInvite[] = $ami->getId_Membre2();
 			}
 		}
 		
 		foreach($amis_ as $ami){
-			if(in_array($ami->getIdMembre1(), $idMembresNonParticipants)){ // si l'ami n'est pas déjà dans le salon
-				$idContactsPossibleToInvite[] = $ami->getIdMembre1();
+			if(in_array($ami->getId_Membre1(), $idMembresNonParticipants)){ // si l'ami n'est pas déjà dans le salon
+				$idContactsPossibleToInvite[] = $ami->getId_Membre1();
 			}
 		}
 		
@@ -425,7 +437,8 @@ class SalonController extends Controller
      */
     public function historiqueAction(Request $request)
     {
-		$idMembre = 1; // à récupérer en $_SESSION
+	        $session = $request->getSession();
+                $idMembre = $session->get('id'); // à récupérer en $_SESSION  
 		$idSalon = $request->get('idSalon');
 		
 		$salon = $this->getDoctrine()
