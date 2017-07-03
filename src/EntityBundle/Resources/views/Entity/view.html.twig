@@ -1,0 +1,17 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}EntityBundle:entity:view{% endblock %}
+
+{% block body %}
+<h1>Produit: {{ entity.name }}</h1>
+    <table>
+        {% for attribute in entity.data %}
+            <tr>
+                <td style="border: 1px solid black">{{ attribute.id }}</td>
+                <td style="border: 1px solid black">{{ attribute.name }}</td>
+                <td style="border: 1px solid black">{{ attribute.value }}</td>
+
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

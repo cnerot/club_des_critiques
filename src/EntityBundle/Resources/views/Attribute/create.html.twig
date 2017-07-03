@@ -1,0 +1,31 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}EntityBundle:Attribute:create{% endblock %}
+
+{% block body %}
+    <h1>Welcome to the Attribute:create page</h1>
+    <form method="post" action="#">
+            <input type="text" placeholder="title" name="name">
+            <select name="type" id="type_input">
+                <option selected disabled>Type</option>
+                <option value="1">text</option>
+                <option value="2">select</option>
+                <option value="3">number</option>
+                <option value="4">date</option>
+            </select>
+        <div class="type type-2">
+            number of options
+            <input type="number" id="inputs_input">
+            <div id="inputs"></div>
+        </div>
+        <div class="type type-4">
+            <select name="date">
+                <option value="2">year</option>
+                <option value="1">date</option>
+                <option></option>
+            </select>
+        </div>
+        <input type="submit" value="create attribute">
+    </form>
+    <a href="{{ path('attribute_all', {'id': id}) }}">Back</a>
+{% endblock %}

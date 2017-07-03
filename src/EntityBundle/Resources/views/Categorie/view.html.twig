@@ -1,0 +1,20 @@
+{% extends "::entity.html.twig" %}
+
+{% block title %}EntityBundle:Categorie:view{% endblock %}
+
+{% block body %}
+    <h1>Categorie : {{ categorie.name }}</h1>
+    <h3>Categorie Attributes</h3>
+    {% for attribute in categorie.attributes %}
+        <p><a href="{{ path('attribute_view', {'id': categorie.id}) }}">{{ attribute.name }}</a></p>
+    {% endfor %}
+    <a href="{{ path('attribute_create',{'id': categorie.id}) }}">+ Créer un attribut</a>
+
+    <h2>Categorie products</h2>
+
+    {% for products in categorie_products %}
+        <p><a href="{{ path('view', {'id': products.id}) }}">{{ products.name }}</a></p>
+    {% endfor %}
+    <a href="{{ path('create',{'id': categorie.id}) }}">+ Créer un produit</a>
+
+{% endblock %}
