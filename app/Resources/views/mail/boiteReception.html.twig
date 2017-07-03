@@ -5,70 +5,88 @@
 {% endblock %}
 
 {% block body %}
-  <div class="row">
+
     <div class="col s12">
-      <ul class="tabs center ">
-        <li class="tab col s3"><a class="active brown-text" href="#recu1">Boite reception</a></li>
-        <li class="tab col s3"><a  href="#envoye2">Message envoyé</a></li>
+      <ul class="tabs tabs-fixed-width brown lighten-3">
+          <li class="tab col s3"><a class="active white-text" href="#recu1"><b>Boite reception</b></a></li>
+        <li class="tab col s3"><a  href="#envoye2" class="brown-text">Message envoyé</a></li>
+        {% for m in membres %}
+            {%if id_membre == m.id  and m.statut == '1' %}
+                <li class="tab col s3"><a  href="#admin" class="brown-text">Message administrative</a></li>
+            {%endif%}
+        {%endfor%}
       </ul>
     </div>
-    <div style="position: fixed; float: right;margin-left: 1150px;margin-top: 20px;">
-       <a class="btn-floating btn-large waves-effect waves-light skin"><i class="material-icons ">add</i></a>
-    </div>
-    <div id="recu1" class="col s12">
-        <div class="container">
-        <div class="row">
-            <div class="card" >
-                {% for mail in messagerie %}
-                 <div class="card-content" style="padding: 0; margin: 0">
-                     <table class="responsive-table" style="padding: 0; margin: 0">
-                         <tr>
-                             {% if mail.vu == false %}
-                                 <td><a href="" class=" black-text right-align"><i class="material-icons">email</i></a></td>
-                             {% elseif mail.vu == true %}
-                                 <td><a href="" class=" black-text right-align"><i class="material-icons">drafts</i></a></td>
-                             {% endif %}
-                             {% for m in membres %}
-                                {% if m.id == mail.id_sender %}
-                                    <td><a href="{{ path("membre_profil", {'id': m.id})}}" class="marg-left padd-left black-text left-align"><b> {{m.prenom}} {{ m.nom}} </b></a></td>
-                                {% endif %}
-                             {% endfor %}
-                             <td><a href="{{ path("messagerie_lire", {'id': mail.id})}}" class="marg-left padd-left black-text left-align"><b>{{ mail.objet|upper }}</b></a></td>
-                             <td><a href="" class="marg-left padd-left black-text"><b>{{ mail.date|date("m/d/Y à H:m") }}</b></a></td>
-                         </tr>
-                     </table>  
-                </div>
-                <hr>
-                {% endfor %}
-            </div>
-        </div>
-      </div>
-    </div>
-    <div id="envoye2" class="col s12">
-        <div class="container">
-           <div class="row">
-               <div class="card" >
-                   {% for mailSent in messagerieSent %}
-                    <div class="card-content" style="padding: 0; margin: 0">
-                        <table style="padding-bottom: 0; margin: 0">
-                            <tr>
-                                <td><a href="" class=" black-text right-align"><i class="material-icons">forward</i></a></td>
-                                {% for m in membres %}
-                                    {% if m.id == mailSent.id_recever %}
-                                        <td><a href="{{ path("membre_profil", {'id': m.id})}}" class="marg-left padd-left black-text left-align"><b> {{m.prenom}} {{ m.nom}} </b></a></td>
+   <div class="row">
+        <div id="recu1" class="col s12">
+            <div class="container">
+            <div class="row">
+                <div class="card" >
+                    {% for mail in messagerie %}
+                     <div class="card-content" style="padding: 0; margin: 0">
+                         <table class="responsive-table" style="padding: 0; margin: 0">
+                             <tr>
+                                 {% if mail.vu == false %}
+                                     <td class="col s3 left-align"><a href="" class=" black-text right-align"><i class="material-icons">email</i></a></td>
+                                 {% elseif mail.vu == true %}
+                                     <td class="col s3 left-align"><a href="" class=" black-text right-align"><i class="material-icons">drafts</i></a></td>
+                                 {% endif %}
+                                 {% for m in membres %}
+                                    {% if m.id == mail.id_sender %}
+                                        <td class="col s3 left-align"><a href="{{ path("membre_profil", {'id': m.id})}}" class="marg-left padd-left black-text left-align"><b> {{m.prenom}} {{ m.nom}} </b></a></td>
                                     {% endif %}
                                  {% endfor %}
-                                <td><a href="{{ path("messagerie_lire", {'id': mailSent.id})}}" class="marg-left padd-left black-text"><b>{{ mailSent.objet|upper }}</b></a></td>
-                                <td><a href="" class="marg-left padd-left black-text right-align"><b>{{ mailSent.date|date("m/d/Y à H:m") }}</b></a></td>
-                            </tr>
-                        </table>  
+                                 {% if mail.id_sender not in SenderIds %}
+                                        <td class="col s3 left-align"><b>Utilisateur</b></td>
+                                 {% endif %}
+                                 <td class="col s3 right-align"><a href="{{ path("messagerie_lire", {'id': mail.id})}}" class="marg-left padd-left black-text left-align"><b>{{ mail.objet|upper }}</b></a></td>
+                                 <td class="col s3 right-align"><a href="" class="marg-left padd-left black-text"><b>{{ mail.date|date("m/d/Y à H:m") }}</b></a></td>
+                             </tr>
+                         </table>  
+                    </div>
+                    <hr>
+                    {% endfor %}
+                </div>
+            </div>
+          </div>
+        </div>
+        <div id="envoye2" class="col s12">
+            <div class="container">
+               <div class="row">
+                   <div class="card" >
+                       {% for mailSent in messagerieSent %}
+                        <div class="card-content" style="padding: 0; margin: 0">
+                            <table style="padding-bottom: 0; margin: 0">
+                                <tr>
+                                    <td class="col s3 left-align"><a href="" class=" black-text right-align"><i class="material-icons">forward</i></a></td>
+                                    {% for m in membres %}
+                                        {% if m.id == mailSent.id_recever %}
+                                            <td class="col s3 left-align"><a href="{{ path("membre_profil", {'id': m.id})}}" class="marg-left padd-left black-text left-align"><b> {{m.prenom}} {{ m.nom}} </b></a></td>
+                                        {% endif %}
+                                     {% endfor %}
+                                     {% if mailSent.id_recever not in SenderIds %}
+                                         <td class="col s3 left-align"><b>Utilisateur</b></td>
+                                     {% endif %}
+                                    <td class="col s3 right-align"><a href="{{ path("messagerie_lire", {'id': mailSent.id})}}" class="marg-left padd-left black-text"><b>{{ mailSent.objet|upper }}</b></a></td>
+                                    <td class="col s3 right-align"><a href="" class="marg-left padd-left black-text right-align"><b>{{ mailSent.date|date("m/d/Y à H:m") }}</b></a></td>
+                                </tr>
+                            </table>  
+                       </div>
+                       <hr>
+                       {% endfor %}
                    </div>
-                   <hr>
-                   {% endfor %}
                </div>
-           </div>
-         </div>
-    </div>
+             </div>
+        </div>
+        <div id="admin" class="col s12">
+            <div class="container">
+               <div class="row">
+                    <div>
+                         <a class="btn-floating btn-large waves-effect waves-light skin"><i class="material-icons ">add</i></a>
+                    </div>
+               </div>
+            </div>
+        </div>
   </div>
 
 {% endblock %}

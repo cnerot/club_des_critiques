@@ -28,6 +28,10 @@ class MessagerieController extends Controller
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $membres = $em->getRepository('AppBundle:Membre')->findAll();
+        $SenderIds = array();
+        foreach ($membres as $m){
+            $SenderIds[] = $m->getId();
+        }
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         $messagerieReceve = $em->getRepository('AppBundle:Messagerie')->findBy(array('id_recever' => $session->get('id')));
         $messagerieSent = $em->getRepository('AppBundle:Messagerie')->findBy(array('id_sender' => $session->get('id')));
@@ -36,7 +40,8 @@ class MessagerieController extends Controller
             'messagerie'=>$messagerieReceve,
             'membres' => $membres,
             'membre' => $membre,
-            'id_membre' => $session->get('id')
+            'id_membre' => $session->get('id'),
+            'SenderIds'=>$SenderIds
             
         ]);
         
@@ -55,15 +60,18 @@ class MessagerieController extends Controller
            $em->flush();
            $this->addFlash('success', "Lu");
         }
-       // var_dump($message.getId());
-        //die;
         $membres = $em->getRepository('AppBundle:Membre')->findAll();
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        $SenderIds = array();
+        foreach ($membres as $m){
+            $SenderIds[] = $m->getId();
+        }
         return $this->render('mail\lireMail.html.twig', [
             'message'=>$message,
             'membres' => $membres,
             'membre' => $membre,
-            'id_membre' => $session->get('id')
+            'id_membre' => $session->get('id'),
+            'SenderIds' => $SenderIds
         ]);
         
     }
