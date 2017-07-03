@@ -64,13 +64,19 @@ class SalonsController extends Controller
         //return $this->render('salons\index.html.twig', [
             //'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         //]);
-        
-         return $this->render('salons\index.html.twig',[
-            'salons' => $salons,
-            'id_membre'=> $session->get('id'),
-            'membre'=> $membre,
-        ]);
-
+        if($session->get('id')!=null){
+            return $this->render('salons\index.html.twig',[
+               'salons' => $salons,
+               'id_membre'=> $session->get('id'),
+               'membre'=> $membre,
+           ]);
+        }else{
+            return $this->render('salons\index.html.twig',[
+               'salons' => $salons,
+               'id_membre'=> $session->get('id'),
+               'membre'=> null,
+           ]);      
+        }
     }
     
      /**
@@ -189,7 +195,11 @@ class SalonsController extends Controller
 		$nbMaxParticipants = 1;
 		$salons = new Salon();
 		$notes = new Note();
-		$idMembre = 1; // à récupérer en $_SESSION
+                $session = $request->getSession();
+                if( $session->get('id')!=null){
+                $em = $this->getDoctrine()->getManager();
+                $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
+		$idMembre = $session->get('id'); // à récupérer en $_SESSION
 		//$idSalon = 9; // à récupérer en $request->get
 		//$noteChosen = 4; // à récupérer en $request->get
 		$idSalon = $_GET['idSalon']; // à récupérer en $request->get
@@ -296,9 +306,17 @@ class SalonsController extends Controller
 		 //return $this->render('salon\index.html.twig',[
             //'salon' => $salon,
         //]);
-        
-        return $this->forward('AppBundle:Salon:index',[
+            return $this->forward('AppBundle:Salon:index',[
+                'salon' => $salon,
+                'membre' => $membre,
+                'id_membre' => $session->get('id'),
+            ]);
+        }else{
+            return $this->forward('AppBundle:Salon:index',[
             'salon' => $salon,
-        ]);
+            'membre' => null,
+            'id_membre' => null,
+            ]); 
+        }
 	}
 }

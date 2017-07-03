@@ -21,10 +21,12 @@ class ContactForm extends AbstractType{
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
                  ->add('objet', TextType::class, [
-                    'label'=>'Objet'
+                    'label'=>'Objet',
+                    'attr' => array('class' => 'validate')
                 ])
                  ->add('message', TextareaType::class, [
-                    'label'=>'Message'
+                    'label'=>'Message',
+                    'attr' => array('class' => 'validate')
                 ]);
     }
     public function configureOption(OptionsResolver $resolver) {

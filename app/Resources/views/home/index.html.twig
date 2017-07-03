@@ -4,6 +4,7 @@
 
 
     <div class="row">
+        <div style="background">
         <div class="col s8">
            <div class="myContainer justify">
                 <div id="">
@@ -17,6 +18,9 @@
             {% if id_membre == null %}
                 <div class="card">
                     <div class="card-content">
+                        {% if mailExist !=null %}
+                            <p>{{mailExist}}</p>
+                        {% endif %}
                         {{ form_start(email) }}
                             <div class="left-align">
                                 <p>Inscrez-vous :</p><br>
@@ -28,33 +32,89 @@
                         {{ form_end(email)}}
                     </div>
                 </div>
-            {% endif %}
-        </div>
-        <div  class="col s12">
-            <div  class="col s8">
-            </div>
-            <div  class="col s4 right-align">
-                    <div class="card">
-                        <div class="card-content">
-                           #menu flotant
-                           <br>
-                           prochain salon :
-                           <br> A ajouter par gaetan
-                        </div>
+                 <div class="card">
+                     <div class="card-content">
+                            #menu flotant
+                            <br>
+                            prochain salon :
+                            <br> A ajouter par gaetan
+                       </div>
                     </div>
-            </div>
+            {% else %}
+                <div  class="col s12">
+                            <div class="card">
+                                <div class="card-content">
+                                   #menu flotant
+                                   <br>
+                                   prochain salon :
+                                   <br> A ajouter par gaetan
+                                </div>
+                            </div>
+                </div>
+            {% endif %}
+                  </div>
+
         </div>
         <div class="col s12">
             <hr>
         </div>
         <div class="col s12">
             <p><b>A la une :</b></p>
+            <div class="col s6">
+                <div class=" col s10 card">
+                    <img class="responsive-img"  src="http://68.media.tumblr.com/84dc97ad47c4b0ff88ce1af21bfc68b3/tumblr_o3ktzaL2LU1ulesryo1_1280.jpg"></img>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class=" col s10 card">
+                    <img  class="responsive-img"  src="http://static.rogerebert.com/uploads/movie/movie_poster/the-impossible-2012/large_clFWvdatigocdkEH5arOqydZF2R.jpg" ></img>
+                </div>
+            </div>
+            <div class="col s12">
+                <div class="col s4">
+                    <div class="card">
+                        <img src="http://www.lecture-academy.com/wp-content/uploads/couvertures/logo_267308-500x796.jpg" class="responsive-img" ></img>
+                    </div>
+                </div>
+                <div class="col s4">
+                    <div class="card">
+                        <img src="http://www.lecture-academy.com/wp-content/uploads/couvertures/logo_267308-500x796.jpg" class="responsive-img" ></img>
+                    </div>
+                </div>
+                <div class="col s4">
+                    <div class="card">
+                        <img src="http://www.lecture-academy.com/wp-content/uploads/couvertures/logo_267308-500x796.jpg" class="responsive-img" ></img>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col s12">
             <hr>
         </div>
         <div class="col s12">
             <p><b>Nous Contactez :</b></p>
+            <div class="row">
+                <div class="col s3">
+                </div>
+                <div class="col s6">
+                    {{ form_start(form) }}
+                        <div class="input-field">
+                            <label>Nom :</label>
+                            <input type="text" class="validate" name="nom"> 
+                        </div>
+                        <div class="input-field">
+                            <label>E-mail :</label>
+                            <input type="text" class="validate" name="mail"> 
+                        </div>
+
+                        {{ form_rest(form) }}
+                        <div class="right">
+                            <button class="" type="submit">Envoyer</button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+                <div class="col s3">
+                </div>            </div>
         </div>
     </div>
     
