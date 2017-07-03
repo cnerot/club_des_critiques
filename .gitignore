@@ -1,2 +1,9 @@
 Config.class.php
 /nbproject/private/
+vendor/
+
+var/
+
+\.idea/
+
+composer\.lock
