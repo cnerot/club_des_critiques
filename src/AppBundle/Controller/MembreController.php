@@ -103,10 +103,10 @@ class MembreController extends Controller
         ]);
     }
     /**
-     * @Route("/edit", name="membre_edit")
+     * @Route("/editinfo", name="membre_editinfo")
      */
     
-    public function editAction(Request $request)
+    public function editInfoAction(Request $request)
     {
         $membre = new Membre();
         $form = $this->createForm(MembreForm::class, $membre);
@@ -143,12 +143,14 @@ class MembreController extends Controller
                var_dump($_POST['confirm']);
             }
         }
-       /* if($membre->getMdp()==$_POST['confirm']){
+        if($membre->getMdp()==$_POST['confirm']){
             $membre->setMdp($membre->getMdp());
             $em = $this->getDoctrine()->getManager();
             $em->persist($membre);
             $em->flush();
-        }*/
+        }else{
+            var_dump('none');
+        }
            
         //return $this->redirectToRoute('membre_edit', ['id'=>$session->get('id'),'membre'=>$membre]);      
     }
@@ -162,12 +164,14 @@ class MembreController extends Controller
         $membre = new Membre();
         $amis = new Amis();
         $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
-        $membre1 = $repository->findAll(
+        $membre1 = $repository->findOneBy(
                 array('id_membre1' =>$session->get('id'),'id_membre2' =>$id)
             );
+            //var_dump($membre1);
         $membre2 = $repository->findOneBy(
                 array('id_membre2' =>$session->get('id'),'id_membre1' =>$id)
             );
+            //var_dump($membre2);
         if($membre1 == null && $membre2 == null){
             $amis->setId_membre1($session->get('id'));
             $amis->setId_membre2($id);

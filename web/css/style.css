@@ -1,3 +1,15 @@
+body{
+    font-family: Roboto;
+}
+p{
+   font-family: Roboto; 
+}
+span{
+    font-family: Roboto;
+}
+h1, h2,h3,h4,h5{
+     font-family: Caviar Dreams;
+}
 textarea{
     height: 10rem;
 }
@@ -127,9 +139,15 @@ div{
      background: #D99E7E 
 }
 .skin-text{
-     color: #D99E7E 
+     color: #D99E7E ;
 }
-
+.tabs .active{
+    color:  #e0f2f1;
+    
+}
+.tabs .indicator{
+    background-color: #e0f2f1;
+}
 .header {
   padding: 20px 0;
   background: rgba(189, 188, 186,0.5) ;
@@ -210,4 +228,17 @@ div{
   .container {
     width: 1360px;
   }
+}
+.objet{
+    background:  rgba(189, 188, 186,0.5);
+    margin-top: 1%;
+    padding: 3px;
+    width: 100%;
+    /*border: 5px solid rgba(189, 188, 186,0.5);*/
+
+}
+.message{
+    border: 5px solid rgba(189, 188, 186,0.5);
+    background:  white ;
+    padding: 2%; 
 }

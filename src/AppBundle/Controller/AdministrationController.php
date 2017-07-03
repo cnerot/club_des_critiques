@@ -37,7 +37,7 @@ class AdministrationController extends Controller
             'membres'=>$membres,
         ]);
     }
-        /** 
+    /** 
      * @Route("/delete/{id}", name="administration_deleteuser")
      */
     public function deleteuserAction(Request $request,$id)

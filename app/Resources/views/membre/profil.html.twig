@@ -96,7 +96,7 @@
                                                 <span class="title">{{ ami.nom }}  {{ ami.prenom }}</span>
                                             </div>
                                             <div class="col s6 right-align">
-                                                <a href="#!" class="btn-floating btn-large"><i class="material-icons">message</i></a>
+                                                <a href="{{ path("messagerie_send", {'id': ami.id})}}" class="btn-floating btn-large"><i class="material-icons">message</i></a>
                                                 <a href="#!" class="btn-floating btn-large red"><i class="material-icons">block</i></a>
                                             </div>
                                         </div>

@@ -93,6 +93,28 @@
         </div>
         <div class="col s12">
             <p><b>Nous Contactez :</b></p>
+            <div class="row">
+                <div class="col s3">
+                </div>
+                <div class="col s6">
+                    {{ form_start(form) }}
+                        <div class="input-field">
+                            <label>Nom :</label>
+                            <input type="text" class="validate" name="nom"> 
+                        </div>
+                        <div class="input-field">
+                            <label>E-mail :</label>
+                            <input type="text" class="validate" name="mail"> 
+                        </div>
+
+                        {{ form_rest(form) }}
+                        <div class="right">
+                            <button class="" type="submit">Envoyer</button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+                <div class="col s3">
+                </div>            </div>
         </div>
     </div>
     
