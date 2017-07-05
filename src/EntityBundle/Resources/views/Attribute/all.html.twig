@@ -1,0 +1,15 @@
+{% extends "::entity.html.twig" %}
+
+{% block title %}EntityBundle:Attribute:all{% endblock %}
+
+{% block body %}
+<h1>Welcome to the Attribute page</h1>
+    <a href="{{ path('attribute_create', {'id': id}) }}">Add new attribute</a>
+    <table>
+    {% for attribute in attributes %}
+        <td>{{ attribute.name }}</td>
+        <td>{{ attribute.type }}</td>
+        <td><a href="{{ path('attribute_view', {'id': attribute.id}) }}">Edit</a></td>
+    {% endfor %}
+    </table>
+{% endblock %}

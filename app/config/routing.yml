@@ -1,0 +1,13 @@
+entity:
+    resource: "@EntityBundle/Resources/config/routing.xml"
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+login:
+    path: /login
+    defaults: { _controller: AppBundle:Security:login}    
+        
+#login_check:
+   # path: /membre_profil

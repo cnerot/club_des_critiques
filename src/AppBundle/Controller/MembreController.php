@@ -235,6 +235,39 @@ class MembreController extends Controller
     }
     
     /**
+     * @Route("/invitationList", name="membre_alerteInvite")
+     */
+    
+    public function invitationListAction(Request $request)
+    {
+        $session = $request->getSession();
+        
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
+        // query for a single product matching the given name and price
+        $invitations = $repository->findBy(
+                array(
+                    'id_membre2'=>$session->get('id'),
+                    'accepter'  => 0
+                ));
+        $inviters=[];
+        foreach($invitations as $invitation){
+            $inviters[] = $invitation->getId_membre1();
+        }
+        $inviter = array();
+        if(isset($inviters)){
+            foreach($inviters as $inviter_id){
+                $repository = $this->getDoctrine()->getRepository('AppBundle:Membre');
+                $inviter[] = $repository->find($inviter_id);
+            }
+        }
+         
+        return $this->render('membre/invitationList.html.twig',[
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
+            'inviters' => $$inviter,
+        ]);
+    }
+    /**
      * @Route("/mesAmis/{id}", name="membre_mesAmis")
      */
     
