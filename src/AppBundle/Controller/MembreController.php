@@ -201,41 +201,9 @@ class MembreController extends Controller
        
         return $this->redirectToRoute('membre_all', ['id'=>$membre->getId(),'id_membre' => $session->get('id'),'membre'=>$membre,]);      
     }
-       /**
-     * @Route("/invitationList", name="membre_alerteInvite")
-     */
-    public function invitationListAction(Request $request)
-    {
-        $session = $request->getSession();
-        
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
-        // query for a single product matching the given name and price
-        $invitations = $repository->findBy(
-                array(
-                    'id_membre2'=>$session->get('id'),
-                    'accepter'  => 0
-                ));
-        $inviters=[];
-        foreach($invitations as $invitation){
-            $inviters[] = $invitation->getId_membre1();
-        }
-        $inviter = array();
-        if(isset($inviters)){
-            foreach($inviters as $inviter_id){
-                $repository = $this->getDoctrine()->getRepository('AppBundle:Membre');
-                $inviter[] = $repository->find($inviter_id);
-            }
-        }
-         
-        return $this->render('membre/invitationList.html.twig',[
-            'membre' => $membre,
-            'id_membre' => $session->get('id'),
-            'inviters' => $$inviter,
-        ]);
-    }
-    
+  
     /**
-     * @Route("/invitationList", name="membre_alerteInvite")
+     * @Route("/invitationList", name="membre_invitationList")
      */
     
     public function invitationListAction(Request $request)
@@ -260,18 +228,64 @@ class MembreController extends Controller
                 $inviter[] = $repository->find($inviter_id);
             }
         }
-         
+        $membre = $this->getDoctrine()->getRepository('AppBundle:Membre')->find($session->get('id'));
         return $this->render('membre/invitationList.html.twig',[
             'membre' => $membre,
             'id_membre' => $session->get('id'),
-            'inviters' => $$inviter,
+            'inviters' => $inviter,
         ]);
     }
     /**
-     * @Route("/mesAmis/{id}", name="membre_mesAmis")
+     * @Route("/acceptInvitation/{id}", name="membre_acceptInvitation")
      */
     
-    public function mesAmisAction($id, Request $request)
+    public function acceptInvitationAction($id, Request $request)
+    {
+        $session = $request->getSession();
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
+        // query for a single product matching the given name and price
+        $invitation = $repository->findOneBy(
+                array(
+                    'id_membre1'=>$id,
+                    'id_membre2'=>$session->get('id'),
+                    'accepter'  => 0
+                ));
+        $invitation->setAccepter(1);
+       // $membre = $this->getDoctrine()->getRepository('AppBundle:Membre')->find($session->get('id'));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($invitation);
+        $em->flush();
+        $this->addFlash('success', "Vous êtes devenu amis!");
+        return $this->redirectToRoute('membre_invitationList', ['id_membre' => $session->get('id')]);      
+
+    }
+    /**
+     * @Route("/supprimerInvitation/{id}", name="membre_supprimerInvitation")
+     */
+    
+    public function supprimerInvitationAction($id, Request $request)
+    {
+        $session = $request->getSession();
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
+        // query for a single product matching the given name and price
+        $invitation = $repository->findOneBy(
+                array(
+                    'id_membre1'=>$id,
+                    'id_membre2'=>$session->get('id'),
+                    'accepter'  => 0
+                ));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($invitation);
+        $em->flush();
+        $this->addFlash('success', "l'invitation a bien été supprimé");
+        return $this->redirectToRoute('membre_invitationList', ['id_membre' => $session->get('id')]);      
+
+    }
+    /**
+     * @Route("/mesAmis", name="membre_mesAmis")
+     */
+    
+    public function mesAmisAction(Request $request)
     {
         $session = $request->getSession();
         
