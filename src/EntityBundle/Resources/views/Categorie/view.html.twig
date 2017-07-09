@@ -13,7 +13,9 @@
     <h2>Categorie products</h2>
 
     {% for products in categorie_products %}
-        <p><a href="{{ path('view', {'id': products.id}) }}">{{ products.name }}</a></p>
+        <p><a href="{{ path('view', {'id': products.id}) }}">{{ products.name }}</a>
+             - <a href="{{ path('frontview', {'id': products.id}) }}">front view</a>
+        </p>
     {% endfor %}
     <a href="{{ path('create',{'id': categorie.id}) }}">+ Créer un produit</a>
 
