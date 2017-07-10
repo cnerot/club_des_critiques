@@ -105,6 +105,80 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
+        if (0 === strpos($pathinfo, '/categorie')) {
+            // entity_homepage
+            if ($pathinfo === '/categorie') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\DefaultController::indexAction',  '_route' => 'entity_homepage',);
+            }
+
+            // categorie_all
+            if ($pathinfo === '/categorie/all') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\CategorieController::allAction',  '_route' => 'categorie_all',);
+            }
+
+            // categorie_view
+            if ($pathinfo === '/categorie/view') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\CategorieController::viewAction',  '_route' => 'categorie_view',);
+            }
+
+            // categorie_create
+            if ($pathinfo === '/categorie/create') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\CategorieController::createAction',  '_route' => 'categorie_create',);
+            }
+
+            // categorie_remove
+            if ($pathinfo === '/categorie/remove') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\CategorieController::removeAction',  '_route' => 'categorie_remove',);
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/attribute')) {
+            // attribute_all
+            if ($pathinfo === '/attribute/all') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\AttributeController::allAction',  '_route' => 'attribute_all',);
+            }
+
+            // attribute_create
+            if ($pathinfo === '/attribute/create') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\AttributeController::createAction',  '_route' => 'attribute_create',);
+            }
+
+            // attribute_view
+            if ($pathinfo === '/attribute/view') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\AttributeController::viewAction',  '_route' => 'attribute_view',);
+            }
+
+            // attribute_delete
+            if ($pathinfo === '/attribute/delete') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\AttributeController::deleteAction',  '_route' => 'attribute_delete',);
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/entity')) {
+            // create
+            if ($pathinfo === '/entity/create') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\entityController::createAction',  '_route' => 'create',);
+            }
+
+            // view
+            if ($pathinfo === '/entity/view') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\entityController::viewAction',  '_route' => 'view',);
+            }
+
+        }
+
+        // frontview
+        if ($pathinfo === '/view') {
+            return array (  '_controller' => 'EntityBundle\\Controller\\entityController::frontviewAction',  '_route' => 'frontview',);
+        }
+
+        // edit
+        if ($pathinfo === '/entity/edit') {
+            return array (  '_controller' => 'EntityBundle\\Controller\\entityController::editAction',  '_route' => 'edit',);
+        }
+
         // administration_siteadmin
         if ($pathinfo === '/administration') {
             return array (  '_controller' => 'AppBundle\\Controller\\AdministrationController::siteadminAction',  '_route' => 'administration_siteadmin',);
@@ -152,22 +226,34 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
-        if (0 === strpos($pathinfo, '/invit')) {
-            // membre_invite
-            if (0 === strpos($pathinfo, '/invite') && preg_match('#^/invite/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_invite')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::inviteAction',));
-            }
+        // membre_invite
+        if (0 === strpos($pathinfo, '/invite') && preg_match('#^/invite/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_invite')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::inviteAction',));
+        }
 
-            // membre_alerteInvite
-            if ($pathinfo === '/invitationList') {
-                return array (  '_controller' => 'AppBundle\\Controller\\MembreController::invitationListAction',  '_route' => 'membre_alerteInvite',);
-            }
+        // membre_alerteInvite
+        if (0 === strpos($pathinfo, '/alerteInvite') && preg_match('#^/alerteInvite/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_alerteInvite')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::alerteInviteAction',));
+        }
 
+        // membre_invitationList
+        if ($pathinfo === '/invitationList') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::invitationListAction',  '_route' => 'membre_invitationList',);
+        }
+
+        // membre_acceptInvitation
+        if (0 === strpos($pathinfo, '/acceptInvitation') && preg_match('#^/acceptInvitation/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_acceptInvitation')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::acceptInvitationAction',));
+        }
+
+        // membre_supprimerInvitation
+        if (0 === strpos($pathinfo, '/supprimerInvitation') && preg_match('#^/supprimerInvitation/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_supprimerInvitation')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::supprimerInvitationAction',));
         }
 
         // membre_mesAmis
-        if (0 === strpos($pathinfo, '/mesAmis') && preg_match('#^/mesAmis/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_mesAmis')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::mesAmisAction',));
+        if ($pathinfo === '/mesAmis') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::mesAmisAction',  '_route' => 'membre_mesAmis',);
         }
 
         // membre_picture
@@ -230,70 +316,93 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
-        if (0 === strpos($pathinfo, '/salon')) {
-            // salon
-            if ($pathinfo === '/salon') {
-                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::indexAction',  '_route' => 'salon',);
-            }
-
-            // salon_recupererDerniersMessages
-            if ($pathinfo === '/salon/recupererDerniersMessages') {
-                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::recupererDerniersMessagesAction',  '_route' => 'salon_recupererDerniersMessages',);
-            }
-
-            // salon_envoyerMessage
-            if ($pathinfo === '/salon/envoyerMessage') {
-                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::envoyerMessageAction',  '_route' => 'salon_envoyerMessage',);
-            }
-
-            // salon_wantBanFromSalon
-            if ($pathinfo === '/salon/wantBanFromSalon') {
-                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::wantBanFromSalonAction',  '_route' => 'salon_wantBanFromSalon',);
-            }
-
-            // salon_addToContacts
-            if ($pathinfo === '/salon/addToContacts') {
-                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::addToContactsAction',  '_route' => 'salon_addToContacts',);
-            }
-
-            // salon_chargeContacts
-            if ($pathinfo === '/salon/chargeContacts') {
-                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::chargeContactsAction',  '_route' => 'salon_chargeContacts',);
-            }
-
-            // salon_invitContacts
-            if ($pathinfo === '/salon/invitContacts') {
-                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::invitContactsAction',  '_route' => 'salon_invitContacts',);
-            }
-
-            // salon_historique
-            if ($pathinfo === '/salon/historique') {
-                return array (  '_controller' => 'AppBundle\\Controller\\SalonController::historiqueAction',  '_route' => 'salon_historique',);
-            }
-
-            if (0 === strpos($pathinfo, '/salons')) {
-                // salons
-                if ($pathinfo === '/salons') {
-                    return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::indexAction',  '_route' => 'salons',);
+        if (0 === strpos($pathinfo, '/s')) {
+            if (0 === strpos($pathinfo, '/salon')) {
+                // salon
+                if ($pathinfo === '/salon') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::indexAction',  '_route' => 'salon',);
                 }
 
-                // salons_popupRejoindre
-                if ($pathinfo === '/salons/popupRejoindre') {
-                    return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::popupRejoindreAction',  '_route' => 'salons_popupRejoindre',);
+                // salon_recupererDerniersMessages
+                if ($pathinfo === '/salon/recupererDerniersMessages') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::recupererDerniersMessagesAction',  '_route' => 'salon_recupererDerniersMessages',);
                 }
 
-                // salons_recupIdSalonPossible
-                if ($pathinfo === '/salons/recupIdSalonPossible') {
-                    return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::recupIdSalonPossibleAction',  '_route' => 'salons_recupIdSalonPossible',);
+                // salon_envoyerMessage
+                if ($pathinfo === '/salon/envoyerMessage') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::envoyerMessageAction',  '_route' => 'salon_envoyerMessage',);
                 }
 
-                // salons_vote
-                if ($pathinfo === '/salons/vote') {
-                    return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::voteAction',  '_route' => 'salons_vote',);
+                // salon_wantBanFromSalon
+                if ($pathinfo === '/salon/wantBanFromSalon') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::wantBanFromSalonAction',  '_route' => 'salon_wantBanFromSalon',);
+                }
+
+                // salon_addToContacts
+                if ($pathinfo === '/salon/addToContacts') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::addToContactsAction',  '_route' => 'salon_addToContacts',);
+                }
+
+                // salon_chargeContacts
+                if ($pathinfo === '/salon/chargeContacts') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::chargeContactsAction',  '_route' => 'salon_chargeContacts',);
+                }
+
+                // salon_invitContacts
+                if ($pathinfo === '/salon/invitContacts') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::invitContactsAction',  '_route' => 'salon_invitContacts',);
+                }
+
+                // salon_historique
+                if ($pathinfo === '/salon/historique') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::historiqueAction',  '_route' => 'salon_historique',);
+                }
+
+                if (0 === strpos($pathinfo, '/salons')) {
+                    // salons
+                    if ($pathinfo === '/salons') {
+                        return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::indexAction',  '_route' => 'salons',);
+                    }
+
+                    // salons_popupRejoindre
+                    if ($pathinfo === '/salons/popupRejoindre') {
+                        return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::popupRejoindreAction',  '_route' => 'salons_popupRejoindre',);
+                    }
+
+                    // salons_recupIdSalonPossible
+                    if ($pathinfo === '/salons/recupIdSalonPossible') {
+                        return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::recupIdSalonPossibleAction',  '_route' => 'salons_recupIdSalonPossible',);
+                    }
+
+                    // salons_vote
+                    if ($pathinfo === '/salons/vote') {
+                        return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::voteAction',  '_route' => 'salons_vote',);
+                    }
+
                 }
 
             }
 
+            // statistiques_statistique
+            if ($pathinfo === '/statistique') {
+                return array (  '_controller' => 'AppBundle\\Controller\\StatistiquesController::statistiqueAction',  '_route' => 'statistiques_statistique',);
+            }
+
+        }
+
+        // statistiques_noteuser
+        if ($pathinfo === '/noteuser') {
+            return array (  '_controller' => 'AppBundle\\Controller\\StatistiquesController::noteUserAction',  '_route' => 'statistiques_noteuser',);
+        }
+
+        // statistiques_articleStat
+        if ($pathinfo === '/articleStat') {
+            return array (  '_controller' => 'AppBundle\\Controller\\StatistiquesController::ArticleByCategoryAction',  '_route' => 'statistiques_articleStat',);
+        }
+
+        // statistiques_nbVisite
+        if ($pathinfo === '/nbVisite') {
+            return array (  '_controller' => 'AppBundle\\Controller\\StatistiquesController::nbVisiteAction',  '_route' => 'statistiques_nbVisite',);
         }
 
         // login

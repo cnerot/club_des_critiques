@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Amis;
+use AppBundle\Entity\Visiteur;
 use AppBundle\Form\MembreForm;
 use AppBundle\Form\ConnexionForm;
 use AppBundle\Form\EditPwdForm;
@@ -365,7 +366,14 @@ class MembreController extends Controller
                 /*return $this->redirectToRoute('membre_profil', [
                      'id'=>$membre->getId(),
                 ]); */
-
+                $visiteur = new Visiteur();
+                $visiteur->setNb_visite(1);
+                $visiteur->setId_membre($membre->getId());
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($visiteur);
+                $em->flush();
+                $this->addFlash('success', "visite");
+                
                 $session->set('id', $membre->getId());
                 $session->set('name', $membre->getNom());
                 $session->set('statut', $membre->getStatut());

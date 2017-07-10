@@ -16,6 +16,7 @@
       <parameter key="DoctrineBundle">Doctrine\Bundle\DoctrineBundle\DoctrineBundle</parameter>
       <parameter key="SensioFrameworkExtraBundle">Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle</parameter>
       <parameter key="AppBundle">AppBundle\AppBundle</parameter>
+      <parameter key="EntityBundle">EntityBundle\EntityBundle</parameter>
       <parameter key="DebugBundle">Symfony\Bundle\DebugBundle\DebugBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
@@ -61,6 +62,11 @@
         <parameter key="parent">null</parameter>
         <parameter key="path">C:\wamp\www\club_des_critiques\src\AppBundle</parameter>
         <parameter key="namespace">AppBundle</parameter>
+      </parameter>
+      <parameter key="EntityBundle" type="collection">
+        <parameter key="parent">null</parameter>
+        <parameter key="path">C:\wamp\www\club_des_critiques\src\EntityBundle</parameter>
+        <parameter key="namespace">EntityBundle</parameter>
       </parameter>
       <parameter key="DebugBundle" type="collection">
         <parameter key="parent">null</parameter>
@@ -441,7 +447,7 @@
         <argument type="service">
           <service class="Symfony\Bundle\FrameworkBundle\CacheWarmer\TranslationsCacheWarmer" public="false">
             <tag name="kernel.cache_warmer"/>
-            <argument type="service" id="translator"/>
+            <argument type="service" id="service_container"/>
           </service>
         </argument>
         <argument type="service">
@@ -455,7 +461,7 @@
                 <tag name="cache.pool" clearer="cache.default_clearer"/>
                 <argument>lM53F9qUSU</argument>
                 <argument>0</argument>
-                <argument>hvDV0S5ZNJ0B4LMMF3CW4k</argument>
+                <argument>kEPhIru1pPBaJYeG9Zo-gc</argument>
                 <argument>C:\wamp\www\club_des_critiques\var\cache\dev/pools</argument>
                 <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
                 <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -494,7 +500,7 @@
         <argument type="service">
           <service class="Symfony\Bundle\TwigBundle\CacheWarmer\TemplateCacheWarmer" public="false">
             <tag name="kernel.cache_warmer"/>
-            <argument type="service" id="twig"/>
+            <argument type="service" id="service_container"/>
             <argument type="service">
               <service class="Symfony\Bundle\TwigBundle\TemplateIterator" public="false">
                 <argument type="service" id="kernel"/>
@@ -638,7 +644,7 @@
       <tag name="cache.pool" clearer="cache.default_clearer"/>
       <argument>oZjVwiJ2cq</argument>
       <argument>0</argument>
-      <argument>hvDV0S5ZNJ0B4LMMF3CW4k</argument>
+      <argument>kEPhIru1pPBaJYeG9Zo-gc</argument>
       <argument>C:\wamp\www\club_des_critiques\var\cache\dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -648,7 +654,7 @@
       <tag name="cache.pool" clearer="cache.default_clearer"/>
       <argument>MpYcVP6ZUx</argument>
       <argument>0</argument>
-      <argument>hvDV0S5ZNJ0B4LMMF3CW4k</argument>
+      <argument>kEPhIru1pPBaJYeG9Zo-gc</argument>
       <argument>C:\wamp\www\club_des_critiques\var\cache\dev/pools</argument>
       <argument type="service" id="monolog.logger.cache" on-invalid="ignore"/>
       <factory class="Symfony\Component\Cache\Adapter\AbstractAdapter" method="createSystemCache"/>
@@ -1343,7 +1349,6 @@
     <service id="data_collector.form" class="Symfony\Component\Form\Extension\DataCollector\FormDataCollector">
       <tag name="data_collector" template="@WebProfiler/Collector/form.html.twig" id="form" priority="310"/>
       <argument type="service" id="data_collector.form.extractor"/>
-      <argument>false</argument>
     </service>
     <service id="debug.debug_handlers_listener" class="Symfony\Component\HttpKernel\EventListener\DebugHandlersListener">
       <tag name="kernel.event_subscriber"/>
@@ -1652,7 +1657,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>595d4fe93ae853.31388313</argument>
+            <argument>59624e33ef7821.93768554</argument>
           </service>
         </argument>
       </argument>
@@ -1875,7 +1880,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.token_storage"/>
-            <argument>595d4fe93ae853.31388313</argument>
+            <argument>59624e33ef7821.93768554</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
             <argument type="service" id="security.authentication.manager"/>
           </service>
@@ -1941,7 +1946,7 @@
         </service>
       </argument>
     </service>
-    <service id="twig" class="Twig_Environment">
+    <service id="twig" class="Twig\Environment">
       <argument type="service" id="twig.loader"/>
       <argument type="collection">
         <argument key="debug">true</argument>
@@ -2065,7 +2070,7 @@
       </call>
       <call method="addExtension">
         <argument type="service">
-          <service class="Twig_Extension_Debug" public="false">
+          <service class="Twig\Extension\DebugExtension" public="false">
             <tag name="twig.extension"/>
           </service>
         </argument>
@@ -2170,7 +2175,7 @@
         </service>
       </configurator>
     </service>
-    <service id="twig.profile" class="Twig_Profiler_Profile"/>
+    <service id="twig.profile" class="Twig\Profiler\Profile"/>
     <service id="twig.runtime.httpkernel" class="Symfony\Bridge\Twig\Extension\HttpKernelRuntime">
       <tag name="twig.runtime"/>
       <argument type="service" id="fragment.handler"/>
@@ -2349,6 +2354,7 @@
           <call method="setEntityNamespaces">
             <argument type="collection">
               <argument key="AppBundle">AppBundle\Entity</argument>
+              <argument key="EntityBundle">EntityBundle\Entity</argument>
             </argument>
           </call>
           <call method="setMetadataCacheImpl">
@@ -2373,6 +2379,19 @@
                     </service>
                   </argument>
                   <argument>AppBundle\Entity</argument>
+                </call>
+                <call method="addDriver">
+                  <argument type="service">
+                    <service class="Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver" public="false">
+                      <argument type="collection">
+                        <argument key="C:\wamp\www\club_des_critiques\src\EntityBundle\Resources\config\doctrine">EntityBundle\Entity</argument>
+                      </argument>
+                      <call method="setGlobalBasename">
+                        <argument>mapping</argument>
+                      </call>
+                    </service>
+                  </argument>
+                  <argument>EntityBundle\Entity</argument>
                 </call>
               </service>
             </argument>
@@ -2878,6 +2897,10 @@
       <call method="addPath">
         <argument>C:\wamp\www\club_des_critiques\vendor\doctrine\doctrine-bundle/Resources/views</argument>
         <argument>Doctrine</argument>
+      </call>
+      <call method="addPath">
+        <argument>C:\wamp\www\club_des_critiques\src\EntityBundle/Resources/views</argument>
+        <argument>Entity</argument>
       </call>
       <call method="addPath">
         <argument>C:\wamp\www\club_des_critiques\vendor\symfony\symfony\src\Symfony\Bundle\DebugBundle/Resources/views</argument>
