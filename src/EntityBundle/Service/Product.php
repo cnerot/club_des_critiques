@@ -19,6 +19,18 @@ class Product
         }
         return false;
     }
+    public function getValueByName($name = null){
+        if  ($name == null) {
+            return false;
+        }
+        foreach ($this->data as $attr){
+            if ($attr->name == $name){
+                return $attr->value;
+            }
+        }
+        return false;
+    }
+
     public function save(EntityManager $em, $attributes = true)
     {
         if ($this->id) {

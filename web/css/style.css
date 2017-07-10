@@ -242,3 +242,20 @@ div{
     background:  white ;
     padding: 2%; 
 }
+
+.product_data{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.product_image{
+    width: 25vw;
+}
+.product_image img{
+    width: 25vw;
+    margin-left: 2vw;
+}
+.product_description{
+    width: 65vw;
+    margin-left: 2vw;
+}

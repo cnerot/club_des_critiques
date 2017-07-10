@@ -3,15 +3,37 @@
 {% block title %}EntityBundle:entity:view{% endblock %}
 
 {% block body %}
-<h1>Produit: {{ entity.name }}</h1>
-    <table>
-        {% for attribute in entity.data %}
-            <tr>
-                <td style="border: 1px solid black">{{ attribute.id }}</td>
-                <td style="border: 1px solid black">{{ attribute.name }}</td>
-                <td style="border: 1px solid black">{{ attribute.value }}</td>
+    <h1>Produit: {{ entity.name }}</h1>
+    <form action="#" method="post">
 
+        <input type="hidden" name="product_id" value="{{ entity.id }}">
+        <table>
+            <thead>
+            <tr>
+                <th style="border: 2px solid black">Nom</th>
+                <th style="border: 2px solid black">Valeur</th>
             </tr>
-        {% endfor %}
-    </table>
+            </thead>
+            <tbody>
+            {% for id, attribute in entity.data %}
+                <tr>
+                    <td style="border: 1px solid black">{{ attribute.name }}</td>
+                    <td style="border: 1px solid black">
+                        {{ include('EntityBundle:Entity:attribute/input.html.twig',{
+                            "attribute":attribute,
+                        }) }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>
+                    <input type="submit" value="Sauvegarder">
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+
+    </form>
 {% endblock %}
