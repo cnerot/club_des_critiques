@@ -11,10 +11,3 @@ Config.class.php
 /app/config/parameters.yml
 /app/config/parameters.ini
 \.idea/
-vendor/
-
-var/
-
-\.idea/
-
-composer\.lock

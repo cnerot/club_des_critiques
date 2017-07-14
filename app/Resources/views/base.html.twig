@@ -19,7 +19,7 @@
 <div>
     {% if membre is defined and membre != null and membre.statut == 1 %}
 
-        <ul id="dropdown1" class="dropdown-content">
+        <ul id="dropdown1" class="dropdown-content" style="margin-top: 63px;">
             <li>
                 <a href="{{ path("membre_admin") }}" id="">
                     <span class="">Gestion de site</span>
@@ -27,8 +27,8 @@
             </li>
             <li class="divider"><span class="yellow-text text-darken-2"></span></li>
             <li>
-                <a href="">
-                    <span class="">label</span>
+                <a href="{{path("statistiques_statistique")}}">
+                    <span class="">Statistiques</span>
                 </a>
             </li>
         </ul>
@@ -41,11 +41,27 @@
 
             <li class="divider"><span class=""></span></li>
             <li>
-                <a href="">
-                    <span class="">label</span>
+                <a href="{{path("statistiques_statistique")}}">
+                    <span class="">Statistiques</span>
                 </a>
             </li>
         </ul>
+        <div class="col s12">
+            <ul id="dropdown3" class="dropdown-content" style="margin-top: 63px;">
+                <li>
+                    <a href="" id="">
+                         <span class="new badge" >1</span>Invitation
+                    </a>
+                </li>
+
+                <li class="divider"><span class=""></span></li>
+                <li>
+                    <a href="">
+                         <span class="new badge" >1</span>Salon
+                    </a>
+                </li>
+            </ul>
+       </div>
     {% endif %}
     <nav class="teal lighten-4" role="navigation">
         <div class="nav-wrapper ">
@@ -54,6 +70,17 @@
                 <a id="logo-container" href="/" class="brand-logo">
                     <img class="logo" src="{{ asset('images/logo.png') }}">
                 </a>
+                </div>
+                 <div class="left padd-left" style="padding-left:19%">
+                    <a href="{{ path("salons")}}" id="">
+                         Salons
+                     </a>
+                </div>
+                 <div class="left padd-left">
+                   <a href="#" id="">
+                         Contenus
+                     </a>
+                </div>
                 {% if membre is defined and id_membre != null %}
                     <div class="right padd-left">
                         <a href="{{ path("membre_logout") }}" id="">
@@ -66,11 +93,14 @@
                         </a>
                     </div>
                     <div class="right padd-left">
-                        <a href="" id="">
-                            <i class="material-icons">public </i>
-                        </a>
+                    <ul class="right hide-on-med-and-down">
+                        <li>
+                            <a class="dropdown-button" href="#!" data-activates="dropdown3">
+                                     <i class="material-icons"> notifications</i>
+                            </a>
+                        </li>
+                    </ul>
                     </div>
-
                     <div class="right padd-left">
                         <a href="{{ path("messagerie_reception") }}" id="">
                             <i class="material-icons">chat </i>
@@ -134,10 +164,17 @@
 </footer>
 
 {% block javascripts %}
+    
     <script src="{{ asset('js/jquery-3.1.1.min.js') }}"></script>
     <script src="{{ asset('js/materialize.min.js') }}"></script>
     <script src="{{ asset('js/init.js') }}"></script>
     <script src="{{ asset('js/salons.js') }}"></script>
+    <script src="{{ asset('js/dataviz.js') }}"></script>
+    <script src="{{ asset('js/jquery.jqplot.min.js') }}"></script>
+    <script src="{{ asset('js/renderer/jqplot.pieRenderer.js') }}"></script>
+    <script src="{{ asset('js/renderer/jqplot.barRenderer.js') }}"></script>
+    <script src="{{ asset('js/renderer/jqplot.dateAxisRenderer.js') }}"></script>
+              
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
 {% endblock %}

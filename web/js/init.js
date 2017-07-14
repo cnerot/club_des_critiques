@@ -71,4 +71,12 @@ function autoSerch(data){
 }       
 function autoRefresch(data){
   
-}       
+} 
+function nbVisite(){
+            month = document.getElementById('month').value;
+            $.ajax({
+                url : '/nbVisite', // La ressource ciblée
+                type : 'GET', // Le type de la requête HTTP.
+                data : 'mois=' + month
+            });
+        }
