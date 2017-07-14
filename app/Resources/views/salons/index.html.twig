@@ -112,17 +112,7 @@
 							  <td>
 									<div class="col s12 input-field action no-margin">
 										<input type="hidden" value="{{ salon.id }}" name="idSalon">
-										<select class="hide browser-default">
-											<option value="selected" disabled selected>Action</option>
-											{% if period == "past" %}
-												<option class="historiqueSalon">Voir</option>
-											{% elseif period == "next" %}
-												<option>Thème</option>
-											{% else %}
-												<option>Thème</option>
-												<option class="join">Rejoindre</option>
-											{% endif %}
-										</select>
+										
 										
 										{% if period == "past" %}
 											<input type="button" class="btn btn-primary historiqueSalon" value="Voir">

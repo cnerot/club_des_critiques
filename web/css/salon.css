@@ -73,3 +73,7 @@
 	margin-top: 10px;
     text-align: center;
 }
+
+.deleteMessage{
+	cursor: pointer;
+}
