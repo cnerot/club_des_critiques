@@ -22,18 +22,18 @@ $(document).ready(function(){
 		}
 	});
     
-    //$(".join").click(function(){		
-	  //$("#joinSalon").click();
-	  //var idSalon = $(this).parent().parent().find('[name=idSalon]').val();
-	  //$("#idSalon").val(idSalon);
-	  //popupRejoindre(idSalon);
-	//});
+    $(".join").click(function(){		
+	  $("#joinSalon").click();
+	  var idSalon = $(this).parent().parent().find('[name=idSalon]').val();
+	  $("#idSalon").val(idSalon);
+	  popupRejoindre(idSalon);
+	});
 	
-	//$(".historiqueSalon").click(function(){
-	  //var idSalon = $(this).parent().parent().find('[name=idSalon]').val();
-	  //$("#idSalon").val(idSalon);
-	  //historiqueSalon(idSalon);
-	//});		
+	$(".historiqueSalon").click(function(){
+	  var idSalon = $(this).parent().parent().find('[name=idSalon]').val();
+	  $("#idSalon").val(idSalon);
+	  historiqueSalon(idSalon);
+	});		
 	
 	$(".closeWindowRateAbook").click(function(){ // remet les action par défaut
 		$(".action select").val("selected");
