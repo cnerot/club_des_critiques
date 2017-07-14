@@ -4,19 +4,52 @@
 
 {% block body %}
     <h1>Categorie : {{ categorie.name }}</h1>
-    <h3>Categorie Attributes</h3>
-    {% for attribute in categorie.attributes %}
-        <p><a href="{{ path('attribute_view', {'id': categorie.id}) }}">{{ attribute.name }}</a></p>
-    {% endfor %}
+    <h3>Attributs de la categorie</h3>
     <a href="{{ path('attribute_create',{'id': categorie.id}) }}">+ Créer un attribut</a>
 
-    <h2>Categorie products</h2>
+    <table>
+        <thead>
+        <tr>
+            <td>id</td>
+            <td>nom</td>
+        </tr>
+        </thead>
+        <tbody>
 
-    {% for products in categorie_products %}
-        <p><a href="{{ path('view', {'id': products.id}) }}">{{ products.name }}</a>
-             - <a href="{{ path('frontview', {'id': products.id}) }}">front view</a>
-        </p>
-    {% endfor %}
+        {% for attribute in categorie.attributes %}
+            <tr>
+                <td>{{ attribute.id }}</td>
+                <td>{{ attribute.name }}</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+    <h2>Produits de la categorie</h2>
+
     <a href="{{ path('create',{'id': categorie.id}) }}">+ Créer un produit</a>
+    <ul class="collapsible" data-collapsible="accordion">
+        {% for products in categorie_products %}
+            <li>
+                <div class="collapsible-header"><i class="material-icons">filter_drama</i>{{ products.name }}</div>
+                <div class="collapsible-body">
+                    <table>
+                        <tr>
+                            <td>
+                                <a href="{{ path('view', {'id': products.id}) }}">Editer le produit</a>
+
+                            </td>
+                            <td>
+                                <a href="{{ path('frontview', {'id': products.id}) }}">Voir en front</a>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
 
 {% endblock %}

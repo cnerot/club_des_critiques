@@ -135,16 +135,19 @@ class Attributes
                     $val->setValue($this->value);
                     $val->setIdAttribute($this->id);
                     $val->setIdEntity($this->productid);
-                    $em->persist($val);                    break;
+                    $em->persist($val);
+                    break;
                 case "integer":
                     $val = $em->getRepository('EntityBundle:valueinteger')->findOneBy(["idAttribute" => $this->id, "idEntity" => $this->productid]);
                     if ($val == null) {
                         $val = new valueinteger();
                     }
+
                     $val->setValue($this->value);
                     $val->setIdAttribute($this->id);
                     $val->setIdEntity($this->productid);
-                    $em->persist($val);                    break;
+                    $em->persist($val);
+                    break;
                 case "date":
                     if ($this->data) {
                         $val = $em->getRepository('EntityBundle:valuedate')->findOneBy(["idAttribute" => $this->id, "idEntity" => $this->productid]);
@@ -170,6 +173,8 @@ class Attributes
             }
             $em->persist($val);
         }
+        $em->persist($attribute);
+
         $em->flush();
         return $this->getById($em, $attribute->getId());
     }
@@ -279,9 +284,8 @@ class Attributes
         }
         return $this;
     }
-    public function createDefaultAttributes(EntityManager $em)
+    public function createDefaultAttributes(EntityManager $em, $id)
     {
-
         $defaults = [
             [
                 "name" => "titre",
@@ -293,10 +297,14 @@ class Attributes
             ],
             [
                 "name" => "image",
-                "type" => "text",
+                "type" => "image",
+            ],
+            [
+                "name" => "front",
+                "type" => "integer",
             ],
         ];
-        $attributes = $this->getByCategorie($em, -1);
+        $attributes = $this->getByCategorie($em, $id);
         foreach ($defaults as $default) {
             $create = true;
             foreach ($attributes as $attribute) {
@@ -310,22 +318,11 @@ class Attributes
                     $new->$key = $element;
                 }
                 $new->obligatory = false;
-                $new->save($em, -1);
+                $new->save($em, $id);
             }
 
         }
-        foreach ($attributes as $attribute) {
-            $delete = true;
-            foreach ($defaults as $default) {
-                if ($attribute->name == $default["name"]) {
-                    $delete = false;
-                }
-            }
-            if ($delete) {
-                $attribute->delete();
-            }
 
-        }
 
     }
     public function getByCategorie(EntityManager $em, $id_categorie)

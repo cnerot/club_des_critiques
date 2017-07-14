@@ -13,7 +13,7 @@
     </select>
 {% endif %}
 {% if attribute.type == "integer" %}
-    <input name="{{ 'attribute_' ~ attribute.id }}" type="number">
+    <input name="{{ 'attribute_' ~ attribute.id }}" type="number" value="{{ attribute.value }}">
 {% endif %}
 {% if attribute.type == "date" %}
     {% if attribute.data %}

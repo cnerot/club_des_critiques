@@ -78,6 +78,7 @@ class Product
         return $array;
     }
 
+
     public function getByCategory(EntityManager $em, $categoryId)
     {
         $products = $em->getRepository('EntityBundle:Entity')->findBy(["category_id" => $categoryId]);
@@ -86,6 +87,5 @@ class Product
             $array[] = (new Product())->getById($em,$product->getId());
         }
         return $array;
-
     }
 }

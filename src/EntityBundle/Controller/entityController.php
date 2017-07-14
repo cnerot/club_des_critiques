@@ -21,6 +21,7 @@ class entityController extends Controller
 
         $em = $this->get('doctrine')->getManager();
         $entity = (new Product())->getById($em, $request->query->get('id', null));
+        $categorie = (new Categories())->getById($em, $entity->id)->name;
 
         $data = $request->request->all();
         if (isset($data['product_id'])){
@@ -45,7 +46,8 @@ class entityController extends Controller
 
 
         return $this->render('EntityBundle:entity:view.html.twig', array(
-            'entity' => $entity
+            'entity' => $entity,
+            'categorie' => $categorie,
         ));
     }
 

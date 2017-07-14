@@ -39,26 +39,30 @@ class CategorieController extends Controller
         $categorie_products = $categorie->getProducts($em);
         $data = $request->request->all();
         if (isset($data['catrgory_id'])) {
-            $newproducts = array();
-            foreach ($categorie_products as $product) {
-                $keep = true;
-                foreach ($data as $key => $attribute) {
-                    if ($attribute == null || $attribute == ""){
-                        continue;
-                    }
-                    $key_array = explode('_', $key);
-                    if ($key_array['0'] == "attribute") {
-                        if ($product->data[$key_array[1]]->value != $attribute) {
-                            $keep = false;
+            if (isset($data['search'])) {
+                $categorie_products = $categorie->getProductsByName($em, $data["search"]);
+            } else {
+                $newproducts = array();
+                foreach ($categorie_products as $product) {
+                    $keep = true;
+                    foreach ($data as $key => $attribute) {
+                        if ($attribute == null || $attribute == "") {
+                            continue;
+                        }
+                        $key_array = explode('_', $key);
+                        if ($key_array['0'] == "attribute") {
+                            if ($product->data[$key_array[1]]->value != $attribute) {
+                                $keep = false;
+                            }
                         }
                     }
+                    if ($keep) {
+                        $newproducts[] = (new Product())->getById($em, $product->id);
+                    }
                 }
-                if ($keep) {
-                    $newproducts[] = (new Product())->getById($em, $product->id);
+                if (!empty($newproducts)) {
+                    $categorie_products = $newproducts;
                 }
-            }
-            if (!empty($newproducts)){
-                $categorie_products = $newproducts;
             }
 
         }

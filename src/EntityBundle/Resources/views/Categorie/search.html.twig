@@ -8,24 +8,29 @@
 {% endblock %}
 
 {% block body %}
+    <form method="post" action="#">
+        <input type="hidden" name="catrgory_id" value="{{ categorie.id }}">
 
+        <input type="text" name="search" placeholder="search">
+        <input type="submit" value="Rechercher">
+    </form>
     <ul id="slide-out" class="side-nav">
         <li>Recherche par filtre</li>
         <form action="#" method="post">
             <input type="hidden" name="catrgory_id" value="{{ categorie.id }}">
-        {% for attribute in categorie.attributes %}
-            <li>
-                {{ attribute.name }} :
-            </li>
-            <li>
-                {{ include('EntityBundle:Categorie:attribute/input.html.twig',{
-                    "attribute":attribute,
-                    "value":0,
-                }) }}
-            </li>
-        {% endfor %}
+            {% for attribute in categorie.attributes %}
+                <li>
+                    {{ attribute.name }} :
+                </li>
+                <li>
+                    {{ include('EntityBundle:Categorie:attribute/input.html.twig',{
+                        "attribute":attribute,
+                        "value":0,
+                    }) }}
+                </li>
+            {% endfor %}
 
-        <li><input type="submit" value="search"></li>
+            <li><input type="submit" value="search"></li>
         </form>
     </ul>
     <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>

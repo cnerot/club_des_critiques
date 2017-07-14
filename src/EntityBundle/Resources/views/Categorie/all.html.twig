@@ -5,19 +5,27 @@
 {% block body %}
     <h1>Toutes Categories</h1>
     <a href="{{ path('categorie_create') }}">Créer une categorie</a>
-    <table>
-        {% for categorie in categories %}
-            <tr>
-                <td style="border: 1px solid black">{{ categorie.id }}</td>
-                <td style="border: 1px solid black"><a href="{{ path('categorie_view', {'id': categorie.id}) }}">{{ categorie.name }}</a></td>
-                <td style="border: 1px solid black">
-                    {% for attribute in categorie.attributes %}
-                        <p><a href="{{ path('attribute_view', {'id': categorie.id}) }}">{{ attribute.name }}</a></p>
-                    {% endfor %}
-                    <a href="{{ path('attribute_create',{'id': categorie.id}) }}">Créer un attribut</a>
-                </td>
 
-            </tr>
+    <ul class="collapsible" data-collapsible="accordion">
+        {% for categorie in categories %}
+
+            <li>
+                <div class="collapsible-header"><i class="material-icons">filter_drama</i>{{ categorie.name }}</div>
+                <div class="collapsible-body">
+                    <a href="{{ path('categorie_view', {'id': categorie.id}) }}">+</a>
+                    <table>
+                        {% for attribute in categorie.attributes %}
+                            <tr>
+                                <td>
+                                    <a href="{{ path('attribute_view', {'id': categorie.id}) }}">{{ attribute.name }}</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <a href="{{ path('attribute_create',{'id': categorie.id}) }}">Créer un attribut</a>
+                    </table>
+                </div>
+            </li>
         {% endfor %}
-    </table>
+
+    </ul>
 {% endblock %}
