@@ -48,7 +48,13 @@ class Participant
      * @ORM\Column(name="id_membres_who_ban", type="string", length=250)
      */
     private $id_membres_who_ban;
-
+	
+	/**
+     * @var int
+     *
+     * @ORM\Column(name="actif", type="integer", length=11)
+     */
+    private $actif;
 
     /**
      * Get id
@@ -154,6 +160,30 @@ class Participant
     public function getIdMembresWhoBan()
     {
         return $this->id_membres_who_ban;
+    }
+    
+    /**
+     * Set actif
+     *
+     * @param integer $actif
+     *
+     * @return Participant
+     */
+    public function setActif($actif)
+    {
+        $this->actif = $actif;
+
+        return $this;
+    }
+
+    /**
+     * Get actif
+     *
+     * @return int
+     */
+    public function getActif()
+    {
+        return $this->actif;
     }
 }
 

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Salon;
 use AppBundle\Entity\Note;
+use AppBundle\Entity\Membre;
 
 class SalonsController extends Controller
 {
@@ -20,6 +21,10 @@ class SalonsController extends Controller
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
+
+        if(empty($membre)){
+			$membre = new Membre();
+		}
         
         $salonsReceived = $this->getDoctrine()
         ->getRepository('AppBundle:Salon')
@@ -29,54 +34,52 @@ class SalonsController extends Controller
         $salons = [];
         $tabIdDoublons = [];
         foreach($salonsReceived as $salonReceived){
-	    $i = 0;
-	    $found = false;
-	    foreach($salonsReceived as $salonReceived2){
-		if($found == false && $salonReceived->getId() != $salonReceived2->getId()){
-		    if(
-			$salonReceived->getDateDebut() == $salonReceived2->getDateDebut() && 
-			$salonReceived->getDateFin() == $salonReceived2->getDateFin() &&
-			$salonReceived->getIdArticle() == $salonReceived2->getIdArticle()					
-			){
-			    $found = true;
-                            if(!in_array($salonReceived->getId(), $tabIdDoublons) && !in_array($salonReceived2->getId(), $tabIdDoublons)){
-				$salons[] = $salonReceived;
-				$tabIdDoublons[] = $salonReceived->getId();
+			$i = 0;
+			$found = false;
+			$foundAncien = false;
+			foreach($salonsReceived as $salonReceived2){
+				if($found == false && $salonReceived->getId() != $salonReceived2->getId()){
+					if(
+					$salonReceived->getDateDebut() == $salonReceived2->getDateDebut() && 
+					$salonReceived->getDateFin() == $salonReceived2->getDateFin() &&
+					$salonReceived->getIdArticle() == $salonReceived2->getIdArticle()					
+					){
+						$found = true;
+						
+						if(strtotime(date('Y-m-d')) > strtotime($salonReceived->getDateFin()->format('Y-m-d'))){
+							$found = false;							
+						}						
+						if(!in_array($salonReceived->getId(), $tabIdDoublons) && !in_array($salonReceived2->getId(), $tabIdDoublons)){
+							$salons[] = $salonReceived;
+							$foundAncien = true;
+							$tabIdDoublons[] = $salonReceived->getId();
 							$tabIdDoublons[] = $salonReceived2->getId();
 						}
-						$idSalonsDoublons[$a][0] = $salonReceived->getId();
-						$idSalonsDoublons[$a][0] = $salonReceived2->getId();
-					}else{
-						
 					}
 				}
 				$i++;
 			}
-			if($found == false){
+			if($found == false && $foundAncien == false){
 				$salons[] = $salonReceived;
 			}
 		}
        //echo "<pre>";
        //print_r($salons);
        //echo "</pre>";
+       
+       //die();
         
         // replace this example code with whatever you need
         //return $this->render('salons\index.html.twig', [
             //'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         //]);
-        if($session->get('id')!=null){
-            return $this->render('salons\index.html.twig',[
-               'salons' => $salons,
-               'id_membre'=> $session->get('id'),
-               'membre'=> $membre,
-           ]);
-        }else{
-            return $this->render('salons\index.html.twig',[
-               'salons' => $salons,
-               'id_membre'=> $session->get('id'),
-               'membre'=> null,
-           ]);      
-        }
+        
+         return $this->render('salons\index.html.twig',[
+            'salons' => $salons,
+            'id_membre'=> $session->get('id'),
+            'membre'=> $membre,
+        ]);
+
     }
     
      /**
@@ -106,11 +109,19 @@ class SalonsController extends Controller
      */
     public function recupIdSalonPossibleAction(Request $request)
     {
-		$nbMaxParticipants = 2;
+		$nbMaxParticipants = 20;
 		$salons = new Salon();
 		$notes = new Note();
 		$idSalon = $request->get('idSalon');
 		$noteChosen = $request->get('noteChosen');
+		
+		$nbMaxSalon = $this->getDoctrine()
+		->getRepository('AppBundle:Parametres')
+		->findOneBy([
+			"id" => 1,
+		]);
+		
+		$nbMaxParticipants = $nbMaxSalon->getNbMaxSalon();
 		
 		$salon = $this->getDoctrine()
 		->getRepository('AppBundle:Salon')
@@ -122,6 +133,7 @@ class SalonsController extends Controller
 		->getRepository('AppBundle:Participant')
 		->findBy([
 			"id_salon" => $idSalon,
+			"actif" => 1,
 		]);				
 		
 		$idArticle = $salon->getIdArticle();
@@ -135,6 +147,8 @@ class SalonsController extends Controller
 			->getRepository('AppBundle:Salon')
 			->findBy([
 				"id_article" => $idArticle,
+				"titre_salon" => $salon->getTitreSalon(),
+				"description" => $salon->getDescription(),
 				"date_debut" => $salon->getDateDebut(),
 				"date_fin" => $salon->getDateFin(),
 			]);
@@ -150,6 +164,7 @@ class SalonsController extends Controller
 				->getRepository('AppBundle:Participant')
 				->findBy([
 					"id_salon" => $sameSalon->getId(),
+					"actif" => 1,
 				]);
 				
 				if(count($participantsSameSalons) < $nbMaxParticipants){
@@ -192,18 +207,23 @@ class SalonsController extends Controller
      */
     public function voteAction(Request $request)
     {
-		$nbMaxParticipants = 1;
+		$nbMaxParticipants = 20;
 		$salons = new Salon();
 		$notes = new Note();
-                $session = $request->getSession();
-                if( $session->get('id')!=null){
-                $em = $this->getDoctrine()->getManager();
-                $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
-		$idMembre = $session->get('id'); // à récupérer en $_SESSION
+		$idMembre = 1; // à récupérer en $_SESSION
 		//$idSalon = 9; // à récupérer en $request->get
 		//$noteChosen = 4; // à récupérer en $request->get
 		$idSalon = $_GET['idSalon']; // à récupérer en $request->get
 		$noteChosen = $_GET['noteChosen']; // à récupérer en $request->get
+		
+		$nbMaxSalon = $this->getDoctrine()
+		->getRepository('AppBundle:Parametres')
+		->findOneBy([
+			"id" => 1,
+		]);
+		
+		$nbMaxParticipants = $nbMaxSalon->getNbMaxSalon();
+		
 		/*$salon = $this->getDoctrine()
 		->getRepository('AppBundle:Salon')
 		->findOneBy([
@@ -306,17 +326,9 @@ class SalonsController extends Controller
 		 //return $this->render('salon\index.html.twig',[
             //'salon' => $salon,
         //]);
-            return $this->forward('AppBundle:Salon:index',[
-                'salon' => $salon,
-                'membre' => $membre,
-                'id_membre' => $session->get('id'),
-            ]);
-        }else{
-            return $this->forward('AppBundle:Salon:index',[
+        
+        return $this->forward('AppBundle:Salon:index',[
             'salon' => $salon,
-            'membre' => null,
-            'id_membre' => null,
-            ]); 
-        }
+        ]);
 	}
 }

@@ -16,6 +16,9 @@ use AppBundle\Entity\Note;
 use AppBundle\Entity\Amis;
 use AppBundle\Entity\Chatsalon;
 use AppBundle\Entity\Participant;
+use AppBundle\Entity\bon_mauvais_membre;
+use AppBundle\Entity\Send_request_salon;
+use AppBundle\Entity\Moderateur;
 
 class SalonController extends Controller
 {
@@ -25,13 +28,38 @@ class SalonController extends Controller
     public function indexAction(Request $request)
     {
 	   $session = $request->getSession();
-           $idMembre = $session->get('id'); // à récupérer en $_SESSION  
-           $em = $this->getDoctrine()->getManager();
-           $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
+	   $idMembre = $session->get('id'); // à récupérer en $_SESSION   
 	   $idSalon = $request->get('salon')->getId();
+	   //$idSalon = 9; //////////
 	   $participantsWithInfos = [];          
 	   $participant_ = new Participant();   	   	    
         
+        $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));                
+        
+        if(empty($membre)){
+			$membre = new Membre();
+		}
+        
+        // vérifier salon ouvert
+        $participantMe = $this->getDoctrine()
+		 ->getRepository('AppBundle:Salon')
+		 ->findOneBy([
+			"id" => $idSalon,
+		 ]);
+		 
+		if(strtotime($participantMe->getDateDebut()->format('Y-m-d')) > strtotime(date('Y-m-d'))
+		|| strtotime($participantMe->getDateFin()->format('Y-m-d')) < strtotime(date('Y-m-d'))
+		){
+			$response = new Response();
+				
+			$response->setStatusCode(200);
+			$response->headers->set('Refresh', '1; url=/');
+			
+			$response->send();
+		}
+
         // vérifier non banni
         $participantMe = [];
 		$participantMe = $this->getDoctrine()
@@ -45,13 +73,14 @@ class SalonController extends Controller
 			$participant_->setIdSalon($idSalon);
 			$participant_->setIdMembre($idMembre);
 			$participant_->setBan(0);
+			$participant_->setActif(1);
 			
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($participant_);
 			$em->flush();
 		}
 	    
-	    if(!empty($participantMe)){
+	    if(!empty($participantMe)){			
 			if($participantMe->getBan() == 1){
 				$response = new Response();
 				
@@ -59,13 +88,19 @@ class SalonController extends Controller
 				$response->headers->set('Refresh', '1; url=/?ban=1');
 				
 				$response->send();
+			}else{
+				$participantMe->setActif(1);
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($participantMe);
+				$em->flush();
 			}
         }
         
         $participants = $this->getDoctrine()
 		->getRepository('AppBundle:Participant')
 		->findBy([
-			"id_salon" => $request->get('salon')->getId(),
+			"id_salon" => $idSalon,
+			"actif" => 1,
 		]);						
 		
 		foreach($participants as $participant){
@@ -98,11 +133,35 @@ class SalonController extends Controller
 			$participant->nom = $membres->getNom();
 			$participant->prenom = $membres->getPrenom();
 			
+			// couronne ou diamant
+			
+			$bon_mauvais_membre = $this->getDoctrine()
+			->getRepository('AppBundle:bon_mauvais_membre')
+			->findBy([
+				"id_membre_recoit" => $participant->getIdMembre(),
+			]);
+			
+			$somme = 0;
+			
+			foreach($bon_mauvais_membre as $bon_mauvais){
+				$somme += $bon_mauvais->getNote();
+			}
+						
+			if($somme >= 20){
+				$participant->good = "couronne";
+			}
+			else if($somme >= 10){
+				$participant->good = "diamant";
+			}
+			else{
+				$participant->good = "";
+			}
+			
 			if($idMembre != $participant->getIdMembre()){ // s'il ne s'agit pas de nous
 				$participantsWithInfos[] = $participant;
 			}
-		}
-         
+		}                  
+
          // récupérer messages
          
          $idSalon = $request->get('salon')->getId();
@@ -125,39 +184,173 @@ class SalonController extends Controller
 			]);
 			
 			$message->prenom_et_nom = $membre->getPrenom()." ".$membre->getNom();						
-		}			
-         //echo "<pre>";
-         //print_r($messages);
-         //echo "</pre>";
-        //$encoders = array(new XmlEncoder(), new JsonEncoder());
-		//$normalizers = array(new ObjectNormalizer());
-		//$serializer = new Serializer($normalizers, $encoders);
+		}
 		
-		//$jsonContent = $serializer->serialize($messages, 'json');
-             
-             //print_r($jsonContent);
-             
+		$moderateur = $this->getDoctrine()
+		->getRepository('AppBundle:Moderateur')
+		->findOneBy([
+			"id_membre" => $idMembre,
+			"moderateur" => "1",
+		]);
+		
+		if(!empty($moderateur)){
+			$IamModerateur = 1;
+		}else{
+			$IamModerateur = 0;
+		}
+		
+		// requête qui confirme notre présence sur le salon
+		
+		$sendRequestSalonNew = new Send_request_salon(); 				
+		
+		$sendRequestSalon = $this->getDoctrine()
+		->getRepository('AppBundle:Send_request_salon')
+		->findOneBy([
+			"id_salon" => $idSalon,
+			"id_membre" => $idMembre,
+		]);
+		
+		// mettre à jour date
+		if(empty($sendRequestSalon)){
+			$sendRequestSalonNew->setIdMembre($idMembre);
+			$sendRequestSalonNew->setIdSalon($idSalon);
+			$sendRequestSalonNew->setDate(new \DateTime('now'));
+			
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($sendRequestSalonNew);
+			$em->flush();
+		}
+
          return $this->render('salon\index.html.twig',[
             'salon' => $request->get('salon'),
             'participants' => $participantsWithInfos,
             'messages' => $messages,
-            'membre' => $membre,
-            'id_membre' => $session->get('id'),
             'idMembre' => $idMembre,
+            'IamModerateur' => $IamModerateur,
+            'membre'=> $membre,
+            'id_membre'=> $session->get('id'),
         ]);
     }
+    
+    /**
+     * @Route("/salon/deleteMessage", name="salon_deleteMessage")
+     */
+    public function deleteMessageAction(Request $request)
+    {
+		$session = $request->getSession();
+	    $idMembre = $session->get('id'); // à récupérer en $_SESSION   
+		$idMessage = $request->get('idMessage');
+		
+		$moderateur = $this->getDoctrine()
+		->getRepository('AppBundle:Moderateur')
+		->findOneBy([
+			"id_membre" => $idMembre,
+			"moderateur" => "1",
+		]);
+		
+		if(empty($moderateur)){
+			return new Response("no moderator");
+		}
+		
+		$chatsalon = $this->getDoctrine()
+		->getRepository('AppBundle:Chatsalon')
+		->findOneBy([
+			"id" => $idMessage,			
+		]);
+		
+		$em = $this->getDoctrine()->getManager();
+		$em->remove($chatsalon);
+		$em->flush();
+		
+		return new Response("ok");
+	}
     
     /**
      * @Route("/salon/recupererDerniersMessages", name="salon_recupererDerniersMessages")
      */
     public function recupererDerniersMessagesAction(Request $request)
     {
-	   $idMembre = 1; // à récupérer en $_SESSION
-	   //$idSalon = 9;	   
-	   $idSalon = $request->get('idSalon');
-	   $lastIdMsg = $request->get('lastIdMsg');
+	   $session = $request->getSession();
+	   $idMembre = $session->get('id'); // à récupérer en $_SESSION   
+	   //$idSalon = 9;	  
+	   $sendRequestSalonNew = new Send_request_salon(); 
+	   $idSalon = $request->get('idSalon'); /////////
+	   $lastIdMsg = $request->get('lastIdMsg'); ////////
 	   //$lastIdMsg = 12;
 		
+		// requête qui confirme notre présence sur le salon
+		
+		$sendRequestSalon = $this->getDoctrine()
+		->getRepository('AppBundle:Send_request_salon')
+		->findOneBy([
+			"id_salon" => $idSalon,
+			"id_membre" => $idMembre,
+		]);
+		
+		// mettre à jour date
+		if(!empty($sendRequestSalon)){
+			$sendRequestSalon->setDate(new \DateTime('now'));
+			
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($sendRequestSalon);
+			$em->flush();
+		}else{
+			$sendRequestSalonNew->setIdMembre($idMembre);
+			$sendRequestSalonNew->setIdSalon($idSalon);
+			$sendRequestSalonNew->setDate(new \DateTime('now'));
+			
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($sendRequestSalonNew);
+			$em->flush();
+		}		
+		
+		$date__ = new \DateTime();
+				
+		$date__->modify('-60 seconds');		
+				
+		// rend inactifs les membres du salon qui ne font plus de requête
+		
+		$listSendRequestSalon = $this->getDoctrine()
+		->getRepository('AppBundle:Send_request_salon')
+		->findBy([
+			"id_salon" => $idSalon,
+		]);
+
+		foreach($listSendRequestSalon as $requestSalon){
+			if(strtotime($requestSalon->getDate()->format('Y-m-d H:i:s')) > strtotime($date__->format('Y-m-d H:i:s'))){
+				//echo "jeune : ".$requestSalon->getIdMembre();
+			}else{
+				//echo "vieux : ".$requestSalon->getIdMembre();
+				
+				$sendOneRequestSalon = $this->getDoctrine()
+				->getRepository('AppBundle:Send_request_salon')
+				->findOneBy([
+					"id_salon" => $idSalon,
+					"id_membre" => $requestSalon->getIdMembre(),
+				]);
+				
+				$em = $this->getDoctrine()->getManager();
+				$em->remove($sendOneRequestSalon);
+				$em->flush();
+				
+				// rend le participant inactif 
+				$pariticipant__ = $this->getDoctrine()
+				->getRepository('AppBundle:Participant')
+				->findOneBy([
+					"id_salon" => $idSalon,
+					"id_membre" => $requestSalon->getIdMembre(),
+				]);
+				
+				$pariticipant__->setActif(0);
+				
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($pariticipant__);
+				$em->flush();
+			}
+		}								
+		
+		// récupérer derniers messages
+				
 		$em = $this->getDoctrine()->getManager();
 		$query = $em->createQuery(
 			"SELECT c
@@ -193,14 +386,6 @@ class SalonController extends Controller
 			$i++;
 		}                
         
-        //echo "<pre>";
-			//print_r($messages);
-        //echo "</pre>";
-        
-        //echo "<pre>";
-			//print_r($content);
-        //echo "</pre>";
-        
         if(!empty($content)){
 			$encoders = array(new XmlEncoder(), new JsonEncoder());
 			$normalizers = array(new ObjectNormalizer());
@@ -215,17 +400,254 @@ class SalonController extends Controller
     }
     
     /**
+     * @Route("/salon/enleverMessagesSupprimes", name="salon_enleverMessagesSupprimes")
+     */
+    public function enleverMessagesSupprimesAction(Request $request)
+    {
+		$session = $request->getSession();
+	    $idMembre = $session->get('id'); // à récupérer en $_SESSION   
+		$listeMessages = explode(",", $request->get('listIdMessages'));
+		
+		// ne plus afficher les messages supprimés
+		
+		$found = false;
+		
+		foreach($listeMessages as $idMessage){
+			$chatsalon = $this->getDoctrine()
+			->getRepository('AppBundle:Chatsalon')
+			->findOneBy([
+				"id" => $idMessage,			
+			]);
+			
+			if(empty($chatsalon)){
+				$listeAenlever[] = $idMessage;
+				$found = true;
+			}
+		}
+		
+		if($found == true){
+			$listeAenlever_ = implode(",", $listeAenlever);
+			return new Response($listeAenlever_);
+		}
+		
+		return new Response("no changement");
+	}
+    
+    /**
+     * @Route("/salon/enleverParticipantsNonActifs", name="salon_enleverParticipantsNonActifs")
+     */
+    public function enleverParticipantsNonActifsAction(Request $request)
+    {
+	   $session = $request->getSession();
+	   $idMembre = $session->get('id'); // à récupérer en $_SESSION   
+	   $idSalon = $request->get('idSalon');
+	   //$idSalon = 9; //////////
+	   $listIdMembresParticipants = $request->get('listIdParticipant');
+	   //$listIdMembresParticipants = "20,3"; //////////
+	   
+	   $listIdParticipants = explode(",", $listIdMembresParticipants);
+	   
+	   $participantsWithInfos = [];          
+	   $participant_ = new Participant();
+        
+        $participants = $this->getDoctrine()
+		->getRepository('AppBundle:Participant')
+		->findBy([
+			"id_salon" => $idSalon,
+			"actif" => 1,
+		]);
+		
+		$participantsNonActifs = $this->getDoctrine()
+		->getRepository('AppBundle:Participant')
+		->findBy([
+			"id_salon" => $idSalon,
+			"actif" => 0,
+		]);
+		
+		$idAnePasInclure = [];
+		
+		foreach($participantsNonActifs as $pNonActifs){
+			if(!in_array($pNonActifs->getIdMembre(), $listIdParticipants)){
+				$idAnePasInclure[] = $pNonActifs->getIdMembre();
+			}
+		}
+		
+		if(!empty($idAnePasInclure)){
+			return new Response(implode(",", $idAnePasInclure));
+		}else{
+			return new Response("no changement");
+		}
+	}
+    
+    /**
+     * @Route("/salon/updateListeParticipants", name="salon_updateListeParticipants")
+     */
+    public function updateListeParticipantsAction(Request $request)
+    {
+	   $session = $request->getSession();
+	   $idMembre = $session->get('id'); // à récupérer en $_SESSION   
+	   $idSalon = $request->get('idSalon');
+	   //$idSalon = 9; //////////
+	   $listIdMembresParticipants = $request->get('listIdParticipant');
+	   //$listIdMembresParticipants = "20,3"; //////////
+	   
+	   $listIdParticipants = explode(",", $listIdMembresParticipants);
+	   
+	   $participantsWithInfos = [];          
+	   $participant_ = new Participant();
+        
+        $participants = $this->getDoctrine()
+		->getRepository('AppBundle:Participant')
+		->findBy([
+			"id_salon" => $idSalon,
+			"actif" => 1,
+		]);
+		
+		$participantsNonActifs = $this->getDoctrine()
+		->getRepository('AppBundle:Participant')
+		->findBy([
+			"id_salon" => $idSalon,
+			"actif" => 0,
+		]);
+		
+		foreach($participantsNonActifs as $pNonActifs){
+			if(!in_array($pNonActifs->getIdMembre(), $listIdParticipants)){
+				$idAnePasInclure[] = $pNonActifs->getIdMembre();
+			}
+		}
+		
+		foreach($participants as $participant){
+			 $membres = $this->getDoctrine()
+			->getRepository('AppBundle:Membre')
+			->findOneBy([
+				"id" => $participant->getIdMembre(),
+			]);								
+			
+			$amis = $this->getDoctrine()
+			->getRepository('AppBundle:Amis')
+			->findOneBy([
+				"id_membre1" => $idMembre,
+				"id_membre2" => $participant->getIdMembre(),
+			]);
+			
+			$amis_ = $this->getDoctrine()
+			->getRepository('AppBundle:Amis')
+			->findOneBy([
+				"id_membre1" => $participant->getIdMembre(),
+				"id_membre2" => $idMembre,
+			]);	
+			
+			if(!empty($amis) || !empty($amis_)){
+				$participant->ami = "true";
+			}else{
+				$participant->ami = "false";
+			}
+			
+			$participant->nom = $membres->getNom();
+			$participant->prenom = $membres->getPrenom();
+			
+			// couronne ou diamant
+			
+			$bon_mauvais_membre = $this->getDoctrine()
+			->getRepository('AppBundle:bon_mauvais_membre')
+			->findBy([
+				"id_membre_recoit" => $participant->getIdMembre(),
+			]);
+			
+			$somme = 0;
+			
+			foreach($bon_mauvais_membre as $bon_mauvais){
+				$somme += $bon_mauvais->getNote();
+			}
+						
+			if($somme >= 20){
+				$participant->good = "couronne";
+			}
+			else if($somme >= 10){
+				$participant->good = "diamant";
+			}
+			else{
+				$participant->good = "";
+			}
+			
+			if($idMembre != $participant->getIdMembre()){ // s'il ne s'agit pas de nous
+				if(!in_array($participant->getIdMembre(), $listIdParticipants)){
+					$participantsWithInfos[] = $participant;
+				}
+			}
+		}
+				
+		$content = [];
+		$i = 0;
+		
+		foreach($participantsWithInfos as $pp){			
+			$content[$i]['id'] = $pp->getId();
+			$content[$i]['idSalon'] = $pp->getIdSalon();
+			$content[$i]['idMembre'] = $pp->getIdMembre();
+			$content[$i]['idMembresWhoBan'] = $pp->getIdMembresWhoBan();
+			$content[$i]['actif'] = $pp->getActif();
+			$content[$i]['ami'] = $pp->ami;
+			$content[$i]['nom'] = $pp->nom;
+			$content[$i]['prenom'] = $pp->prenom;
+			$content[$i]['good'] = $pp->good;
+			
+			$i++;
+		}
+		
+		if(!empty($content)){
+			$encoders = array(new XmlEncoder(), new JsonEncoder());
+			$normalizers = array(new ObjectNormalizer());
+			$serializer = new Serializer($normalizers, $encoders);
+			
+			$jsonContent = $serializer->serialize($content, 'json');
+			
+			return new JsonResponse([$jsonContent]);
+		}else{
+			return new Response("no changement");
+		}
+	}
+    
+    /**
      * @Route("/salon/envoyerMessage", name="salon_envoyerMessage")
      */
     public function envoyerMessageAction(Request $request)
     {
-       $session = $request->getSession();
-       $idMembre = $session->get('id'); // à récupérer en $_SESSION  
-       $em = $this->getDoctrine()->getManager();
-       $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
-       $idSalon = $request->get('idSalon');
+	   $session = $request->getSession();
+	   $idMembre = $session->get('id'); // à récupérer en $_SESSION   
+	   $idSalon = $request->get('idSalon');
        $chatSalon = new Chatsalon();
        
+       // vérifier si cet utilisateur envoie trop de messages en un espace-temps très court
+       
+	   $ChatsSalon = [];
+
+	   $em = $this->getDoctrine()->getManager();
+	   $query = $em->createQuery(
+			"SELECT s
+			FROM AppBundle:Chatsalon s
+			WHERE s.id_salon = :id_salon AND s.id_membre = :id_membre
+			AND s.date >= :date
+			ORDER by s.date ASC"
+	   )->setParameter('id_salon', $idSalon)
+	   ->setParameter('id_membre', $idMembre)
+	   ->setParameter('date', new \DateTime('-2 minutes'));
+	   $ChatsSalon = $query->getResult();
+       
+       if(count($ChatsSalon) >= 100){		   		   
+		   $em = $this->getDoctrine()->getManager();
+		   $query = $em->createQuery(
+				"DELETE
+				FROM AppBundle:Chatsalon s
+				WHERE s.id_salon = :id_salon AND s.id_membre = :id_membre
+				AND s.date >= :date"
+		   )->setParameter('id_salon', $idSalon)
+		   ->setParameter('id_membre', $idMembre)
+		   ->setParameter('date', new \DateTime('-2 minutes'));
+		   $ChatsSalon = $query->getResult();
+		   
+		   return new Response("banni");
+	   }  
+              
        // vérifier non banni
        $participantMe = $this->getDoctrine()
 		->getRepository('AppBundle:Participant')
@@ -248,11 +670,15 @@ class SalonController extends Controller
         
         $message = $request->get('message');
         //$message = "mon message";
-        $date = new \DateTime(date('Y-m-d H:i:s'));
+        
+        // empêcher d'écrire plus de 2100 caractères
+        
+        if(strlen($message) > 2100 || trim($message) == "")
+			return new Response("ok");
+        
         $chatSalon->setIdSalon($idSalon);
 		$chatSalon->setIdMembre($idMembre);
 		$chatSalon->setMsg($message);
-		$chatSalon->setDate($date);
 		
 		$em = $this->getDoctrine()->getManager();
 		$em->persist($chatSalon);
@@ -262,17 +688,54 @@ class SalonController extends Controller
     }
     
     /**
+     * @Route("/salon/banFromSalon", name="salon_banFromSalon")
+     */
+    public function banFromSalonAction(Request $request)
+    {
+		$session = $request->getSession();
+	    $idMembre = $session->get('id'); // à récupérer en $_SESSION   
+	    $idSalon = $request->get('idSalon');
+		$idMembreParticipant = $request->get('idMembreParticipant');
+		
+		$participant = $this->getDoctrine()
+		->getRepository('AppBundle:Participant')
+		->findOneBy([
+			"id_salon" => $idSalon,
+			"id_membre" => $idMembreParticipant,
+		]);
+		
+		$participant->setBan(1);
+		$participant->setActif(0);
+		
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($participant);
+		$em->flush();
+		
+		$moderateur = $this->getDoctrine()
+		->getRepository('AppBundle:Moderateur')
+		->findOneBy([
+			"id_membre" => $idMembre,
+			"moderateur" => "1",
+		]);
+		
+		if(empty($moderateur)){
+			return new Response("no moderator");
+		}
+		
+		return new Response("ok");
+	}
+    
+    /**
      * @Route("/salon/wantBanFromSalon", name="salon_wantBanFromSalon")
      */
     public function wantBanFromSalonAction(Request $request)
     {
 	   $nbBanMax = 2;
 	   $session = $request->getSession();
-           $idMembre = $session->get('id'); // à récupérer en $_SESSION  
-	   //$idSalon = $request->get('idSalon');
-	   $idSalon = 9;
-	   //$idMembreParticipant = $request->get('idMembreParticipant');
-	   $idMembreParticipant = $session->get('id');
+	   $idMembre = $session->get('id'); // à récupérer en $_SESSION   
+	   $idSalon = $request->get('idSalon');
+	   $idMembreParticipant = $request->get('idMembreParticipant');
+	   //$idMembreParticipant = 2;
        
         $participants = $this->getDoctrine()
 		->getRepository('AppBundle:Participant')
@@ -299,19 +762,51 @@ class SalonController extends Controller
 		}
 		else{ // si déjà banni
 			return new Response("Vous avez déjà fait une demande de bannissement pour ce contact.");
+		}            
+        
+        return new Response("ok");
+    }
+    
+    /**
+     * @Route("/salon/goodMembre", name="salon_goodMembre")
+     */
+    public function goodMembreAction(Request $request)
+    {
+	   $bon_mauvais_membres = new bon_mauvais_membre();
+	   $session = $request->getSession();
+	   $idMembre = $session->get('id'); // à récupérer en $_SESSION   
+	   //$idMembreRecoit = $request->get('idSalon');
+	   $idMembreRecoit = $request->get('idMembreParticipant');
+	   $idSalon = $request->get('idSalon');
+       
+        $bon_mauvais_membre = $this->getDoctrine()
+		->getRepository('AppBundle:bon_mauvais_membre')
+		->findOneBy([
+			"id_membre_recoit" => $idMembreRecoit,
+			"id_membre_donne" => $idMembre,
+		]);
+		
+        if(!empty($bon_mauvais_membre)){
+			// update
+			$bon_mauvais_membre->setIdMembreRecoit($idMembreRecoit);
+			$bon_mauvais_membre->setIdMembreDonne($idMembre);
+			$bon_mauvais_membre->setNote($request->get('note'));
+			
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($bon_mauvais_membre);
+			$em->flush();
+		}else{
+			// insert
+			$bon_mauvais_membres->setIdMembreRecoit($idMembreRecoit);
+			$bon_mauvais_membres->setIdMembreDonne($idMembre);
+			$bon_mauvais_membres->setNote($request->get('note'));
+			
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($bon_mauvais_membres);
+			$em->flush();
 		}
         
-        echo "<pre>";
-			print_r($participants);
-        echo "</pre>";
-        
-        echo "<pre>";
-			print_r($idMembresWhoBan);
-        echo "</pre>";
-        
-        die();                
-        
-         return new Response("ok");
+        return new Response("ok");
     }
     
     /**
@@ -319,8 +814,8 @@ class SalonController extends Controller
      */
     public function addToContactsAction(Request $request)
     {
-	        $session = $request->getSession();
-                $idMembre = $session->get('id'); // à récupérer en $_SESSION  
+		$session = $request->getSession();
+	    $idMembre = $session->get('id'); // à récupérer en $_SESSION   
 		$idContact = $request->get('idContact');
 		
 		$amis__ = new Amis();
@@ -340,8 +835,8 @@ class SalonController extends Controller
 		]);
 		
 		if(empty($amis) && empty($amis_) && $idContact != $idMembre){
-			$amis__->setId_Membre1($idMembre);
-			$amis__->setId_Membre2($idContact);
+			$amis__->setIdMembre1($idMembre);
+			$amis__->setIdMembre2($idContact);
 			
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($amis__);
@@ -356,8 +851,8 @@ class SalonController extends Controller
      */
     public function chargeContactsAction(Request $request)
     {
-	        $session = $request->getSession();
-                $idMembre = $session->get('id'); // à récupérer en $_SESSION  
+		$session = $request->getSession();
+	    $idMembre = $session->get('id'); // à récupérer en $_SESSION   
 		$idSalon = $request->get('idSalon');
 		
 		$amis__ = new Amis();
@@ -388,14 +883,14 @@ class SalonController extends Controller
 		}				
 		
 		foreach($amis as $ami){
-			if(in_array($ami->getId_Membre2(), $idMembresNonParticipants)){ // si l'ami n'est pas déjà dans le salon
-				$idContactsPossibleToInvite[] = $ami->getId_Membre2();
+			if(in_array($ami->getIdMembre2(), $idMembresNonParticipants)){ // si l'ami n'est pas déjà dans le salon
+				$idContactsPossibleToInvite[] = $ami->getIdMembre2();
 			}
 		}
 		
 		foreach($amis_ as $ami){
-			if(in_array($ami->getId_Membre1(), $idMembresNonParticipants)){ // si l'ami n'est pas déjà dans le salon
-				$idContactsPossibleToInvite[] = $ami->getId_Membre1();
+			if(in_array($ami->getIdMembre1(), $idMembresNonParticipants)){ // si l'ami n'est pas déjà dans le salon
+				$idContactsPossibleToInvite[] = $ami->getIdMembre1();
 			}
 		}
 		
@@ -423,11 +918,18 @@ class SalonController extends Controller
      */
     public function invitContactsAction(Request $request)
     {
-		$idMembre = 1; // à récupérer en $_SESSION
+		$session = $request->getSession();
+	    $idMembre = $session->get('id'); // à récupérer en $_SESSION   
 		//$idSalon = $request->get('idSalon');
 		$idSalon = 9;
 		
-			
+		
+		
+		$membres = $this->getDoctrine()
+		->getRepository('AppBundle:Inviter_au_salon')
+		->findOneBy([
+			"id" => $idContactP,
+		]);
 		
 		return new Response("ok");
 	}
@@ -437,8 +939,6 @@ class SalonController extends Controller
      */
     public function historiqueAction(Request $request)
     {
-	        $session = $request->getSession();
-                $idMembre = $session->get('id'); // à récupérer en $_SESSION  
 		$idSalon = $request->get('idSalon');
 		
 		$salon = $this->getDoctrine()
@@ -447,6 +947,8 @@ class SalonController extends Controller
 			"id" => $idSalon,
 		]);				
 		
+		$ChatsSalon = [];
+		
 		$em = $this->getDoctrine()->getManager();
 		$query = $em->createQuery(
 			"SELECT s
@@ -454,10 +956,10 @@ class SalonController extends Controller
 			WHERE s.id_salon = :id_salon
 			ORDER by s.date ASC"
 		)->setParameter('id_salon', $idSalon);
-		$ChatsSalon = $query->getResult();				
-				
+		$ChatsSalon = $query->getResult();		
+		
 		$participantsWithInfos = [];
-		foreach($ChatsSalon as $ChatSalon){	
+		foreach($ChatsSalon as $ChatSalon){
 			$participant = $this->getDoctrine()
 				->getRepository('AppBundle:Participant')
 				->findOneBy([
@@ -465,6 +967,7 @@ class SalonController extends Controller
 					"id_membre" => $ChatSalon->getIdMembre(),
 				]);
 			
+			if(!empty($participant)){			
 				$membres = $this->getDoctrine()
 					->getRepository('AppBundle:Membre')
 					->findOneBy([
@@ -473,6 +976,10 @@ class SalonController extends Controller
 				
 				$ChatSalon->nom = $membres->getNom();
 				$ChatSalon->prenom = $membres->getPrenom();
+			}else{
+				$ChatSalon->nom = "";
+				$ChatSalon->prenom = "";
+			}
 				
 				$participantsWithInfos[] = $ChatSalon;				
 		}
