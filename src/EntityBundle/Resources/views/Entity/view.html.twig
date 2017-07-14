@@ -4,7 +4,7 @@
 
 {% block body %}
     <h1>Produit: {{ entity.name }}</h1>
-    <form action="#" method="post">
+    <form action="#" method="post"  enctype="multipart/form-data">
 
         <input type="hidden" name="product_id" value="{{ entity.id }}">
         <table>
@@ -21,7 +21,6 @@
                     <td style="border: 1px solid black">
                         {{ include('EntityBundle:Entity:attribute/input.html.twig',{
                             "attribute":attribute,
-                            "value":1
                         }) }}
                     </td>
                 </tr>

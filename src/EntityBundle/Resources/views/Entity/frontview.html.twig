@@ -5,21 +5,26 @@
     {% block body %}
         <h1> {{ categorie }} : {{ entity.name }}</h1>
         <div class="product_data">
-        <div class="product_image">
-        {% if entity.getValueByName('image') == null or entity.getValueByName('image') == "" %}
-            <img src="http://media.istockphoto.com/vectors/closed-old-book-in-brown-cover-vector-id537900186?k=6&m=537900186&s=612x612&w=0&h=kDVfXAgEJjK8MM5IeODaufN8DO6eN_uGLbdkrIgKvHc=">
-        {% endif %}
-        </div>
-        <div class="product_description">{{ entity.getValueByName('description') }}</div>
+            <div class="product_image">
+                {% if entity.getValueByName('image') == null or entity.getValueByName('image') == "" %}
+                    <img src="http://media.istockphoto.com/vectors/closed-old-book-in-brown-cover-vector-id537900186?k=6&m=537900186&s=612x612&w=0&h=kDVfXAgEJjK8MM5IeODaufN8DO6eN_uGLbdkrIgKvHc=">
+                {% else %}
+                    <img src="{{ entity.getValueByName('image') }}">
+
+                {% endif %}
+            </div>
+            <div class="product_description">{{ entity.getValueByName('description') }}</div>
 
         </div>
         <table>
             <tbody>
             {% for id, attribute in entity.data %}
-                <tr>
-                    <td style="border: 1px solid black">{{ attribute.name }}</td>
-                    <td style="border: 1px solid black">{{ attribute.value }}</td>
-                </tr>
+                {% if attribute.obligatory %}
+                    <tr>
+                        <td style="border: 1px solid black">{{ attribute.name }}</td>
+                        <td style="border: 1px solid black">{{ attribute.value }}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
             </tbody>
         </table>

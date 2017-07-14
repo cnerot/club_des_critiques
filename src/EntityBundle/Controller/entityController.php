@@ -32,6 +32,14 @@ class entityController extends Controller
                     $attribute->save($em);
                 }
             }
+            foreach ($_FILES as $key => $val){
+                $key_array = explode('_',$key);
+                if ($key_array['0'] == "attribute"){
+                    $attribute = $entity->data[$key_array[1]];
+                    $attribute->value = $val;
+                    $attribute->save($em);
+                }
+            }
             $entity = (new Product())->getById($em, $request->query->get('id', null));
         }
 

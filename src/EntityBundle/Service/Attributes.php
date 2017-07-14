@@ -50,6 +50,9 @@ class Attributes
             case "text":
                 $attribute->setType(1);
                 break;
+            case "image":
+                $attribute->setType(5);
+                break;
             case "select":
                 $attribute->setType(2);
                 if ($this->id) {
@@ -98,6 +101,28 @@ class Attributes
                         $val = new valuetext();
                     }
                     $val->setValue($this->value);
+                    $val->setIdAttribute($this->id);
+                    $val->setIdEntity($this->productid);
+                    $em->persist($val);
+                    break;
+                case "image":
+                    $val = $em->getRepository('EntityBundle:valuetext')->findOneBy(["idAttribute" => $this->id, "idEntity" => $this->productid]);
+                    if ($val == null) {
+                        $val = new valuetext();
+                    }
+                    if (is_array($this->value)){
+                        $upload_dir = "images\\uploads";
+
+                        if (!file_exists($upload_dir)) {
+                            mkdir($upload_dir, 0777, true);
+                        }
+                        $upload_dir = $upload_dir."\\".$this->value["name"];
+                        if (file_exists($upload_dir)){
+                            $upload_dir .= "_";
+                        }
+                        move_uploaded_file($this->value["tmp_name"], $upload_dir);
+                        $val->setValue("../" . $upload_dir);
+                    }
                     $val->setIdAttribute($this->id);
                     $val->setIdEntity($this->productid);
                     $em->persist($val);
@@ -203,6 +228,9 @@ class Attributes
                 $option = $em->getRepository('EntityBundle:attributeOption')->findOneBy(["attributeId" => $id]);
                 $this->data = $option->getValue();
                 break;
+            case 5:
+                $this->type = "image";
+                break;
             default:
                 break;
         }
@@ -210,6 +238,12 @@ class Attributes
 
             switch ($this->type) {
                 case "text":
+                    $val = $em->getRepository('EntityBundle:valuetext')->findOneBy(["idAttribute" => $this->id, "idEntity" => $this->productid]);
+                    if ($val != null) {
+                        $this->value = $val->getValue();
+                    }
+                    break;
+                case "image":
                     $val = $em->getRepository('EntityBundle:valuetext')->findOneBy(["idAttribute" => $this->id, "idEntity" => $this->productid]);
                     if ($val != null) {
                         $this->value = $val->getValue();
