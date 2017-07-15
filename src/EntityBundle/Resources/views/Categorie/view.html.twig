@@ -3,53 +3,55 @@
 {% block title %}EntityBundle:Categorie:view{% endblock %}
 
 {% block body %}
-    <h1>Categorie : {{ categorie.name }}</h1>
-    <h3>Attributs de la categorie</h3>
-    <a href="{{ path('attribute_create',{'id': categorie.id}) }}">+ Créer un attribut</a>
-
-    <table>
-        <thead>
-        <tr>
-            <td>id</td>
-            <td>nom</td>
-        </tr>
-        </thead>
-        <tbody>
-
-        {% for attribute in categorie.attributes %}
-            <tr>
-                <td>{{ attribute.id }}</td>
-                <td>{{ attribute.name }}</td>
-            </tr>
-        {% endfor %}
-
-        </tbody>
-    </table>
-
-    <h2>Produits de la categorie</h2>
-
-    <a href="{{ path('create',{'id': categorie.id}) }}">+ Créer un produit</a>
-    <ul class="collapsible" data-collapsible="accordion">
-        {% for products in categorie_products %}
-            <li>
-                <div class="collapsible-header"><i class="material-icons">filter_drama</i>{{ products.name }}</div>
-                <div class="collapsible-body">
-                    <table>
-                        <tr>
-                            <td>
-                                <a href="{{ path('view', {'id': products.id}) }}">Editer le produit</a>
-
-                            </td>
-                            <td>
-                                <a href="{{ path('frontview', {'id': products.id}) }}">Voir en front</a>
-
-                            </td>
-                        </tr>
-                    </table>
-
+<div class="row">
+    <div class=" margin-top">
+        <div class="col s12">
+           <div class="col s8">
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <p>Les éléments liés à la categorie <b>{{ categorie.name }}</b>
+                    <a href="{{ path('create',{'id': categorie.id}) }}" class="right  btn waves-effect waves-light white teal-text lighten-3"><i class="material-icons">add</i></a>
                 </div>
-            </li>
-        {% endfor %}
-    </ul>
-
+                 <div class="panel-footer">
+                     <table>
+                         <tr>
+                             <td>
+                        {% for products in categorie_products %}
+                                <div class="card col s4 brown lighten-4">
+                                    <div class="card-content">
+                                        <div class="left"><p>{{ products.name }}</p></div>
+                                        <div class="right">
+                                            <a href="{{ path('frontview', {'id': products.id}) }}"class="right red-text lighten-3"><i class="material-icons">delete</i></a>
+                                            <a href="{{ path('view', {'id': products.id}) }}" class="right  orange-text accent-2"><i class="material-icons">edit</i></a>
+                                            <a href="{{ path('frontview', {'id': products.id}) }}"class="right teal-text lighten-3"><i class="material-icons">visibility</i></a>
+                                        </div>
+                                    </div>
+                                          
+                                </div>
+                        {% endfor %}
+                             </td>
+                         </tr>
+                     </table>
+                 </div>
+              </div>
+            </div>
+            <div class="col s4">
+                <div class="panel panel-primary">
+                       <div class="panel-heading">
+                            <p>Attributs de la categorie <b>{{ categorie.name }}</b>
+                            <a href="{{ path('attribute_create',{'id': categorie.id}) }}" class="right  btn waves-effect waves-light white teal-text lighten-3"><i class="material-icons">add</i></a>
+                            </p>
+                       </div>
+                       <div class="panel-footer">
+                            {% for attribute in categorie.attributes %}
+                                <div class="chip">{{ attribute.name }}</div>
+                            {% endfor %}
+                       </div>
+                </div>
+            </div>
+        <div>
+    </div>
+</div>
+</div>
+</div>
 {% endblock %}

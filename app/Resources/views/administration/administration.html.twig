@@ -8,10 +8,10 @@
    
     <div class="container">
         <div class="row">
-            <h4><center>Administration</center></h4>
+            <h1 class="titleS"><center>Administration</center></h1>
             <ul class="collapsible popout" data-collapsible="accordion">
                 <li>
-                  <div class="collapsible-header">Page d'accueil</div>
+                  <div class="collapsible-header brown lighten-3">Page d'accueil</div>
                   <div class="collapsible-body row" style="padding:3%">
                       <form method="post" action="{{path('administration_siteadmin')}}">
                             <label for="">Le concept : </label>
@@ -28,21 +28,21 @@
                   </div>
                 </li>
                 <li>
-                    <div class="collapsible-header"><a href="/categorie/all">Contenus</a></div>
+                    <div class="collapsible-header brown lighten-3 "><a href="/categorie/all" class="black-text">Contenus</a></div>
                   <!--<div class="collapsible-body"><span>A ajouter par charles</span></div>-->
                 </li>
                 <li>
-                  <div class="collapsible-header">Pages statiques</div>
+                  <div class="collapsible-header brown lighten-3">Pages statiques</div>
                   <div class="collapsible-body"><span>A ajouter par charles</span></div>
                 </li>
                 <li>
-                  <div class="collapsible-header">Salons</div>
+                  <div class="collapsible-header brown lighten-3">Salons</div>
                   <div class="collapsible-body">
                       <span>A ajouter par gaetan</span>
                   </div>
                 </li>
                 <li>
-                  <div class="collapsible-header">Membres</div>
+                  <div class="collapsible-header brown lighten-3">Membres</div>
                   <div class="collapsible-body"  style="padding:3%">
                       <table>
                       {% for m in membres %}

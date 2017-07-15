@@ -295,6 +295,18 @@ div{
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
 }
+
 .huge {
     font-size: 30px;
+}
+.titleS{
+    font-family: Roboto;
+    font-size: 32px;
+    text-shadow: -1px -1px #4db6ac, 1px 1px #4db6ac;
+    color: #4db6ac ;
+   /* padding:16px;*/
+    font-weight:lighter;
+    text-align:center;
+    display:block;
+    margin:16px;
 }
