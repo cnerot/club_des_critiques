@@ -1,5 +1,46 @@
 {% extends "::base.html.twig" %}
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/salons.js') }}"></script>
 
+    <script>
+        function refreshStars(idSalon, noteChosen) {
+            window.location = "/salons/vote?idSalon=" + idSalon + "&noteChosen=" + noteChosen;
+        }
+
+        function getIdSalonPossible(idSalon, noteChosen) {
+            $.ajax({
+                url: "{{ path('salons_recupIdSalonPossible') }}",
+                method: "post",
+                data: {
+                    idSalon: idSalon,
+                    noteChosen: noteChosen,
+                }
+            }).done(function (msg) {
+                $('#idSalon').val(msg);
+                var noteChosen = $('#noteChosen').val();
+                refreshStars(msg, noteChosen);
+            });
+        }
+
+        function popupRejoindre(idSalon) {
+            $.ajax({
+                url: "{{ path('salons_popupRejoindre') }}",
+                method: "post",
+                data: {
+                    idSalon: idSalon,
+                }
+            }).done(function (msg) {
+                $('#nomSalon').html(msg);
+            });
+        }
+
+        function historiqueSalon(idSalon) {
+            window.location = "/salon/historique?idSalon=" + idSalon;
+        }</script>
+    {{ parent() }}
+
+{% endblock %}
 {% block title %}EntityBundle:entity:frontview{% endblock %}
 
     {% block body %}
@@ -10,11 +51,99 @@
                     <img src="http://media.istockphoto.com/vectors/closed-old-book-in-brown-cover-vector-id537900186?k=6&m=537900186&s=612x612&w=0&h=kDVfXAgEJjK8MM5IeODaufN8DO6eN_uGLbdkrIgKvHc=">
                 {% else %}
                     <img src="{{ entity.getValueByName('image') }}">
-
                 {% endif %}
             </div>
             <div class="product_description">{{ entity.getValueByName('description') }}</div>
+            <div class="container">
+                <a id="joinSalon" class="waves-effect waves-light btn hide" href="#modal1">Modal</a>
+                <div id="modal1" class="modal">
+                    <div class="modal-content">
+                        <div class="col s8 rateAbook left">
+                            <h4 id="nomSalon"></h4>
+                            <div class="col s12 center">
+                                <div class="col s12 center">
+                                    <img src="{{ asset('images/star_white.png') }}" id="star_1"
+                                         class="star starNotSelected">
+                                    <img src="{{ asset('images/star_white.png') }}" id="star_2"
+                                         class="star starNotSelected">
+                                    <img src="{{ asset('images/star_white.png') }}" id="star_3"
+                                         class="star starNotSelected">
+                                    <img src="{{ asset('images/star_white.png') }}" id="star_4"
+                                         class="star starNotSelected">
+                                </div>
+                            </div>
 
+                            <div class="center">
+                                <input type="button" class="btn btn-primary" id="rejoindreSalon" value="Rejoindre">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#"
+                           class="closeWindowRateAbook modal-action modal-close waves-effect waves-green btn-flat">Annuler</a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div id="salons" class="col s12 margin-top">
+                        <table class="listing table">
+                            <thead>
+                            <tr class="">
+                                <th>Titre</th>
+                                <th>Date Début</th>
+                                <th>Date Fin</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for salon in salons %}
+                                {% if "now"|date('Ymd') > salon.dateFin.date|date('Ymd') %}
+                                    {% set period = 'past' %}
+                                {% elseif "now"|date('Ymd') < salon.dateDebut.date|date('Ymd') %}
+                                    {% set period = 'next' %}
+                                {% else %}
+                                    {% set period = 'current' %}
+                                {% endif %}
+
+                                <tr class="{{ period }}">
+                                    <td>
+                                        {{ salon.titreSalon }}
+                                    </td>
+                                    <td>
+                                        <abbr title="{{ salon.dateDebut.date|date('d/m/Y') }}">
+                                            {{ salon.dateDebut.date|date('Y/m/d') }}
+                                        </abbr>
+                                    </td>
+                                    <td>
+                                        <abbr title="{{ salon.dateFin.date|date('d/m/Y') }}">
+                                            {{ salon.dateFin.date|date('Y/m/d') }}
+                                        </abbr>
+                                    </td>
+                                    <td>
+                                        <div class="col s12 input-field action no-margin">
+                                            <input type="hidden" value="{{ salon.id }}" name="idSalon">
+
+
+                                            {% if period == "past" %}
+                                                <input type="button" class="btn btn-primary historiqueSalon"
+                                                       value="Voir">
+                                            {% elseif period == "next" %}
+                                                <input type="button" class="btn btn-primary" value="Thème">
+                                            {% else %}
+                                                <input type="button" class="btn btn-primary" value="Thème">
+                                                <input type="button" class="btn btn-primary join" value="Rejoindre">
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="idSalon">
+            <input type="hidden" id="noteChosen">
         </div>
         <table>
             <tbody>
