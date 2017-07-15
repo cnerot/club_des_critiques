@@ -1,5 +1,9 @@
 {% extends "::base.html.twig" %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/entity.js') }}"></script>
+{% endblock %}
 {% block title %}EntityBundle:Attribute:create{% endblock %}
 
 {% block body %}
@@ -26,7 +30,8 @@
                 <option></option>
             </select>
         </div>
-        <select name="obligatory">
+        <label for="obligatory">Attribut frontend</label>
+        <select id="obligatory" name="obligatory">
             <option value="1">yes</option>
             <option value="0">no</option>
             </select>
