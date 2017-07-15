@@ -5,9 +5,8 @@ $(document).ready(function() {
     /**
      * Display or hide elements by type
      */
-
     $('.type').hide();
-    $('#type_input').mouseup(function(){
+    $('#type_input').change(function(){
         $('.type').hide();
         $('.type-' + $(this).val()).show();
     });
