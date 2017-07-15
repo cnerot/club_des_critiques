@@ -12,8 +12,23 @@ use AppBundle\Entity\Salon;
 use AppBundle\Entity\Membre;
 class entityController extends Controller
 {
-    public function createAction()
+    public function createAction(Request $request)
     {
+        $em = $this->get('doctrine')->getManager();
+
+        $categorie_id =  $request->query->get('id', null);
+
+        $data = $request->request->all();
+        if (!empty($data)) {
+            $cat = new Product();
+            $cat->name = $data["title"];
+            $cat->category = $categorie_id;
+            $cat = $cat->save($this->get('doctrine')->getManager());
+            $url = $this->generateUrl("categorie_all");
+            return $this->redirect(
+                sprintf('%s', $url)
+            );
+        }
         return $this->render('EntityBundle:entity:create.html.twig', array());
     }
 
