@@ -8,47 +8,65 @@
 {% endblock %}
 
 {% block body %}
-    <form method="post" action="#">
-        <input type="hidden" name="catrgory_id" value="{{ categorie.id }}">
+<div class="row">
+<div class="margin-top">
+    <div class="col m12">
+        <div class="row">
 
-        <input type="text" name="search" placeholder="search">
-        <input type="submit" value="Rechercher">
-    </form>
-    <ul id="slide-out" class="side-nav">
-        <li>Recherche par filtre</li>
-        <form action="#" method="post">
-            <input type="hidden" name="catrgory_id" value="{{ categorie.id }}">
-            {% for attribute in categorie.attributes %}
-                <li>
-                    {{ attribute.name }} :
-                </li>
-                <li>
-                    {{ include('EntityBundle:Categorie:attribute/input.html.twig',{
-                        "attribute":attribute,
-                        "value":0,
-                    }) }}
-                </li>
-            {% endfor %}
+            <div class="col s6">
+                <div class="row">
+                    <div class="col s12">
+                       <ul id="slide-out" class="side-nav teal lighten-4 margin-top-side">
+                           <li><b>Recherche par filtre</b></li>
+                            <form action="#" method="post">
+                                <input type="hidden" name="catrgory_id" value="{{ categorie.id }}">
+                                {% for attribute in categorie.attributes %}
+                                    <li>
+                                        <div class="col s12"><b>{{ attribute.name }} :</b></div>
+                                    </li>
+                                    <li>
+                                        {{ include('EntityBundle:Categorie:attribute/input.html.twig',{
+                                            "attribute":attribute,
+                                            "value":0,
+                                        }) }}
+                                    </li>
+                                {% endfor %}
 
-            <li><input type="submit" value="search"></li>
-        </form>
-    </ul>
-    <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
-
-
-    <h1>Categorie : {{ categorie.name }}</h1>
-    <div class="row">
-
-        <div class="col s12">
-            <p><b>A la une :</b></p>
-
-            {% for products in categorie_products %}
-                <div class="col s3">
-                    {{ include('EntityBundle:Entity:card.html.twig',{
-                        "product":products,
-                    }) }}
+                                <li><input type="submit" value="search" class="btn waves-effect waves-light right"></li>
+                            </form>
+                        </ul>
+                        <a href="#" data-activates="slide-out" class="button-collapse btn-floating btn-large brown lighten-3"><i class="material-icons">search</i></a>
+                    </div>
                 </div>
-            {% endfor %}
+            </div>
+            <form method="post" action="#">
+                <input type="hidden" name="catrgory_id" value="{{ categorie.id }}">
+                <div class="input-field col s4 ">
+                    <input type="text" name="search" class="validate right">
+                    <label for="search">Rechercher</label>
+                </div>
+                <div class="input-field  col s2">
+                    <input type="submit" value="Rechercher" class="btn waves-effect waves-light right" >
+                </div>
+            </form>
+        </div>
+
+    </div>
+    </div>
+</div>
+
+   <div class="container">
+        <div class="row">
+            <h3>Categorie : {{ categorie.name }}</h3>
+            <div class="col s12">
+                {% for products in categorie_products %}
+                    <div class="col s3">
+                        {{ include('EntityBundle:Entity:card.html.twig',{
+                            "product":products,
+                        }) }}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

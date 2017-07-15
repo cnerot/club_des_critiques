@@ -179,6 +179,11 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'EntityBundle\\Controller\\entityController::editAction',  '_route' => 'edit',);
         }
 
+        // search
+        if ($pathinfo === '/search') {
+            return array (  '_controller' => 'EntityBundle\\Controller\\CategorieController::searchAction',  '_route' => 'search',);
+        }
+
         // administration_siteadmin
         if ($pathinfo === '/administration') {
             return array (  '_controller' => 'AppBundle\\Controller\\AdministrationController::siteadminAction',  '_route' => 'administration_siteadmin',);
@@ -196,6 +201,11 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             }
 
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
+        }
+
+        // contenu
+        if ($pathinfo === '/contenu') {
+            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::contenuAction',  '_route' => 'contenu',);
         }
 
         // membre_admin
@@ -333,9 +343,32 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                     return array (  '_controller' => 'AppBundle\\Controller\\SalonController::indexAction',  '_route' => 'salon',);
                 }
 
+                // salon_deleteMessage
+                if ($pathinfo === '/salon/deleteMessage') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::deleteMessageAction',  '_route' => 'salon_deleteMessage',);
+                }
+
                 // salon_recupererDerniersMessages
                 if ($pathinfo === '/salon/recupererDerniersMessages') {
                     return array (  '_controller' => 'AppBundle\\Controller\\SalonController::recupererDerniersMessagesAction',  '_route' => 'salon_recupererDerniersMessages',);
+                }
+
+                if (0 === strpos($pathinfo, '/salon/enlever')) {
+                    // salon_enleverMessagesSupprimes
+                    if ($pathinfo === '/salon/enleverMessagesSupprimes') {
+                        return array (  '_controller' => 'AppBundle\\Controller\\SalonController::enleverMessagesSupprimesAction',  '_route' => 'salon_enleverMessagesSupprimes',);
+                    }
+
+                    // salon_enleverParticipantsNonActifs
+                    if ($pathinfo === '/salon/enleverParticipantsNonActifs') {
+                        return array (  '_controller' => 'AppBundle\\Controller\\SalonController::enleverParticipantsNonActifsAction',  '_route' => 'salon_enleverParticipantsNonActifs',);
+                    }
+
+                }
+
+                // salon_updateListeParticipants
+                if ($pathinfo === '/salon/updateListeParticipants') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::updateListeParticipantsAction',  '_route' => 'salon_updateListeParticipants',);
                 }
 
                 // salon_envoyerMessage
@@ -343,9 +376,19 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                     return array (  '_controller' => 'AppBundle\\Controller\\SalonController::envoyerMessageAction',  '_route' => 'salon_envoyerMessage',);
                 }
 
+                // salon_banFromSalon
+                if ($pathinfo === '/salon/banFromSalon') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::banFromSalonAction',  '_route' => 'salon_banFromSalon',);
+                }
+
                 // salon_wantBanFromSalon
                 if ($pathinfo === '/salon/wantBanFromSalon') {
                     return array (  '_controller' => 'AppBundle\\Controller\\SalonController::wantBanFromSalonAction',  '_route' => 'salon_wantBanFromSalon',);
+                }
+
+                // salon_goodMembre
+                if ($pathinfo === '/salon/goodMembre') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::goodMembreAction',  '_route' => 'salon_goodMembre',);
                 }
 
                 // salon_addToContacts
