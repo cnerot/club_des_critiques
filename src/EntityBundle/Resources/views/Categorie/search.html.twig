@@ -21,9 +21,7 @@
                             <form action="#" method="post">
                                 <input type="hidden" name="catrgory_id" value="{{ categorie.id }}">
                                 {% for attribute in categorie.attributes %}
-                                    <li>
-                                        <div class="col s12"><b>{{ attribute.name }} :</b></div>
-                                    </li>
+                                    
                                     <li>
                                         {{ include('EntityBundle:Categorie:attribute/input.html.twig',{
                                             "attribute":attribute,

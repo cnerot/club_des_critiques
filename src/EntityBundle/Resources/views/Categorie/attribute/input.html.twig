@@ -1,23 +1,30 @@
 <div class="col s12">
-{% if attribute.type == "text" %}
-    <input name="{{ 'attribute_' ~ attribute.id }}" type="text" value="{{ attribute.value }}">
-{% endif %}
-{% if attribute.type == "select" %}
-    <select name="{{ 'attribute_' ~ attribute.id }}">
-        <option disabled selected>veuillez choisir une option</option>
-        {% for id, option in attribute.data %}
-            <option value="{{ id }}">{{ option }}</option>
-        {% endfor %}
-    </select>
-{% endif %}
-{% if attribute.type == "integer" %}
-    <input name="{{ 'attribute_' ~ attribute.id }}" type="number">
-{% endif %}
-{% if attribute.type == "date" %}
-    {% if attribute.data %}
-        <input name="{{ 'attribute_' ~ attribute.id }}" type="date">
-    {% else %}
-        <input name="{{ 'attribute_' ~ attribute.id }}" type="number">
+    {% if attribute.obligatory %}
+        {% if attribute.type != "image" %}
+            <li>
+                <div class="col s12"><b>{{ attribute.name }} :</b></div>
+            </li>
+        {% endif %}
+        {% if attribute.type == "text" %}
+            <input name="{{ 'attribute_' ~ attribute.id }}" type="text" value="{{ attribute.value }}">
+        {% endif %}
+        {% if attribute.type == "select" %}
+            <select name="{{ 'attribute_' ~ attribute.id }}">
+                <option disabled selected>veuillez choisir une option</option>
+                {% for id, option in attribute.data %}
+                    <option value="{{ id }}">{{ option }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+        {% if attribute.type == "integer" %}
+            <input name="{{ 'attribute_' ~ attribute.id }}" type="number">
+        {% endif %}
+        {% if attribute.type == "date" %}
+            {% if attribute.data %}
+                <input name="{{ 'attribute_' ~ attribute.id }}" type="date">
+            {% else %}
+                <input name="{{ 'attribute_' ~ attribute.id }}" type="number">
+            {% endif %}
+        {% endif %}
     {% endif %}
-{% endif %}
 </div>
