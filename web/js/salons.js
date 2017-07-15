@@ -22,6 +22,15 @@ $(document).ready(function(){
 		}
 	});
     
+    $(document).on("click", "#ajouterSalon", function(){
+		var titre = $("#nomNewSalon").val();
+		var description = $("#descriptionNewSalon").val();
+		var dateDebut = $("#dateDebutNewSalon").val();
+		var dateFin = $("#dateFinNewSalon").val();
+		var article = $("#idArticleNewSalon").val();
+		ajouterSalon(titre, description, dateDebut, dateFin, article);
+	});
+    
     $(".join").click(function(){		
 	  $("#joinSalon").click();
 	  var idSalon = $(this).parent().parent().find('[name=idSalon]').val();
