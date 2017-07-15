@@ -179,6 +179,11 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'EntityBundle\\Controller\\entityController::editAction',  '_route' => 'edit',);
         }
 
+        // search
+        if ($pathinfo === '/search') {
+            return array (  '_controller' => 'EntityBundle\\Controller\\CategorieController::searchAction',  '_route' => 'search',);
+        }
+
         // administration_siteadmin
         if ($pathinfo === '/administration') {
             return array (  '_controller' => 'AppBundle\\Controller\\AdministrationController::siteadminAction',  '_route' => 'administration_siteadmin',);
@@ -196,6 +201,11 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             }
 
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
+        }
+
+        // contenu
+        if ($pathinfo === '/contenu') {
+            return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::contenuAction',  '_route' => 'contenu',);
         }
 
         // membre_admin
@@ -234,6 +244,16 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
         // membre_alerteInvite
         if (0 === strpos($pathinfo, '/alerteInvite') && preg_match('#^/alerteInvite/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_alerteInvite')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::alerteInviteAction',));
+        }
+
+        // membre_notificationInvit
+        if ($pathinfo === '/notificationInvit') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::notificationInvitAction',  '_route' => 'membre_notificationInvit',);
+        }
+
+        // membre_setInvitationToVu
+        if ($pathinfo === '/setInvitationToVu') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::setInvitationToVuAction',  '_route' => 'membre_setInvitationToVu',);
         }
 
         // membre_invitationList
@@ -323,9 +343,32 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                     return array (  '_controller' => 'AppBundle\\Controller\\SalonController::indexAction',  '_route' => 'salon',);
                 }
 
+                // salon_deleteMessage
+                if ($pathinfo === '/salon/deleteMessage') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::deleteMessageAction',  '_route' => 'salon_deleteMessage',);
+                }
+
                 // salon_recupererDerniersMessages
                 if ($pathinfo === '/salon/recupererDerniersMessages') {
                     return array (  '_controller' => 'AppBundle\\Controller\\SalonController::recupererDerniersMessagesAction',  '_route' => 'salon_recupererDerniersMessages',);
+                }
+
+                if (0 === strpos($pathinfo, '/salon/enlever')) {
+                    // salon_enleverMessagesSupprimes
+                    if ($pathinfo === '/salon/enleverMessagesSupprimes') {
+                        return array (  '_controller' => 'AppBundle\\Controller\\SalonController::enleverMessagesSupprimesAction',  '_route' => 'salon_enleverMessagesSupprimes',);
+                    }
+
+                    // salon_enleverParticipantsNonActifs
+                    if ($pathinfo === '/salon/enleverParticipantsNonActifs') {
+                        return array (  '_controller' => 'AppBundle\\Controller\\SalonController::enleverParticipantsNonActifsAction',  '_route' => 'salon_enleverParticipantsNonActifs',);
+                    }
+
+                }
+
+                // salon_updateListeParticipants
+                if ($pathinfo === '/salon/updateListeParticipants') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::updateListeParticipantsAction',  '_route' => 'salon_updateListeParticipants',);
                 }
 
                 // salon_envoyerMessage
@@ -333,9 +376,19 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                     return array (  '_controller' => 'AppBundle\\Controller\\SalonController::envoyerMessageAction',  '_route' => 'salon_envoyerMessage',);
                 }
 
+                // salon_banFromSalon
+                if ($pathinfo === '/salon/banFromSalon') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::banFromSalonAction',  '_route' => 'salon_banFromSalon',);
+                }
+
                 // salon_wantBanFromSalon
                 if ($pathinfo === '/salon/wantBanFromSalon') {
                     return array (  '_controller' => 'AppBundle\\Controller\\SalonController::wantBanFromSalonAction',  '_route' => 'salon_wantBanFromSalon',);
+                }
+
+                // salon_goodMembre
+                if ($pathinfo === '/salon/goodMembre') {
+                    return array (  '_controller' => 'AppBundle\\Controller\\SalonController::goodMembreAction',  '_route' => 'salon_goodMembre',);
                 }
 
                 // salon_addToContacts
@@ -364,6 +417,19 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                         return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::indexAction',  '_route' => 'salons',);
                     }
 
+                    if (0 === strpos($pathinfo, '/salons/ajouter')) {
+                        // salons_ajouter
+                        if ($pathinfo === '/salons/ajouter') {
+                            return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::ajouterSalonAction',  '_route' => 'salons_ajouter',);
+                        }
+
+                        // salons_ajouterVerif
+                        if ($pathinfo === '/salons/ajouterVerif') {
+                            return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::ajouterVerifSalonAction',  '_route' => 'salons_ajouterVerif',);
+                        }
+
+                    }
+
                     // salons_popupRejoindre
                     if ($pathinfo === '/salons/popupRejoindre') {
                         return array (  '_controller' => 'AppBundle\\Controller\\SalonsController::popupRejoindreAction',  '_route' => 'salons_popupRejoindre',);
@@ -388,11 +454,6 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                 return array (  '_controller' => 'AppBundle\\Controller\\StatistiquesController::statistiqueAction',  '_route' => 'statistiques_statistique',);
             }
 
-        }
-
-        // statistiques_noteuser
-        if ($pathinfo === '/noteuser') {
-            return array (  '_controller' => 'AppBundle\\Controller\\StatistiquesController::noteUserAction',  '_route' => 'statistiques_noteuser',);
         }
 
         // statistiques_articleStat

@@ -1,3 +1,4 @@
+<div class="col s12">
 {% if attribute.type == "text" %}
     <input name="{{ 'attribute_' ~ attribute.id }}" type="text" value="{{ attribute.value }}">
 {% endif %}
@@ -19,3 +20,4 @@
         <input name="{{ 'attribute_' ~ attribute.id }}" type="number">
     {% endif %}
 {% endif %}
+</div>

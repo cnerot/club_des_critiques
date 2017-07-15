@@ -39,6 +39,13 @@ class Amis {
      * @ORM\Column(type="boolean")
      */
     protected $accepter = 0;
+    
+    /**
+     * @var boolean 
+     * 
+     * @ORM\Column(type="boolean")
+     */
+    protected $vu = 0;
 
 
     public function __construct() {
@@ -66,6 +73,13 @@ class Amis {
      */
     function getAccepter() {
         return $this->accepter;
+    }
+    
+    /*
+     * @return boolean
+     */
+    function getVu() {
+        return $this->vu;
     }
   
     /**
@@ -99,6 +113,14 @@ class Amis {
      */
     function setAccepter($accepter) {
         $this->accepter = $accepter;
+    }
+    /**
+     * @var boolean 
+     * 
+     * @return boolean
+     */
+    function setVu($vu) {
+        $this->vu = $vu;
     }
   
 

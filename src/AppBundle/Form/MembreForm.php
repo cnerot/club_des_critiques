@@ -33,18 +33,6 @@ class MembreForm extends AbstractType{
                         'placeholder'=>'ecrire votre description ici ..',
                         'class'=>'form-control'
                     ],
-                ])
-                ->add('mdp', PasswordType::class, [
-                    'label'=>'Mot de passe',
-                    'attr'=>[
-                        'class'=>'form-control'
-                    ],
-                ])
-                ->add('confirm', PasswordType::class, [
-                    'label'=>'Confirmation',
-                    'attr'=>[
-                        'class'=>'form-control'
-                    ],
                 ]);
         
     }

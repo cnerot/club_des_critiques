@@ -109,5 +109,23 @@ class DefaultController extends Controller
              
         ]);
     }
+    /**
+     * @Route("/contenu", name="contenu")
+     */
+    public function contenuAction(Request $request)
+    {
+        $session = $request->getSession();
+        if($session->get('id')!=null){
+            $em = $this->getDoctrine()->getManager();
+            $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        }else{
+            $membre = new Membre();
+        }
+        return $this->render('contenu/contenu.html.twig',[
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
+             
+        ]);
+    }
    
 }

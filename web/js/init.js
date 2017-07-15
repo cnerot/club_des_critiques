@@ -80,3 +80,46 @@ function nbVisite(){
                 data : 'mois=' + month
             });
         }
+function getRequested(url, callback) {
+		$.get(url, function(data) {
+			//data = $.parseJSON(data);
+			callback(data);
+		});
+}
+function notification(){
+	/*$.ajax({
+	    url: "/notificationInvit",
+	    method: "post",
+            data: {}
+	    }).done(function(data){
+                console.log(data);
+		notificationButton = document.getElementById('notification');
+                notificationButton.className = "material-icons red-text";
+                //alert(notificationButton);		
+	    });*/
+        getRequested("/notificationInvit", function(data) {
+                console.log("data");
+                newInvitation(data);
+	});
+}
+function newInvitation(data){
+    console.log(data.length);
+    InvitationBadge = document.getElementById('invitationBadge');
+    $('#invitationBadge').html('<span id="invitationBadge" class="new badge" >'+data.length+'</span>Invitation');
+    if(data.length !=0){
+        notificationButton = document.getElementById('notification');
+        notificationButton.className = "material-icons red-text";
+       
+        //alert(notificationButton);
+    }
+}
+function SetVu(){
+        notificationButton = document.getElementById('notification');
+        notificationButton.className = "material-icons red-white";
+        getRequested("/setInvitationToVu", function(data) {});
+}
+// changer par un setinterval
+setInterval(function(){
+		notification();
+	}, 9050);
+ 

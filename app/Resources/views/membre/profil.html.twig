@@ -61,7 +61,20 @@
           {% if membre.id == id_membre %}
             <div class="card">
               <div class="card-content">
-                  <div><a href="#">Modifier mes information</a></div>
+                  <div>
+                      <a href="#modal3">Modifier mes information</a>
+                      <div id="modal3" class="modal">
+                        <div class="modal-content">
+                            {{ form_start(editInfoForm) }}
+                            {{ form_rest(editInfoForm) }}
+                                <button class="waves-effect waves-light btn" type="submit">Modifier</button>
+                            {{ form_end(editInfoForm) }}
+                          </div>
+                          <div class="modal-footer">
+                            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Fermer</a>
+                          </div>
+                      </div> 
+                  </div>
                   <div>
                       <a href="#modal2">Modifier mon mot de passe</a>
                       <div id="modal2" class="modal">

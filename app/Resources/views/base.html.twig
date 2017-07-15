@@ -5,10 +5,14 @@
     <title>{% block title %}Club des critiques{% endblock %}</title>
     {% block stylesheets %}
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/dataviz.css') }}">
         <link rel="stylesheet" href="{{ asset('css/materialize.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('css/salons.css') }}">
         <link rel="stylesheet" href="{{ asset('css/salon.css') }}">
+                <link rel="stylesheet" href="{{ asset('css/jquery.jqplot.min.css') }}">
+
+
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
@@ -49,8 +53,8 @@
         <div class="col s12">
             <ul id="dropdown3" class="dropdown-content" style="margin-top: 63px;">
                 <li>
-                    <a href="" id="">
-                         <span class="new badge" >1</span>Invitation
+                    <a href="{{ path("membre_invitationList")}}" id="invitationBadge">
+                        <!-- <span id="invitationBadge" class="new badge" ></span>Invitation-->
                     </a>
                 </li>
 
@@ -77,7 +81,7 @@
                      </a>
                 </div>
                  <div class="left padd-left">
-                   <a href="#" id="">
+                   <a href="{{path("contenu")}}" id="">
                          Contenus
                      </a>
                 </div>
@@ -95,8 +99,8 @@
                     <div class="right padd-left">
                     <ul class="right hide-on-med-and-down">
                         <li>
-                            <a class="dropdown-button" href="#!" data-activates="dropdown3">
-                                     <i class="material-icons"> notifications</i>
+                            <a class="dropdown-button" href="#!" data-activates="dropdown3" onclick="SetVu()">
+                                     <i id="notification" class="material-icons"> notifications</i>
                             </a>
                         </li>
                     </ul>
@@ -169,14 +173,21 @@
     <script src="{{ asset('js/materialize.min.js') }}"></script>
     <script src="{{ asset('js/init.js') }}"></script>
     <script src="{{ asset('js/salons.js') }}"></script>
-    <script src="{{ asset('js/dataviz.js') }}"></script>
+
+
     <script src="{{ asset('js/jquery.jqplot.min.js') }}"></script>
-    <script src="{{ asset('js/renderer/jqplot.pieRenderer.js') }}"></script>
     <script src="{{ asset('js/renderer/jqplot.barRenderer.js') }}"></script>
     <script src="{{ asset('js/renderer/jqplot.dateAxisRenderer.js') }}"></script>
+    <script src="{{ asset('js/renderer/jqplot.pieRenderer.js') }}"></script>
+    <script src="{{ asset('js/renderer/jqplot.categoryAxisRenderer.js') }}"></script>
+
+    <script src="{{ asset('js/dataviz.js') }}"></script>
+
+
+
+
+
               
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
 {% endblock %}
 </body>
 </html>

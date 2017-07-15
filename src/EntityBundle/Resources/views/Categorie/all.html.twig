@@ -3,29 +3,38 @@
 {% block title %}EntityBundle:Categorie:all{% endblock %}
 
 {% block body %}
-    <h1>Toutes Categories</h1>
-    <a href="{{ path('categorie_create') }}">Créer une categorie</a>
+    <div class="row">
+        <div class="container">
+            <h1 class="titleS">Gestion des Categories</h1>
+            <div class="col s12">
+                <a href="{{ path('categorie_create') }}" class="btn-floating btn-large waves-effect waves-light  brown lighten-3 right"><i class="material-icons">add</i></a>
+            </div>
+            <div class="col s12">
+                <ul class="collapsible" data-collapsible="accordion">
+                    {% for categorie in categories %}
 
-    <ul class="collapsible" data-collapsible="accordion">
-        {% for categorie in categories %}
+                        <li>
+                            <div class="collapsible-header brown lighten-3"><i class="material-icons">build</i><b>{{ categorie.name }}</b></div>
+                            <div class="collapsible-body">
+                                <table>
+                                     <tr>
+                                    {% for attribute in categorie.attributes %}
+                                            <td>
+                                                 <div class="chip">
+                                                       <a class="black-text darken-1" href="{{ path('attribute_view', {'id': categorie.id}) }}">{{ attribute.name }}</a>
+                                                  </div>
+                                            </td>
+                                    {% endfor %}
+                                    </tr>
+                                    <a href="{{ path('categorie_view', {'id': categorie.id}) }}" class="right  btn waves-effect waves-light"><i class="material-icons">list</i></a>
+                                    <a href="{{ path('attribute_create',{'id': categorie.id}) }}" class="right  btn waves-effect waves-light"><i class="material-icons">add</i></a>
+                                </table>
+                            </div>
+                        </li>
+                    {% endfor %}
 
-            <li>
-                <div class="collapsible-header"><i class="material-icons">filter_drama</i>{{ categorie.name }}</div>
-                <div class="collapsible-body">
-                    <a href="{{ path('categorie_view', {'id': categorie.id}) }}">+</a>
-                    <table>
-                        {% for attribute in categorie.attributes %}
-                            <tr>
-                                <td>
-                                    <a href="{{ path('attribute_view', {'id': categorie.id}) }}">{{ attribute.name }}</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        <a href="{{ path('attribute_create',{'id': categorie.id}) }}">Créer un attribut</a>
-                    </table>
-                </div>
-            </li>
-        {% endfor %}
-
-    </ul>
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}
