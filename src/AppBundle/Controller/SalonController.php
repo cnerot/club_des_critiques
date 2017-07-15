@@ -940,6 +940,13 @@ class SalonController extends Controller
     public function historiqueAction(Request $request)
     {
 		$idSalon = $request->get('idSalon');
+		$session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
+
+        if(empty($membre)){
+			$membre = new Membre();
+		}
 		
 		$salon = $this->getDoctrine()
 		->getRepository('AppBundle:Salon')
@@ -987,6 +994,8 @@ class SalonController extends Controller
 	return $this->render('salon\historiqueSalon.html.twig',[
             'salon' => $salon,
             'chats' => $participantsWithInfos,
+            'id_membre'=> $session->get('id'),
+            'membre'=> $membre,
         ]);
 	}
 }
