@@ -42,4 +42,7 @@
   <route id="edit" path="/entity/edit">
     <default key="_controller">EntityBundle:entity:edit</default>
   </route>
+  <route id="search" path="/search">
+    <default key="_controller">EntityBundle:Categorie:search</default>
+  </route>
 </routes>

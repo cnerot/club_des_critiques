@@ -12,6 +12,7 @@
                 <option value="2">select</option>
                 <option value="3">number</option>
                 <option value="4">date</option>
+                <option value="5">image</option>
             </select>
         <div class="type type-2">
             number of options
@@ -25,6 +26,10 @@
                 <option></option>
             </select>
         </div>
+        <select name="obligatory">
+            <option value="1">yes</option>
+            <option value="0">no</option>
+            </select>
         <input type="submit" value="create attribute">
     </form>
     <a href="{{ path('attribute_all', {'id': id}) }}">Back</a>

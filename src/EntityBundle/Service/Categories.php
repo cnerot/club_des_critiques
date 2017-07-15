@@ -39,7 +39,7 @@ class Categories
     }
     public function getById(EntityManager $em,$id)
     {
-        (new Attributes())->createDefaultAttributes($em);
+        (new Attributes())->createDefaultAttributes($em, $id);
         $categorie = $em->getRepository('EntityBundle:categorie')->findOneBy(["id" => $id]);
         $this->id = $categorie->getId();
         $this->name = $categorie->getTitre();
@@ -51,6 +51,17 @@ class Categories
         $categorie = $em->getRepository('EntityBundle:categorie')->findOneBy(["id" => $this->id]);
         return (new Product())->getByCategory($em,$categorie->getId());
 
+    }
+    public function getProductsByName(EntityManager $em, $query)
+    {
+        $categorie = $em->getRepository('EntityBundle:categorie')->findOneBy(["id" => $this->id]);
+        $products =  (new Product())->getByCategory($em,$categorie->getId());
+        $array = array();
+        foreach ($products as $product) {
+            if (strstr($product->name,$query))
+                $array[] = $product;
+        }
+        return $array;
     }
     public function getAll(EntityManager $em)
     {

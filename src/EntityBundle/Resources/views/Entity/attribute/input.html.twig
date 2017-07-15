@@ -1,24 +1,31 @@
 {% if attribute.type == "text" %}
-       <input name="{{ 'attribute_' ~ attribute.id }}" type="text" value="{{ attribute.value }}">
+    <input name="{{ 'attribute_' ~ attribute.id }}" type="text" value="{{ attribute.value }}">
 {% endif %}
 {% if attribute.type == "select" %}
-       <select name="{{ 'attribute_' ~ attribute.id }}">
-              {% for id, option in attribute.data %}
-                     {% if id == attribute.value %}
-                            <option value="{{ id }}" selected>{{ option }}</option>
-                     {% else %}
-                            <option value="{{ id }}">{{ option }}</option>
-                     {% endif %}
-              {% endfor %}
-       </select>
+    <select name="{{ 'attribute_' ~ attribute.id }}">
+        {% for id, option in attribute.data %}
+            {% if id == attribute.value %}
+                <option value="{{ id }}" selected>{{ option }}</option>
+            {% else %}
+                <option value="{{ id }}">{{ option }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
 {% endif %}
 {% if attribute.type == "integer" %}
-       <input name="{{ 'attribute_' ~ attribute.id }}" type="number">
+    <input name="{{ 'attribute_' ~ attribute.id }}" type="number" value="{{ attribute.value }}">
 {% endif %}
 {% if attribute.type == "date" %}
-       {% if attribute.data %}
-              <input name="{{ 'attribute_' ~ attribute.id }}" type="date" value="{{ attribute.value }}">
-       {% else %}
-              <input name="{{ 'attribute_' ~ attribute.id }}" type="number">
-       {% endif %}
+    {% if attribute.data %}
+        <input name="{{ 'attribute_' ~ attribute.id }}" type="date" value="{{ attribute.value }}">
+    {% else %}
+        <input name="{{ 'attribute_' ~ attribute.id }}" type="number">
+    {% endif %}
+{% endif %}
+{% if attribute.type == "image" %}
+    {% if attribute.value is defined and  attribute.value != "" %}
+        <img height="100px" src="{{ attribute.value }}">
+    {% endif %}
+    <input name="{{ 'attribute_' ~ attribute.id }}" type="file">
+
 {% endif %}

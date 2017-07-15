@@ -21,10 +21,19 @@ class entityController extends Controller
 
         $em = $this->get('doctrine')->getManager();
         $entity = (new Product())->getById($em, $request->query->get('id', null));
+        $categorie = (new Categories())->getById($em, $entity->id)->name;
 
         $data = $request->request->all();
         if (isset($data['product_id'])){
             foreach ($data as $key => $val){
+                $key_array = explode('_',$key);
+                if ($key_array['0'] == "attribute"){
+                    $attribute = $entity->data[$key_array[1]];
+                    $attribute->value = $val;
+                    $attribute->save($em);
+                }
+            }
+            foreach ($_FILES as $key => $val){
                 $key_array = explode('_',$key);
                 if ($key_array['0'] == "attribute"){
                     $attribute = $entity->data[$key_array[1]];
@@ -37,7 +46,8 @@ class entityController extends Controller
 
 
         return $this->render('EntityBundle:entity:view.html.twig', array(
-            'entity' => $entity
+            'entity' => $entity,
+            'categorie' => $categorie,
         ));
     }
 

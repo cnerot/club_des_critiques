@@ -2,7 +2,7 @@
 
 namespace EntityBundle\Controller;
 
-use AppBundle\Entity\Attribute;
+use EntityBundle\Entity\attribute;
 use EntityBundle\Entity\attributeOption;
 use EntityBundle\Service\Attributes;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -44,7 +44,8 @@ class AttributeController extends Controller
                 $attribute = new Attribute();
                 $attribute->setName($data['name']);
                 $attribute->setType($data['type']);
-                $attribute->setIdCategorie($id);
+                $attribute->setCategory($id);
+                $attribute->setObligatory($data["obligatory"]);
                 $em->persist($attribute);
                 $em->flush();
                 if ($data['type'] == '2') {

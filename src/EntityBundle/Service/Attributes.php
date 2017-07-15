@@ -50,6 +50,9 @@ class Attributes
             case "text":
                 $attribute->setType(1);
                 break;
+            case "image":
+                $attribute->setType(5);
+                break;
             case "select":
                 $attribute->setType(2);
                 if ($this->id) {
@@ -102,6 +105,28 @@ class Attributes
                     $val->setIdEntity($this->productid);
                     $em->persist($val);
                     break;
+                case "image":
+                    $val = $em->getRepository('EntityBundle:valuetext')->findOneBy(["idAttribute" => $this->id, "idEntity" => $this->productid]);
+                    if ($val == null) {
+                        $val = new valuetext();
+                    }
+                    if (is_array($this->value)){
+                        $upload_dir = "images\\uploads";
+
+                        if (!file_exists($upload_dir)) {
+                            mkdir($upload_dir, 0777, true);
+                        }
+                        $upload_dir = $upload_dir."\\".$this->value["name"];
+                        if (file_exists($upload_dir)){
+                            $upload_dir .= "_";
+                        }
+                        move_uploaded_file($this->value["tmp_name"], $upload_dir);
+                        $val->setValue("../" . $upload_dir);
+                    }
+                    $val->setIdAttribute($this->id);
+                    $val->setIdEntity($this->productid);
+                    $em->persist($val);
+                    break;
                 case "select":
                     $val = $em->getRepository('EntityBundle:valueinteger')->findOneBy(["idAttribute" => $this->id, "idEntity" => $this->productid]);
                     if ($val == null) {
@@ -110,16 +135,19 @@ class Attributes
                     $val->setValue($this->value);
                     $val->setIdAttribute($this->id);
                     $val->setIdEntity($this->productid);
-                    $em->persist($val);                    break;
+                    $em->persist($val);
+                    break;
                 case "integer":
                     $val = $em->getRepository('EntityBundle:valueinteger')->findOneBy(["idAttribute" => $this->id, "idEntity" => $this->productid]);
                     if ($val == null) {
                         $val = new valueinteger();
                     }
+
                     $val->setValue($this->value);
                     $val->setIdAttribute($this->id);
                     $val->setIdEntity($this->productid);
-                    $em->persist($val);                    break;
+                    $em->persist($val);
+                    break;
                 case "date":
                     if ($this->data) {
                         $val = $em->getRepository('EntityBundle:valuedate')->findOneBy(["idAttribute" => $this->id, "idEntity" => $this->productid]);
@@ -145,6 +173,8 @@ class Attributes
             }
             $em->persist($val);
         }
+        $em->persist($attribute);
+
         $em->flush();
         return $this->getById($em, $attribute->getId());
     }
@@ -203,6 +233,9 @@ class Attributes
                 $option = $em->getRepository('EntityBundle:attributeOption')->findOneBy(["attributeId" => $id]);
                 $this->data = $option->getValue();
                 break;
+            case 5:
+                $this->type = "image";
+                break;
             default:
                 break;
         }
@@ -210,6 +243,12 @@ class Attributes
 
             switch ($this->type) {
                 case "text":
+                    $val = $em->getRepository('EntityBundle:valuetext')->findOneBy(["idAttribute" => $this->id, "idEntity" => $this->productid]);
+                    if ($val != null) {
+                        $this->value = $val->getValue();
+                    }
+                    break;
+                case "image":
                     $val = $em->getRepository('EntityBundle:valuetext')->findOneBy(["idAttribute" => $this->id, "idEntity" => $this->productid]);
                     if ($val != null) {
                         $this->value = $val->getValue();
@@ -245,9 +284,8 @@ class Attributes
         }
         return $this;
     }
-    public function createDefaultAttributes(EntityManager $em)
+    public function createDefaultAttributes(EntityManager $em, $id)
     {
-
         $defaults = [
             [
                 "name" => "titre",
@@ -259,10 +297,14 @@ class Attributes
             ],
             [
                 "name" => "image",
-                "type" => "text",
+                "type" => "image",
+            ],
+            [
+                "name" => "front",
+                "type" => "integer",
             ],
         ];
-        $attributes = $this->getByCategorie($em, -1);
+        $attributes = $this->getByCategorie($em, $id);
         foreach ($defaults as $default) {
             $create = true;
             foreach ($attributes as $attribute) {
@@ -276,22 +318,11 @@ class Attributes
                     $new->$key = $element;
                 }
                 $new->obligatory = false;
-                $new->save($em, -1);
+                $new->save($em, $id);
             }
 
         }
-        foreach ($attributes as $attribute) {
-            $delete = true;
-            foreach ($defaults as $default) {
-                if ($attribute->name == $default["name"]) {
-                    $delete = false;
-                }
-            }
-            if ($delete) {
-                $attribute->delete();
-            }
 
-        }
 
     }
     public function getByCategorie(EntityManager $em, $id_categorie)

@@ -1,0 +1,20 @@
+
+<div class=" card">
+    <div class="card-image waves-effect waves-block waves-light">
+        {% if product.getValueByName('image') == null or product.getValueByName('image') == "" %}
+            <img class="activator" src="http://static1.purepeople.com/articles/9/16/83/99/@/1996736-affiche-du-film-le-chasseur-et-la-reine-950x0-1.jpg">
+        {% else %}
+            <img class="activator" src="{{ product.getValueByName('image') }}">
+        {% endif %}
+    </div>
+    <div class="card-content">
+        <span class="card-title activator grey-text text-darken-4">{{ product.name }}<i class="material-icons right">more_vert</i></span>
+    </div>
+    <div class="card-action brown">
+        <a href="#" class="">Voir details</a>
+    </div>
+    <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+        <p>{{ product.getValueByName('description') }}</p>
+    </div>
+</div>
