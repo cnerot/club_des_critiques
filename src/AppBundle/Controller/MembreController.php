@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,11 +74,20 @@ class MembreController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $request->getSession();
         $membre = $em->getRepository('AppBundle:Membre')->findOneById($id);
-        $editPwdForm = $this->createForm(EditPwdForm::class, $membre);
+        $editPwdForm = $this->createForm(EditPwdForm::class, $membre,
+                array(
+                     'action' => $this->generateUrl('membre_edit_pwd'),
+                     'method' => 'POST',
+                ));
+        $editInfoForm = $this->createForm(MembreForm::class, $membre,
+                array(
+                     'action' => $this->generateUrl('membre_editinfo'),
+                     'method' => 'POST',
+                ));
         $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
         // query for a single product matching the given name and price
         $membre1 = $repository->findBy(
-                array('id_membre1' =>$session->get('id'))
+                array('id_membre1' =>$session->get('id'),'accepter'=>1)
             );
            // var_dump($membre1);
         $amisId = array();
@@ -85,7 +95,7 @@ class MembreController extends Controller
             $amisId[] = $m1->getId_membre2();
         }
         $membre2 = $repository->findBy(
-                array('id_membre2' =>$session->get('id'))
+                array('id_membre2' =>$session->get('id'),'accepter'=>1)
             );
        // var_dump($membre2);
         foreach($membre2 as $m2){
@@ -101,6 +111,7 @@ class MembreController extends Controller
             'picture'=>$membre->getPicture(),
             'id_membre' => $session->get('id'),
             'editPwdForm'=>$editPwdForm->createView(),
+            'editInfoForm'=>$editInfoForm->createView(),
         ]);
     }
     /**
@@ -109,24 +120,19 @@ class MembreController extends Controller
     
     public function editInfoAction(Request $request)
     {
-        $membre = new Membre();
-        $form = $this->createForm(MembreForm::class, $membre);
         $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+
+        $form = $this->createForm(MembreForm::class, $membre);
         $form->handleRequest($request);
         if($form->isValid()){
-           $em = $this->getDoctrine()->getManager();
            $em->persist($membre);
            $em->flush();
-           
-           $this->addFlash('success', "Votre compte à été créé!");
-           
-           return $this->redirectToRoute('membre_show', ['id'=>$membre->getId()]);      
+           $this->addFlash('success', "Vos informations personnelles sont à jour!");
         }
-        return $this->render('membre\create.html.twig',[
-            'membre' => $membre,
-            'id_membre' => $session->get('id'),
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('membre_profil', ['id'=>$session->get('id')]);      
+       
     }
     /**
      * @Route("/editPwd", name="membre_edit_pwd")
@@ -139,21 +145,22 @@ class MembreController extends Controller
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $membre = $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
+        $data = $request->get('edit_pwd_form');
         if($request->isMethod('POST')){
-            if(isset($_POST['mdp']) && isset($_POST['confirm'])){
-               var_dump($_POST['confirm']);
+            if(isset($data['mdp']) && isset($data['confirm'])){
+               if($data['mdp']==$data['confirm']){
+                    $membre->setMdp(crypt($data['mdp'],''));
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($membre);
+                    $em->flush();
+                }else{
+                    echo "le mot ne correspond à sa confirmation!";
+                }
             }
         }
-        if($membre->getMdp()==$_POST['confirm']){
-            $membre->setMdp($membre->getMdp());
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($membre);
-            $em->flush();
-        }else{
-            var_dump('none');
-        }
+       
            
-        //return $this->redirectToRoute('membre_edit', ['id'=>$session->get('id'),'membre'=>$membre]);      
+        return $this->redirectToRoute('membre_profil', ['id'=>$session->get('id'),'membre'=>$membre]);      
     }
     /**
      * @Route("/invite/{id}", name="membre_invite")
@@ -201,6 +208,45 @@ class MembreController extends Controller
         $this->addFlash('success', "Invitation envoyée");
        
         return $this->redirectToRoute('membre_all', ['id'=>$membre->getId(),'id_membre' => $session->get('id'),'membre'=>$membre,]);      
+    }
+    /**
+     * @Route("/notificationInvit", name="membre_notificationInvit")
+     */
+    
+    public function notificationInvitAction(Request $request)
+    {
+        $session = $request->getSession();
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
+        $invitations = $repository->findBy(
+                array(
+                    'id_membre2'=>$session->get('id'),
+                    'accepter'  => 0,
+                    'vu'  => 0
+                ));
+        return new JsonResponse($invitations);   
+    }
+    /**
+     * @Route("/setInvitationToVu", name="membre_setInvitationToVu")
+     */
+    
+    public function setInvitationToVuAction(Request $request)
+    {
+        $session = $request->getSession();
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
+        $invitations = $repository->findBy(
+                array(
+                    'id_membre2'=>$session->get('id'),
+                    'accepter'  => 0,
+                    'vu'  => 0
+                ));
+        foreach($invitations as $invitation){
+            $invitation->setVu(1);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($invitation);
+            $em->flush();
+            $this->addFlash('success',"Vu");
+        }
+        return new JsonResponse([]);   
     }
   
     /**
@@ -293,14 +339,14 @@ class MembreController extends Controller
         $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
         // query for a single product matching the given name and price
         $membre1 = $repository->findBy(
-                array('id_membre1' =>$session->get('id'))
+                array('id_membre1' =>$session->get('id'),'accepter' =>1)
             );
         $amisId = array();
         foreach($membre1 as $m1){
             $amisId[] = $m1->getId_membre2();
         }
         $membre2 = $repository->findBy(
-                array('id_membre2' =>$session->get('id'))
+                array('id_membre2' =>$session->get('id'),'accepter' =>1)
             );
         foreach($membre1 as $m2){
             $amisId[] = $m2->getId_membre1();
@@ -342,7 +388,7 @@ class MembreController extends Controller
         return $this->redirectToRoute('membre_profil', [
             'membre'=>$membre,
             'id_membre' => $session->get('id'),
-           // 'id' => $session->get('id'),
+            'id' => $session->get('id'),
            // 'picture' => $membre->getPicture(),
             ]);      
     }
@@ -358,6 +404,8 @@ class MembreController extends Controller
         if($form->isValid()){
             $repository = $this->getDoctrine()->getRepository('AppBundle:Membre');
             // query for a single product matching the given name and price
+            //$hashed_password = 'RTBDSG907HGVB@@BGJGfgcgfVGHCDFVBHJhfhg0989';
+           // $membre->setMdp(crypt($membre->getMdp(),$hashed_password));
             $membre = $repository->findOneBy(
                 array('mail' => $membre->getMail(), 'mdp' => $membre->getMdp())
             );

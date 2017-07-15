@@ -236,6 +236,16 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return $this->mergeDefaults(array_replace($matches, array('_route' => 'membre_alerteInvite')), array (  '_controller' => 'AppBundle\\Controller\\MembreController::alerteInviteAction',));
         }
 
+        // membre_notificationInvit
+        if ($pathinfo === '/notificationInvit') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::notificationInvitAction',  '_route' => 'membre_notificationInvit',);
+        }
+
+        // membre_setInvitationToVu
+        if ($pathinfo === '/setInvitationToVu') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::setInvitationToVuAction',  '_route' => 'membre_setInvitationToVu',);
+        }
+
         // membre_invitationList
         if ($pathinfo === '/invitationList') {
             return array (  '_controller' => 'AppBundle\\Controller\\MembreController::invitationListAction',  '_route' => 'membre_invitationList',);
@@ -388,11 +398,6 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
                 return array (  '_controller' => 'AppBundle\\Controller\\StatistiquesController::statistiqueAction',  '_route' => 'statistiques_statistique',);
             }
 
-        }
-
-        // statistiques_noteuser
-        if ($pathinfo === '/noteuser') {
-            return array (  '_controller' => 'AppBundle\\Controller\\StatistiquesController::noteUserAction',  '_route' => 'statistiques_noteuser',);
         }
 
         // statistiques_articleStat
