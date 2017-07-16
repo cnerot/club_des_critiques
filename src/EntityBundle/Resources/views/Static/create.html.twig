@@ -1,6 +1,6 @@
-{% extends "::entity.html.twig" %}
+{% extends "::base.html.twig" %}
 
-{% block title %}EntityBundle:Categorie:create{% endblock %}
+{% block title %}EntityBundle:Static:create{% endblock %}
 
 {% block body %}
     <div class="row">
@@ -9,6 +9,12 @@
                 <div class="input-field col s12">
                     <input type="text" placeholder="title" name="title" placeholder="Placeholder" id="first_name"
                            type="text" class="validate">
+                    <label for="first_name">page name</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea name="content"></textarea>
                     <label for="first_name">Categorie name</label>
                 </div>
             </div>
@@ -19,5 +25,5 @@
             </div>
         </form>
     </div>
-    <a href="{{ path('categorie_all') }}">Back</a>
+
 {% endblock %}
