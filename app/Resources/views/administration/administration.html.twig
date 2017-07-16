@@ -34,11 +34,22 @@
                 <li>
                   <div class="collapsible-header brown lighten-3">Pages statiques</div>
                   <div class="collapsible-body">
-                      {% for page in pages %}
-                          <a href="{{ path('static_edit', {'id': page.getId()}) }}">{{ page.getName() }}</a>
-                          <a href="{{ path('static_delete', {'id': page.getId()}) }}">supprimer</a>
-                      {% endfor %}
-
+                        <table class="table striped">
+                             
+                                {% if pages is defined %}
+                                   {% for page in pages %}
+                                       <tr>
+                                            <td class="center">
+                                                <a href="{{ path('static_edit', {'id': page.getId()}) }}" class="black-text"><i class="material-icons orange-text accent-2">edit</i>{{ page.getName() }}</a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('static_delete', {'id': page.getId()}) }}" ><i class="material-icons red-text">delete</i></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            <a href="/static/create" class="right btn waves-effect waves-light"><i class="material-icons">add</i></a>
+                        </table>
                   </div>
                 </li>
                 <li>
