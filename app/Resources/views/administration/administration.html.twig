@@ -33,7 +33,13 @@
                 </li>
                 <li>
                   <div class="collapsible-header brown lighten-3">Pages statiques</div>
-                  <div class="collapsible-body"><span>A ajouter par charles</span></div>
+                  <div class="collapsible-body">
+                      {% for page in pages %}
+                          <a href="{{ path('static_edit', {'id': page.getId()}) }}">{{ page.getName() }}</a>
+                          <a href="{{ path('static_delete', {'id': page.getId()}) }}">supprimer</a>
+                      {% endfor %}
+
+                  </div>
                 </li>
                 <li>
                   <div class="collapsible-header brown lighten-3">Salons</div>

@@ -3,5 +3,21 @@
 {% block title %}EntityBundle:entity:create{% endblock %}
 
 {% block body %}
-<h1>Welcome to the entity:create page</h1>
+    <div class="row">
+        <form class="col s12" method="post" action="#">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" placeholder="title" name="title" placeholder="Placeholder" id="first_name"
+                           type="text" class="validate">
+                    <label for="first_name">Categorie name</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="email" type="submit" value="Creer l'entité" class="validate">
+                </div>
+            </div>
+        </form>
+    </div>
+<a href="{{ path('categorie_all') }}">Back</a>
 {% endblock %}

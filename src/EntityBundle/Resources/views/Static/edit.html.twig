@@ -1,0 +1,28 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}EntityBundle:Static:edit{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <form class="col s12" method="post" action="#">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" placeholder="title" name="title" value="{{ page.getName() }}" placeholder="Placeholder" id="first_name"
+                           type="text" class="validate">
+                    <label for="first_name">Nom</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea name="content">{{ page.getContent() }}</textarea>
+                    <label for="first_name">Contenue</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="email" type="submit" value="create categorie" class="validate">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

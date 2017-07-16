@@ -45,4 +45,16 @@
   <route id="search" path="/search">
     <default key="_controller">EntityBundle:Categorie:search</default>
   </route>
+  <route id="static_create" path="/static/create">
+    <default key="_controller">EntityBundle:Static:create</default>
+  </route>
+  <route id="static_edit" path="/static/edit">
+    <default key="_controller">EntityBundle:Static:edit</default>
+  </route>
+  <route id="static_delete" path="/static/delete">
+    <default key="_controller">EntityBundle:Static:delete</default>
+  </route>
+  <route id="static_view" path="/static/view">
+    <default key="_controller">EntityBundle:Static:view</default>
+  </route>
 </routes>
