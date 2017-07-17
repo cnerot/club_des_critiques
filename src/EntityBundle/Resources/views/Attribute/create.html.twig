@@ -7,35 +7,57 @@
 {% block title %}EntityBundle:Attribute:create{% endblock %}
 
 {% block body %}
-    <h1>Welcome to the Attribute:create page</h1>
-    <form method="post" action="#">
-            <input type="text" placeholder="title" name="name">
-            <select name="type" id="type_input">
-                <option selected disabled>Type</option>
-                <option value="1">text</option>
-                <option value="2">select</option>
-                <option value="3">number</option>
-                <option value="4">date</option>
-                <option value="5">image</option>
-            </select>
-        <div class="type type-2">
-            number of options
-            <input type="number" id="inputs_input">
-            <div id="inputs"></div>
+    <div class="container">
+        <div class="row margin-top">
+            <fieldset class=" grey lighten-5" ><legend><b>Création d'un nouveau attribus</b></legend>
+            <div class="col s12 grey lighten-5">
+                <form method="post" action="#">
+                     <div class="input-field col s6">
+                        <input type="text" name="name">
+                        <label for="name">Titre</label>
+                     </div>
+                    <div class="input-field col s6">
+                        <select name="type" id="type_input">
+                            <option selected disabled>Type</option>
+                            <option value="1">text</option>
+                            <option value="2">select</option>
+                            <option value="3">number</option>
+                            <option value="4">date</option>
+                            <option value="5">image</option>
+                        </select>
+                    </div>
+                    <div class="input-field col s6">
+                        <div class="type type-2">
+                            number of options
+                            <input type="number" id="inputs_input">
+                            <div id="inputs"></div>
+                        </div>
+                    </div>
+                    <div class="input-field col s6">
+                        <div class="type type-4">
+                            <select name="date">
+                                <option value="2">year</option>
+                                <option value="1">date</option>
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-field col s4">
+                        <select id="obligatory" name="obligatory">
+                            <option selected disabled>Attribut frontend</option>
+                            <option value="1">oui</option>
+                            <option value="0">non</option>
+                        </select>
+                    </div>
+                    <div class="input-field col s8">
+                    </div>
+                    <div class="input-field col s12">
+                        <a href="{{ path('attribute_all', {'id': id}) }}" class="waves-effect waves-light btn left  grey lighten-2 black-text">Retour</a>
+                        <input type="submit" value="Valider" class="waves-effect waves-light btn right">
+                    </div>
+                </form>
+            </div>
+            </fieldset>
         </div>
-        <div class="type type-4">
-            <select name="date">
-                <option value="2">year</option>
-                <option value="1">date</option>
-                <option></option>
-            </select>
-        </div>
-        <label for="obligatory">Attribut frontend</label>
-        <select id="obligatory" name="obligatory">
-            <option value="1">yes</option>
-            <option value="0">no</option>
-            </select>
-        <input type="submit" value="create attribute">
-    </form>
-    <a href="{{ path('attribute_all', {'id': id}) }}">Back</a>
+    </div>
 {% endblock %}

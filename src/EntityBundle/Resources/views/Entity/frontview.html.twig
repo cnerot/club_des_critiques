@@ -43,17 +43,21 @@
 {% endblock %}
 {% block title %}EntityBundle:entity:frontview{% endblock %}
 
-    {% block body %}
-        <h1> {{ categorie }} : {{ entity.name }}</h1>
+{% block body %}
+ <div class="container margin-top">
+     <div class="row">
         <div class="product_data">
             <div class="product_image">
                 {% if entity.getValueByName('image') == null or entity.getValueByName('image') == "" %}
-                    <img src="http://media.istockphoto.com/vectors/closed-old-book-in-brown-cover-vector-id537900186?k=6&m=537900186&s=612x612&w=0&h=kDVfXAgEJjK8MM5IeODaufN8DO6eN_uGLbdkrIgKvHc=">
+                    <img src="http://www.proscientiapublica.pl/attachments/Header/image_4.jpg?template=generic">
                 {% else %}
                     <img src="{{ entity.getValueByName('image') }}">
                 {% endif %}
             </div>
-            <div class="product_description">{{ entity.getValueByName('description') }}</div>
+            <div class="product_description">
+                <p><b> {{ categorie }} : {{ entity.name }}</b><p>
+                {{ entity.getValueByName('description') }}
+            </div>
             <div class="container">
                 <a id="joinSalon" class="waves-effect waves-light btn hide" href="#modal1">Modal</a>
                 <div id="modal1" class="modal">
@@ -157,5 +161,6 @@
             {% endfor %}
             </tbody>
         </table>
-
+     </div>
+</div>
     {% endblock %}

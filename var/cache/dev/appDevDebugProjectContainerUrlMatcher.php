@@ -179,9 +179,35 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'EntityBundle\\Controller\\entityController::editAction',  '_route' => 'edit',);
         }
 
-        // search
-        if ($pathinfo === '/search') {
-            return array (  '_controller' => 'EntityBundle\\Controller\\CategorieController::searchAction',  '_route' => 'search',);
+        if (0 === strpos($pathinfo, '/s')) {
+            // search
+            if ($pathinfo === '/search') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\CategorieController::searchAction',  '_route' => 'search',);
+            }
+
+            if (0 === strpos($pathinfo, '/static')) {
+                // static_create
+                if ($pathinfo === '/static/create') {
+                    return array (  '_controller' => 'EntityBundle\\Controller\\StaticController::createAction',  '_route' => 'static_create',);
+                }
+
+                // static_edit
+                if ($pathinfo === '/static/edit') {
+                    return array (  '_controller' => 'EntityBundle\\Controller\\StaticController::editAction',  '_route' => 'static_edit',);
+                }
+
+                // static_delete
+                if ($pathinfo === '/static/delete') {
+                    return array (  '_controller' => 'EntityBundle\\Controller\\StaticController::deleteAction',  '_route' => 'static_delete',);
+                }
+
+                // static_view
+                if ($pathinfo === '/static/view') {
+                    return array (  '_controller' => 'EntityBundle\\Controller\\StaticController::viewAction',  '_route' => 'static_view',);
+                }
+
+            }
+
         }
 
         // administration_siteadmin
