@@ -331,7 +331,7 @@ class Attributes
         $attributes = $em->getRepository('EntityBundle:attribute')->findBy(["category" => $id_categorie]);
         $array = array();
         foreach ($attributes as $attribute) {
-            $array[] = (new Attributes($this->productid))->getById($em, $attribute->getId());
+            $array[$attribute->getId()] = (new Attributes($this->productid))->getById($em, $attribute->getId());
         }
         return $array;
     }

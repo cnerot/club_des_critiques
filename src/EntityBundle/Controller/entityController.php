@@ -15,6 +15,8 @@ class entityController extends Controller
     public function createAction(Request $request)
     {
         $em = $this->get('doctrine')->getManager();
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
 
         $categorie_id =  $request->query->get('id', null);
 
@@ -29,17 +31,28 @@ class entityController extends Controller
                 sprintf('%s', $url)
             );
         }
-        return $this->render('EntityBundle:entity:create.html.twig', array());
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
+        return $this->render('EntityBundle:entity:create.html.twig', array(
+            "pages" => $pages_static,
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
+        ));
     }
 
     public function viewAction(Request $request)
     {
         $em = $this->get('doctrine')->getManager();
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+
         $entity = (new Product())->getById($em, $request->query->get('id', null));
         $categorie = (new Categories())->getById($em, $entity->category)->name;
         $data = $request->request->all();
         if (isset($data['product_id'])){
             foreach ($data as $key => $val){
+                if ($key == 'product_id'){
+                    continue;
+                }
                 $key_array = explode('_',$key);
                 if ($key_array['0'] == "attribute"){
                     $attribute = $entity->data[$key_array[1]];
@@ -59,9 +72,13 @@ class entityController extends Controller
         }
 
 
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('EntityBundle:entity:view.html.twig', array(
+            "pages" => $pages_static,
             'entity' => $entity,
             'categorie' => $categorie,
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
         ));
     }
 
@@ -71,6 +88,8 @@ class entityController extends Controller
          * Recuperation des salons
          */
         $em = $this->getDoctrine()->getManager();
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
 
         $salon = new Salon();
         $session = $request->getSession();
@@ -122,10 +141,14 @@ class entityController extends Controller
         $entity = (new Product())->getById($em, $request->query->get('id', null));
         $categorie = (new Categories())->getById($em, $entity->id)->name;
 
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('EntityBundle:entity:frontview.html.twig', array(
+            "pages" => $pages_static,
             'entity' => $entity,
             'categorie' => $categorie,
             'salons' => $salons,
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
         ));
     }
 

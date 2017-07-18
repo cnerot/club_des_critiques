@@ -12,10 +12,17 @@ class AttributeController extends Controller
 {
     public function allAction(Request $request)
     {
+
         $em = $this->get('doctrine')->getManager();
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         $id = $request->query->get('id', null);
         $attributes = $em->getRepository('EntityBundle:attribute')->findBy(["category" => $id]);
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('EntityBundle:Attribute:all.html.twig', array(
+            "pages" => $pages_static,
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
             'id' => $id,
             'attributes' => $attributes,
         ));
@@ -24,7 +31,10 @@ class AttributeController extends Controller
     public function createAction(Request $request)
     {
 
+
         $em = $this->get('doctrine')->getManager();
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         $categories = $em->getRepository('EntityBundle:categorie')->findAll();
         $id = $request->query->get('id', null);
         $data = $request->request->all();
@@ -76,7 +86,10 @@ class AttributeController extends Controller
         }
 
 
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('EntityBundle:Attribute:create.html.twig', array(
+            "pages" => $pages_static,
+            'membre' => $membre,
             'id' => $id,
             "categories" => $categories,
         ));
@@ -84,17 +97,35 @@ class AttributeController extends Controller
 
     public function viewAction(Request $request)
     {
+
         $em = $this->get('doctrine')->getManager();
+
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         $attribute = (new Attributes())->getById($em, $request->query->get('id', null));
 
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('EntityBundle:Attribute:view.html.twig', array(// ...
+            'membre' => $membre,
             'attribute' => $attribute,
+            'id_membre' => $session->get('id'),
+            "pages" => $pages_static,
+
         ));
     }
 
     public function deleteAction(Request $request)
     {
+        $em = $this->get('doctrine')->getManager();
+
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('EntityBundle:Attribute:delete.html.twig', array(// ...
+            "pages" => $pages_static,
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
         ));
     }
 
