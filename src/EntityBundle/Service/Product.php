@@ -11,7 +11,9 @@ class Product
     public $name;
     public $category;
     public $data = array();
-    public function delete(EntityManager $em){
+
+    public function delete(EntityManager $em)
+    {
         if ($this->id) {
             $product = $em->getRepository('EntityBundle:entity')->findOneBy(["id" => $this->id]);
             $em->remove($product);
@@ -19,12 +21,14 @@ class Product
         }
         return false;
     }
-    public function getValueByName($name = null){
-        if  ($name == null) {
+
+    public function getValueByName($name = null)
+    {
+        if ($name == null) {
             return false;
         }
-        foreach ($this->data as $attr){
-            if ($attr->name == $name){
+        foreach ($this->data as $attr) {
+            if ($attr->name == $name) {
                 return $attr->value;
             }
         }
@@ -49,9 +53,8 @@ class Product
             }
             $this->data = $array;
         }
-        return $this->getById($em,$product->getId());
+        return $this->getById($em, $product->getId());
     }
-
 
 
     public function getById(EntityManager $em, $id)
@@ -61,8 +64,8 @@ class Product
         $this->name = $product->getCode();
         $this->category = $product->getCategorieId();
         if ($this->id) {
-            $this->data = (new Attributes($this->id))->getAll($em);
-        }else {
+            $this->data = (new Attributes($this->id))->getByCategorie($em, $this->category);
+        } else {
             $this->data = (new Attributes())->getAll($em);
         }
         return $this;
@@ -73,18 +76,39 @@ class Product
         $products = $em->getRepository('EntityBundle:Entity')->findAll();
         $array = array();
         foreach ($products as $product) {
-            $array[] = (new Product())->getById($em,$product->getId());
+            $array[] = (new Product())->getById($em, $product->getId());
         }
         return $array;
     }
 
+
+    public function getAttributeValue(EntityManager $em,$attribute_name)
+    {
+        foreach ($this->data as $attribute) {
+            if ($attribute->name == $attribute_name) {
+                return $attribute->value;
+            }
+        }
+    }
+
+    public function getByAttribute(EntityManager $em,$attribue_name, $attribute_value)
+    {
+        $products = (new Product())->getAll($em);
+        $array = array();
+        foreach ($products as $product){
+            if ($product->getAttributeValue($em,$attribue_name)== $attribute_value){
+                $array[] = $product;
+            }
+        }
+        return $array;
+    }
 
     public function getByCategory(EntityManager $em, $categoryId)
     {
         $products = $em->getRepository('EntityBundle:Entity')->findBy(["category_id" => $categoryId]);
         $array = array();
         foreach ($products as $product) {
-            $array[] = (new Product())->getById($em,$product->getId());
+            $array[] = (new Product())->getById($em, $product->getId());
         }
         return $array;
     }

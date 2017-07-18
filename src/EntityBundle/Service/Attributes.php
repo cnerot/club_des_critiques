@@ -304,12 +304,13 @@ class Attributes
                 "type" => "integer",
             ],
         ];
-        $attributes = $this->getByCategorie($em, $id);
         foreach ($defaults as $default) {
+            $attributes = $this->getByCategorie($em, $id);
             $create = true;
             foreach ($attributes as $attribute) {
                 if ($attribute->name == $default["name"]) {
                     $create = false;
+                    continue;
                 }
             }
             if ($create) {

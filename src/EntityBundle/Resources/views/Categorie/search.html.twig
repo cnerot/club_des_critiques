@@ -18,20 +18,18 @@
                     <div class="col s12">
                        <ul id="slide-out" class="side-nav teal lighten-4 margin-top-side">
                            <li><b>Recherche par filtre</b></li>
-                            <form action="#" method="post">
+                            <li><form action="#" method="post">
                                 <input type="hidden" name="catrgory_id" value="{{ categorie.id }}">
                                 {% for attribute in categorie.attributes %}
-                                    
-                                    <li>
                                         {{ include('EntityBundle:Categorie:attribute/input.html.twig',{
                                             "attribute":attribute,
                                             "value":0,
                                         }) }}
-                                    </li>
                                 {% endfor %}
+                           <input type="submit" value="search" class="btn waves-effect waves-light">
 
-                                <li><input type="submit" value="search" class="btn waves-effect waves-light right"></li>
-                            </form>
+                            </form></li>
+
                         </ul>
                         <a href="#" data-activates="slide-out" class="button-collapse btn-floating btn-large brown lighten-3"><i class="material-icons">search</i></a>
                     </div>

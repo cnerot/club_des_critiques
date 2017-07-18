@@ -34,14 +34,9 @@ class entityController extends Controller
 
     public function viewAction(Request $request)
     {
-
-
-
-
         $em = $this->get('doctrine')->getManager();
         $entity = (new Product())->getById($em, $request->query->get('id', null));
-        $categorie = (new Categories())->getById($em, $entity->id)->name;
-
+        $categorie = (new Categories())->getById($em, $entity->category)->name;
         $data = $request->request->all();
         if (isset($data['product_id'])){
             foreach ($data as $key => $val){
