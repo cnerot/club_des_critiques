@@ -64,16 +64,7 @@ class SalonsController extends Controller
 				$salons[] = $salonReceived;
 			}
 		}
-       //echo "<pre>";
-       //print_r($salons);
-       //echo "</pre>";
-       
-       //die();
-        
-        // replace this example code with whatever you need
-        //return $this->render('salons\index.html.twig', [
-            //'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-        //]);
+
         
          return $this->render('salons\index.html.twig',[
             'salons' => $salons,
@@ -228,9 +219,11 @@ class SalonsController extends Controller
 		$nbMaxParticipants = 20;
 		$salons = new Salon();
 		$notes = new Note();
-		$idSalon = $request->get('idSalon');
-		$noteChosen = $request->get('noteChosen');
-		
+		//$idSalon = $request->get('idSalon');
+		//$noteChosen = $request->get('noteChosen');
+
+		$idSalon = 2;
+		$noteChosen = 3;
 		$nbMaxSalon = $this->getDoctrine()
 		->getRepository('AppBundle:Parametres')
 		->findOneBy([
@@ -251,7 +244,6 @@ class SalonsController extends Controller
 			"id_salon" => $idSalon,
 			"actif" => 1,
 		]);				
-		
 		$idArticle = $salon->getIdArticle();
 		
 		//echo $idArticle;

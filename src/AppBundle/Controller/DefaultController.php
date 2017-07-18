@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use EntityBundle\Service\Product;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,10 +21,14 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $em = $this->get('doctrine')->getManager();
+        $frontpage_product = (new Product())->getByAttribute($em, "front",1);
+
         $membre = new Membre();
         $form = $this->createForm(InscriptionForm::class, $membre);
         $form->handleRequest($request);
         $session = $request->getSession();
+
         $erreur=null;
         if($form->isValid()){
             $repository = $this->getDoctrine()->getRepository('AppBundle:Membre');
@@ -47,7 +52,6 @@ class DefaultController extends Controller
                  'text/html'
                  );
                 $this->get('mailer')->send($message);
-                $em = $this->getDoctrine()->getManager();
                 $em->persist($membre);
                 $em->flush();
                 $erreur=null;
@@ -106,7 +110,7 @@ class DefaultController extends Controller
             'concept' => $concept->getConcept(),
             'mailExist'=>$erreur,
             'form'=>$contactForm->createView(),
-             
+             'productsTop' => $frontpage_product,
         ]);
     }
     /**
