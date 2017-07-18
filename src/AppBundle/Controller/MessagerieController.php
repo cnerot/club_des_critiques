@@ -28,6 +28,15 @@ class MessagerieController extends Controller
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $membres = $em->getRepository('AppBundle:Membre')->findAll();
+        
+        $message = new Messagerie();
+        $form = $this->createForm(mailForm::class, $message,
+                array(
+                     'action' => $this->generateUrl('messagerie_sendMessageAdmin'),
+                     'method' => 'POST',
+                ));
+        $form->handleRequest($request);
+        
         $SenderIds = array();
         foreach ($membres as $m){
             $SenderIds[] = $m->getId();
@@ -41,7 +50,9 @@ class MessagerieController extends Controller
             'membres' => $membres,
             'membre' => $membre,
             'id_membre' => $session->get('id'),
-            'SenderIds'=>$SenderIds
+            'SenderIds'=>$SenderIds,
+            'form' => $form->createView()
+               
             
         ]);
         
@@ -162,5 +173,39 @@ class MessagerieController extends Controller
             'id_membre' => $session->get('id'),
             'membreRecever' => $membreRecever,
         ]);
+    }
+     /**
+     * @Route("/sendMessageAdmin", name="messagerie_sendMessageAdmin")
+    */
+    public function sendMessageAdminAction(Request $request)
+    {
+        $message = new Messagerie();
+       
+        $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        $membreRecevers = $em->getRepository('AppBundle:Membre')->findAll();
+        var_dump($membreRecevers);
+       // die;
+        $data = $request->get('mail_form');
+        if($request->isMethod('POST')){
+            if(isset($data['objet']) && isset($data['message'])){
+                foreach($membreRecevers as $membreRecever){
+                        $message->setId_Sender($session->get('id'));
+                        $message->setId_Recever($membreRecever->getId());
+                        $message->setObjet($data['objet']);
+                        $message->setMessage($data['message']);
+                        $message->setVu(0);
+                        $date = new \DateTime(date('Y-m-d H:i:s'));
+                        $message->setDate($date);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($message);
+                        $em->flush();
+                }
+            }
+              
+        }
+       return $this->redirectToRoute('messagerie_reception', ['id'=>$session->get('id'),'membre'=>$membre]);      
+
     }
 }
