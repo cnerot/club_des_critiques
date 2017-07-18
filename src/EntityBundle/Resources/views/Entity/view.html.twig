@@ -3,37 +3,30 @@
 {% block title %}EntityBundle:entity:view{% endblock %}
 
 {% block body %}
-    <h1>{{ categorie }}: {{ entity.name }}</h1>
-    <form action="#" method="post"  enctype="multipart/form-data">
+    <div class="container margin-top">
+        <div class="row">
+            
+            <h5>Configuration de {{ categorie }}: {{ entity.name }}</h5>
+            <fieldset>
+                <form action="#" method="post"  enctype="multipart/form-data">
 
-        <input type="hidden" name="product_id" value="{{ entity.id }}">
-        <table>
-            <thead>
-            <tr>
-                <th style="border: 2px solid black">Attribut</th>
-                <th style="border: 2px solid black">Valeur</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for id, attribute in entity.data %}
-                <tr>
-                    <td style="border: 1px solid black">{{ attribute.name }}</td>
-                    <td style="border: 1px solid black">
-                        {{ include('EntityBundle:Entity:attribute/input.html.twig',{
-                            "attribute":attribute,
-                        }) }}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-            <tfoot>
-            <tr>
-                <th>
-                    <input type="submit" value="Sauvegarder">
-                </th>
-            </tr>
-            </tfoot>
-        </table>
+                    <input type="hidden" name="product_id" value="{{ entity.id }}">
+                    {% for id, attribute in entity.data %}
+                            <div class="input-field col s6">
+                                {{ include('EntityBundle:Entity:attribute/input.html.twig',{
+                                    "attribute":attribute,}) }}
+                                {% if( attribute.name != 'image') %}
+                                <label for="{{ attribute.name }}">{{ attribute.name }}<label>
+                                {% endif %}
+                            </div>
+                    {% endfor %}
+                    <br>
+                     <div class="input-field col s3 right">
+                        <input type="submit" value="Sauvegarder" class="btn waves-effect waves-light">
+                     </div>
 
-    </form>
+                </form>
+           </fieldset>
+        </div>
+    </div>
 {% endblock %}

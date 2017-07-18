@@ -26,6 +26,14 @@
     {% if attribute.value is defined and  attribute.value != "" %}
         <img height="100px" src="{{ attribute.value }}">
     {% endif %}
-    <input name="{{ 'attribute_' ~ attribute.id }}" type="file">
+     <div class="file-field input-field">
+     <div class="btn black">
+        <i class="material-icons large">image</i>
+        <input type="file" name="{{ 'attribute_' ~ attribute.id }}">
+      </div>
+      <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
 
 {% endif %}
