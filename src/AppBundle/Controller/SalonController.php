@@ -220,9 +220,11 @@ class SalonController extends Controller
 			$em->persist($sendRequestSalonNew);
 			$em->flush();
 		}
+		$pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
 
          return $this->render('salon\index.html.twig',[
-            'salon' => $request->get('salon'),
+			 "pages" => $pages_static,
+			 'salon' => $request->get('salon'),
             'participants' => $participantsWithInfos,
             'messages' => $messages,
             'idMembre' => $idMembre,
@@ -990,12 +992,15 @@ class SalonController extends Controller
 				
 				$participantsWithInfos[] = $ChatSalon;				
 		}
-		
-	return $this->render('salon\historiqueSalon.html.twig',[
+		$pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
+
+		return $this->render('salon\historiqueSalon.html.twig',[
             'salon' => $salon,
             'chats' => $participantsWithInfos,
             'id_membre'=> $session->get('id'),
             'membre'=> $membre,
-        ]);
+			"pages" => $pages_static,
+
+		]);
 	}
 }

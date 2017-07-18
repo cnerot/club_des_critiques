@@ -65,9 +65,11 @@ class SalonsController extends Controller
 			}
 		}
 
-        
+		$pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
          return $this->render('salons\index.html.twig',[
-            'salons' => $salons,
+			 "pages" => $pages_static,
+
+			 'salons' => $salons,
             'id_membre'=> $session->get('id'),
             'membre'=> $membre,
         ]);
@@ -131,12 +133,15 @@ class SalonsController extends Controller
 				//$salons[] = $salonReceived;
 			//}
 		//}
-        
-         return $this->render('salons\ajouterSalon.html.twig',[
+		$pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
+
+		return $this->render('salons\ajouterSalon.html.twig',[
             'id_membre'=> $session->get('id'),
             'membre'=> $membre,
             'articles'=> $articles,
-        ]);
+			 "pages" => $pages_static,
+
+		 ]);
 
     }
     
@@ -434,9 +439,12 @@ class SalonsController extends Controller
 		 //return $this->render('salon\index.html.twig',[
             //'salon' => $salon,
         //]);
-        
-        return $this->forward('AppBundle:Salon:index',[
+		$pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
+
+		return $this->forward('AppBundle:Salon:index',[
             'salon' => $salon,
-        ]);
+			"pages" => $pages_static,
+
+		]);
 	}
 }

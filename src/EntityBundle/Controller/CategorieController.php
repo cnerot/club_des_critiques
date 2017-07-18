@@ -11,22 +11,36 @@ use EntityBundle\Service\Categories;
 
 class CategorieController extends Controller
 {
-    public function allAction()
+    public function allAction(Request $request)
     {
+
         $em = $this->get('doctrine')->getManager();
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+
         $categories = (new Categories())->getAll($em);
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
 
         return $this->render('EntityBundle:Categorie:all.html.twig', array(
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
             "categories" => $categories,
+            "pages" => $pages_static,
         ));
     }
 
     public function viewAction(Request $request)
     {
         $em = $this->get('doctrine')->getManager();
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         $categorie = (new Categories())->getById($em, $request->query->get('id', null));
         $categorie_products = $categorie->getProducts($em);
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('EntityBundle:Categorie:view.html.twig', array(
+            "pages" => $pages_static,
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
             "categorie" => $categorie,
             "categorie_products" => $categorie_products,
         ));
@@ -35,6 +49,8 @@ class CategorieController extends Controller
     public function searchAction(Request $request)
     {
         $em = $this->get('doctrine')->getManager();
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         $categorie = (new Categories())->getById($em, $request->query->get('id', null));
         $categorie_products = $categorie->getProducts($em);
         $data = $request->request->all();
@@ -68,14 +84,22 @@ class CategorieController extends Controller
             }
 
         }
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('EntityBundle:Categorie:search.html.twig', array(
+            "pages" => $pages_static,
+            'membre' => $membre,
             "categorie" => $categorie,
             "categorie_products" => $categorie_products,
+            'id_membre' => $session->get('id'),
+
         ));
     }
 
     public function createAction(Request $request)
     {
+        $em = $this->get('doctrine')->getManager();
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         $data = $request->request->all();
         if (!empty($data)) {
             $cat = new Categories();
@@ -86,12 +110,27 @@ class CategorieController extends Controller
                 sprintf('%s#%s', $url, 'comment1423')
             );
         }
-        return $this->render('EntityBundle:Categorie:create.html.twig', array());
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
+        return $this->render('EntityBundle:Categorie:create.html.twig', array(
+            "pages" => $pages_static,
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
+
+        ));
     }
 
     public function removeAction(Request $request)
     {
-        return $this->render('EntityBundle:Categorie:remove.html.twig', array(// ...
+        $em = $this->get('doctrine')->getManager();
+        $session = $request->getSession();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
+        return $this->render('EntityBundle:Categorie:remove.html.twig', array(
+            "pages" => $pages_static,
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
+
         ));
     }
 
