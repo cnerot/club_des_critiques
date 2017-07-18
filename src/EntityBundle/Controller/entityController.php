@@ -50,6 +50,9 @@ class entityController extends Controller
         $data = $request->request->all();
         if (isset($data['product_id'])){
             foreach ($data as $key => $val){
+                if ($key == 'product_id'){
+                    continue;
+                }
                 $key_array = explode('_',$key);
                 if ($key_array['0'] == "attribute"){
                     $attribute = $entity->data[$key_array[1]];
