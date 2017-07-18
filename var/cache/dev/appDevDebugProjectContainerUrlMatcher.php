@@ -344,9 +344,17 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\MessagerieController::contactAction',  '_route' => 'messagerie_nouscontacter',);
         }
 
-        // messagerie_send
-        if (0 === strpos($pathinfo, '/send') && preg_match('#^/send/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
-            return $this->mergeDefaults(array_replace($matches, array('_route' => 'messagerie_send')), array (  '_controller' => 'AppBundle\\Controller\\MessagerieController::sendAction',));
+        if (0 === strpos($pathinfo, '/send')) {
+            // messagerie_send
+            if (preg_match('#^/send/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'messagerie_send')), array (  '_controller' => 'AppBundle\\Controller\\MessagerieController::sendAction',));
+            }
+
+            // messagerie_sendMessageAdmin
+            if ($pathinfo === '/sendMessageAdmin') {
+                return array (  '_controller' => 'AppBundle\\Controller\\MessagerieController::sendMessageAdminAction',  '_route' => 'messagerie_sendMessageAdmin',);
+            }
+
         }
 
         if (0 === strpos($pathinfo, '/note')) {
