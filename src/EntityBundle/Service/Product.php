@@ -64,7 +64,7 @@ class Product
         $this->name = $product->getCode();
         $this->category = $product->getCategorieId();
         if ($this->id) {
-            $this->data = (new Attributes($this->id))->getAll($em);
+            $this->data = (new Attributes($this->id))->getByCategorie($em, $this->category);
         } else {
             $this->data = (new Attributes())->getAll($em);
         }
