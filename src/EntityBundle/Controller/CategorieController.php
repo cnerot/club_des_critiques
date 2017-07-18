@@ -39,9 +39,11 @@ class CategorieController extends Controller
         $categorie_products = $categorie->getProducts($em);
         $data = $request->request->all();
         if (isset($data['catrgory_id'])) {
+
             if (isset($data['search'])) {
                 $categorie_products = $categorie->getProductsByName($em, $data["search"]);
             } else {
+
                 $newproducts = array();
                 foreach ($categorie_products as $product) {
                     $keep = true;
@@ -60,7 +62,7 @@ class CategorieController extends Controller
                         $newproducts[] = (new Product())->getById($em, $product->id);
                     }
                 }
-                if (!empty($newproducts)) {
+                if (is_array($newproducts)) {
                     $categorie_products = $newproducts;
                 }
             }
