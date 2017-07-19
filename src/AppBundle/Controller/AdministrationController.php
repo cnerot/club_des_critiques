@@ -23,6 +23,11 @@ class AdministrationController extends Controller
         $concept = $em->getRepository('AppBundle:Concept')->find(1);
         $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
 
+        if ($membre->getStatut() != 1){
+            return $this->redirect(
+                sprintf('%s', $this->generateUrl("homepage"))
+            );
+        }
         if(isset($_POST['concept'])){
             if($concept->getId() == null ){
                 $concept = new Concept();

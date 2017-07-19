@@ -44,7 +44,11 @@ class entityController extends Controller
         $em = $this->get('doctrine')->getManager();
         $session = $request->getSession();
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
-
+        if ($membre->getStatut() != 1){
+            return $this->redirect(
+                sprintf('%s', $this->generateUrl("homepage"))
+            );
+        }
         $entity = (new Product())->getById($em, $request->query->get('id', null));
         $categorie = (new Categories())->getById($em, $entity->category)->name;
         $data = $request->request->all();
