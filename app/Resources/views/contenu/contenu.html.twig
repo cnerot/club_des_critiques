@@ -9,6 +9,7 @@
     <div class="row margin-top">
         <div class="col l12 col m12 col s12 col xs12">
             <div class="container">
+                <h1 class="titleS">Contenue par categorie</h1><br>
                 {% for categorie in categories %}
                     <div class="col l3 col m6">
                         <a href="{{ path("search", {"id":categorie.id}) }}">

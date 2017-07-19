@@ -141,14 +141,19 @@ class LoanController extends Controller
             $new = array();
             $new['id'] = $loan->getId();
             $new['status'] = $loan->getStatus();
-            $new['owner'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdLoan());
-            $new['loan'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdOwner());
+            if ($loan->getIdLoan() != null) {
+                $new['loan'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdLoan());
+            }
+            $new['owner'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdOwner());
             $new['product'] = (new Product())->getById($em,$loan->getIdProduct());
             $new_loans[] = $new;
         }
         $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
-        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
-
+        if ($session->get('id') != null) {
+            $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        } else {
+            $membre = null;
+        }
         $url = $this->generateUrl("frontview")."?id=".$request->query->get('entity', null);
         return $this->render('EntityBundle:Borrow:admin.html.twig', array(
             'loans' => $new_loans,

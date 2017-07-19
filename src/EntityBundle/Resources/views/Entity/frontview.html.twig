@@ -46,22 +46,52 @@
 {% block title %}EntityBundle:entity:frontview{% endblock %}
 
 {% block body %}
- <div class="container margin-top">
-     <div class="row">
-        <div class="product_data">
-            <div class="product_image">
-                {% if entity.getValueByName('image') == null or entity.getValueByName('image') == "" %}
-                    <img src="http://www.proscientiapublica.pl/attachments/Header/image_4.jpg?template=generic">
-                {% else %}
-                    <img class="materialboxed" data-caption="photo de produit" width="200px" height="250px" src="{{ entity.getValueByName('image') }}">
-                {% endif %}
+    <div class="container margin-top">
+        <div class="row">
+            <div class="product_data">
+                <div class="product_image">
+                    {% if entity.getValueByName('image') == null or entity.getValueByName('image') == "" %}
+                        <img src="http://www.proscientiapublica.pl/attachments/Header/image_4.jpg?template=generic">
+                    {% else %}
+                        <img class="materialboxed" data-caption="photo de produit" width="200px" height="250px"
+                             src="{{ entity.getValueByName('image') }}">
+                    {% endif %}
+                </div>
+                <div class="product_description divProduct center-align" style="margin-left:6%">
+                    <h4><b> {{ categorie }} : {{ entity.name }}</h4>
+                    <p>
+                        {{ entity.getValueByName('description') }}
+                    </p>
+
+                        {% for id, attribute in entity.data %}
+                            {% if attribute.value != null %}
+                            {% if attribute.obligatory %}
+                                <span style="font-size: 22px">{{ attribute.name | upper }} :</span><br>
+                                <span>
+                                    {% if attribute.type == "text" %}
+                                        {{ attribute.value }}
+                                    {% endif %}
+                                    {% if attribute.type == "select" %}
+                                        {{ attribute.data[attribute.value] }}
+                                    {% endif %}
+                                    {% if attribute.type == "integer" %}
+                                        {{ attribute.value }}
+                                    {% endif %}
+                                    {% if attribute.type == "date" %}
+                                        {{ attribute.value }}
+                                    {% endif %}
+                                    {% if attribute.type == "image" %}
+                                        {% if attribute.value is defined and  attribute.value != "" %}
+                                            <img class="materialboxed" data-caption="image produit" height="100px" src="{{ attribute.value }}">
+                                        {% endif %}
+                                    {% endif %}
+                                </span><br>
+                            {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                </div>
             </div>
-            <div class="product_description divProduct center-align" style="margin-left:6%">
-                <h4><b> {{ categorie }} : {{ entity.name }}</h4><p>
-                {{ entity.getValueByName('description') }}
-            </div>
-        </div>
-        <div class="container">
+            <div class="container">
                 <a id="joinSalon" class="waves-effect waves-light btn hide" href="#modal1">Modal</a>
                 <div id="modal1" class="modal">
                     <div class="modal-content">
@@ -136,9 +166,9 @@
                                                     <input type="button" class="btn btn-primary historiqueSalon"
                                                            value="Voir">
                                                 {% elseif period == "next" %}
-                                                    <input type="button" class="btn btn-primary" value="Thème">
+                                                    <span>Rejoindre Prochainement</span>
+
                                                 {% else %}
-                                                    <input type="button" class="btn btn-primary" value="Thème">
                                                     <input type="button" class="btn btn-primary join" value="Rejoindre">
                                                 {% endif %}
                                             </div>
@@ -182,44 +212,48 @@
                 }
             </script>
             <div class="container margin-top">
-            <div class="borrow">
-                <div class="col s5">
-                <button id="borrow-own" onclick="own()"
-                        class="waves-effect waves-light btn {% if status != null %}hidden{% endif %}">Je
-                    possede ce livre
-                </button>
-                <button id="borrow-loan" onclick="loan()"
-                        class="waves-effect waves-light btn {% if status is not defined or status != 7 %}hidden{% endif %}">
-                    Je veux preter mon livre
-                </button>
-                <span id="borrow-loanable" class="{% if status is not defined or status != 1 %}hidden{% endif %}">Proposition de prêt</span>
-                <span class="{% if status is not defined or status != 2 %}hidden{% endif %}">Empreinteur Interessé</span>
-                <span class="{% if status is not defined or status != 3 %}hidden{% endif %}">Empreinteur Validé</span>
+                {% if membre.getId() != null %}
+                    <div class="borrow">
+                        <div class="col s5">
+                            <button id="borrow-own" onclick="own()"
+                                    class="waves-effect waves-light btn {% if status != null %}hidden{% endif %}">Je
+                                possede ce livre
+                            </button>
+                            <button id="borrow-loan" onclick="loan()"
+                                    class="waves-effect waves-light btn {% if status is not defined or status != 7 %}hidden{% endif %}">
+                                Je veux preter mon livre
+                            </button>
+                            <span id="borrow-loanable"
+                                  class="{% if status is not defined or status != 1 %}hidden{% endif %}">Proposition de prêt</span>
+                            <span class="{% if status is not defined or status != 2 %}hidden{% endif %}">Empreinteur Interessé</span>
+                            <span class="{% if status is not defined or status != 3 %}hidden{% endif %}">Empreinteur Validé</span>
 
-                
-                <table>
-                    <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
 
-                    <tbody>
-                    {% for loan in loans %}
-                        {% if loan.getStatus() == 1 %}
-                            <tr>
-                                <td>{{ loan.getId() }}</td>
-                                <td>
-                                    <a href="{{ path('loan_borrow') }}?loan={{ loan.getId() }}&entity={{ entity.id }}"
-                                       class="waves-effect waves-light btn">Empreinter</a></td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                    </tbody>
-                </table>
-                </div>
-            </div>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                {% for loan in loans %}
+                                    {% if loan.getStatus() == 1 %}
+                                        <tr>
+                                            <td>{{ loan.getId() }}</td>
+                                            <td>
+                                                <a href="{{ path('loan_borrow') }}?loan={{ loan.getId() }}&entity={{ entity.id }}"
+                                                   class="waves-effect waves-light btn">Empreinter</a></td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+
             </div>
             <div class="container">
                 <a id="joinSalon" class="waves-effect waves-light btn hide" href="#modal1">Modal</a>
@@ -295,9 +329,8 @@
                                                 <input type="button" class="btn btn-primary historiqueSalon"
                                                        value="Voir">
                                             {% elseif period == "next" %}
-                                                <input type="button" class="btn btn-primary" value="Thème">
+                                                <span>Rejoindre Prochainement</span>
                                             {% else %}
-                                                <input type="button" class="btn btn-primary" value="Thème">
                                                 <input type="button" class="btn btn-primary join" value="Rejoindre">
                                             {% endif %}
                                         </div>
@@ -313,18 +346,7 @@
             <input type="hidden" id="noteChosen">
 
 
-            <table>
-                <tbody>
-                {% for id, attribute in entity.data %}
-                    {% if attribute.obligatory %}
-                        <tr>
-                            <td style="border: 1px solid black">{{ attribute.name }}</td>
-                            <td style="border: 1px solid black">{{ attribute.value }}</td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-                </tbody>
-            </table>
+
         </div>
     </div>
 {% endblock %}

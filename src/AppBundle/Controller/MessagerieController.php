@@ -165,7 +165,10 @@ class MessagerieController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($message);
             $em->flush();
-              
+
+            return $this->redirectToRoute('messagerie_reception', ['id'=>$session->get('id'),'membre'=>$membre]);
+
+
         }
         return $this->render('mail/mail.html.twig',[
             'membre' => $membre,
