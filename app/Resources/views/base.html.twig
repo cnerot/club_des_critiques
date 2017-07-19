@@ -154,7 +154,7 @@
                 <ul>
                     {% if pages is defined %}
                         {% for singlePage in pages %}
-                            <li><a class=""
+                            <li><a class=" white-text text-bold"
                                    href="{{ path('static_view', {'id': singlePage.id}) }}">{{ singlePage.getName() | upper }} </a>
                             </li>
                         {% endfor %}

@@ -79,7 +79,7 @@ class SalonsController extends Controller
     /**
      * @Route("/salons/ajouter", name="salons_ajouter")
      */
-    public function ajouterSalonAction(Request $request)
+    public function ajouterSalonAction( Request $request)
     {
         $salon = new Salon();
         $session = $request->getSession();
@@ -93,7 +93,7 @@ class SalonsController extends Controller
 		$articles = [];
 		
         $articles = $this->getDoctrine()
-        ->getRepository('AppBundle:Article')
+        ->getRepository('EntityBundle:Entity')
         ->findAll();
         
         $salonsReceived = $this->getDoctrine()
@@ -135,11 +135,11 @@ class SalonsController extends Controller
 		//}
 		$pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
 
-		return $this->render('salons\ajouterSalon.html.twig',[
+            return $this->render('salons\ajouterSalon.html.twig',[
             'id_membre'=> $session->get('id'),
             'membre'=> $membre,
             'articles'=> $articles,
-			 "pages" => $pages_static,
+	    "pages" => $pages_static,
 
 		 ]);
 
@@ -166,32 +166,36 @@ class SalonsController extends Controller
         
         $error = false;
         
-        $explodeDateDebut = explode("/", $dateDebut);   
-        $dateDebutFR = $explodeDateDebut[2]."-".$explodeDateDebut[1]."-".$explodeDateDebut[0];
-        
-        $explodeDateFin = explode("/", $dateFin);
-        $dateFinFR = $explodeDateFin[2]."-".$explodeDateFin[1]."-".$explodeDateFin[0];
-        
-        if(strtotime($dateDebutFR) > strtotime($dateFinFR)){
-			$error = true;
-		}        
-        
-        if($error == true)
-			return new Response("Erreur dans le formulaire");
-		else{			
-			$salon_->setTitreSalon($titre);
-			$salon_->setDescription($description);
-			$salon_->setDateDebut(new \DateTime($dateDebutFR));
-			$salon_->setDateFin(new \DateTime($dateFinFR));
-			$salon_->setValide(1);
-			$salon_->setIdArticle($article);	
-				
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($salon_);
-			$em->flush();
-			
-			return new Response("Salon créé");			
-		}
+        $explodeDateDebut = explode("/", $dateDebut);  
+      //  if(isset($explodeDateDebut[2]) && isset($explodeDateDebut[0]) && isset($explodeDateDebut[1])){
+           // $dateDebutFR = $explodeDateDebut[2]."-".$explodeDateDebut[1]."-".$explodeDateDebut[0];
+
+           // $explodeDateFin = explode("/", $dateFin);
+           // $dateFinFR = $explodeDateFin[2]."-".$explodeDateFin[1]."-".$explodeDateFin[0];
+
+            //if(strtotime($dateDebutFR) > strtotime($dateFinFR)){
+            //                $error = true;
+            //        }        
+
+            if($error == true)
+                            return new Response("Erreur dans le formulaire");
+                    else{			
+                            $salon_->setTitreSalon($titre);
+                            $salon_->setDescription($description);
+                            $salon_->setDateDebut(new \DateTime($dateDebut));
+                            $salon_->setDateFin(new \DateTime($dateFin));
+                            $salon_->setValide(1);
+                            $salon_->setIdArticle($article);	
+
+                            $em = $this->getDoctrine()->getManager();
+                            $em->persist($salon_);
+                            $em->flush();
+
+                            return new Response("Salon créé");			
+                    }
+      //  }
+        return $this->redirectToRoute('salons', []);      
+
     }
     
      /**

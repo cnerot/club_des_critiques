@@ -122,4 +122,12 @@ function SetVu(){
 setInterval(function(){
 		notification();
 	}, 9050);
- 
+        
+ function changeRole(id){
+            statut = document.getElementById('statut').value;
+            $.ajax({
+                url : '/changeRole', // La ressource ciblée
+                type : 'GET', // Le type de la requête HTTP.
+                data : 'statut=' + statut +'&id='+ id
+            });
+        }

@@ -307,17 +307,19 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\MembreController::editpictureAction',  '_route' => 'membre_picture',);
         }
 
-        if (0 === strpos($pathinfo, '/log')) {
-            // membre_login
-            if ($pathinfo === '/login') {
-                return array (  '_controller' => 'AppBundle\\Controller\\MembreController::loginAction',  '_route' => 'membre_login',);
-            }
+        // membre_login
+        if ($pathinfo === '/login') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::loginAction',  '_route' => 'membre_login',);
+        }
 
-            // membre_logout
-            if ($pathinfo === '/logout') {
-                return array (  '_controller' => 'AppBundle\\Controller\\MembreController::logoutAction',  '_route' => 'membre_logout',);
-            }
+        // membre_changeRole
+        if ($pathinfo === '/changeRole') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::changeRoleAction',  '_route' => 'membre_changeRole',);
+        }
 
+        // membre_logout
+        if ($pathinfo === '/logout') {
+            return array (  '_controller' => 'AppBundle\\Controller\\MembreController::logoutAction',  '_route' => 'membre_logout',);
         }
 
         // membre_index
