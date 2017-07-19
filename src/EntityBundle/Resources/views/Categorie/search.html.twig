@@ -54,15 +54,15 @@
    <div class="container">
         <div class="row">
             <h3>Categorie : {{ categorie.name }}</h3>
-            <div class="col s12">
-                {% for products in categorie_products %}
-                    <div class="col s3">
-                        {{ include('EntityBundle:Entity:card.html.twig',{
-                            "product":products,
-                        }) }}
-                    </div>
-                {% endfor %}
-            </div>
+                <div class="col s12 ">
+                    {% for products in categorie_products %}
+                        <div class="col s3">
+                            {{ include('EntityBundle:Entity:card.html.twig',{
+                                "product":products,
+                            }) }}
+                        </div>
+                    {% endfor %}
+                </div>
         </div>
     </div>
 {% endblock %}

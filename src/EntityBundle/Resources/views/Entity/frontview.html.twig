@@ -56,12 +56,12 @@
                     <img class="materialboxed" data-caption="photo de produit" width="200px" height="250px" src="{{ entity.getValueByName('image') }}">
                 {% endif %}
             </div>
-            <div class="product_description" style="margin-left:6%">
+            <div class="product_description divProduct center-align" style="margin-left:6%">
                 <h4><b> {{ categorie }} : {{ entity.name }}</h4><p>
                 {{ entity.getValueByName('description') }}
             </div>
         </div>
-            <div class="container">
+        <div class="container">
                 <a id="joinSalon" class="waves-effect waves-light btn hide" href="#modal1">Modal</a>
                 <div id="modal1" class="modal">
                     <div class="modal-content">
@@ -181,7 +181,9 @@
 
                 }
             </script>
+            <div class="container margin-top">
             <div class="borrow">
+                <div class="col s5">
                 <button id="borrow-own" onclick="own()"
                         class="waves-effect waves-light btn {% if status != null %}hidden{% endif %}">Je
                     possede ce livre
@@ -190,11 +192,11 @@
                         class="waves-effect waves-light btn {% if status is not defined or status != 7 %}hidden{% endif %}">
                     Je veux preter mon livre
                 </button>
-                <span id="borrow-loanable" class="{% if status is not defined or status != 1 %}hidden{% endif %}">Proposition de pret</span>
+                <span id="borrow-loanable" class="{% if status is not defined or status != 1 %}hidden{% endif %}">Proposition de prêt</span>
                 <span class="{% if status is not defined or status != 2 %}hidden{% endif %}">Empreinteur Interessé</span>
                 <span class="{% if status is not defined or status != 3 %}hidden{% endif %}">Empreinteur Validé</span>
 
-
+                
                 <table>
                     <thead>
                     <tr>
@@ -216,7 +218,8 @@
                     {% endfor %}
                     </tbody>
                 </table>
-
+                </div>
+            </div>
             </div>
             <div class="container">
                 <a id="joinSalon" class="waves-effect waves-light btn hide" href="#modal1">Modal</a>
