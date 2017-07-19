@@ -14,6 +14,7 @@ use AppBundle\Form\ConnexionForm;
 use AppBundle\Form\ContactForm;
 use AppBundle\Form\InscriptionForm;
 use AppBundle\Helper\Helper;
+use EntityBundle\Service\Categories;
 
 class DefaultController extends Controller
 {
@@ -136,6 +137,12 @@ class DefaultController extends Controller
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
+        $categories = (new Categories())->getAll($em);
+        $categorie_products = array();
+        foreach    ($categories as $category) {
+            $categorie_products[$category->id] = $category->getProducts($em);
+        }
+
         if($session->get('id')!=null){
             $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         }else{
@@ -144,8 +151,10 @@ class DefaultController extends Controller
         return $this->render('contenu/contenu.html.twig',[
             'membre' => $membre,
             'id_membre' => $session->get('id'),
-            'pages' => $pages_static
-             
+            'pages' => $pages_static,
+            'categories' => $categories,
+            'categorie_products' => $categorie_products,
+
         ]);
     }
    
