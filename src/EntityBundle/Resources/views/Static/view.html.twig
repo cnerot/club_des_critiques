@@ -3,9 +3,13 @@
 {% block title %}EntityBundle:Static:view{% endblock %}
 
 {% block body %}
-    <h1>{{ page.getName() }}</h1>
-    <div class="content">
-        {{ page.getContent() }}
+    <div class="container margin-top">
+        <div class="row">
+            <h3 class="titleS">{{ page.getName() }}</h3>
+            <div class="content">
+                {{ page.getContent() }}
+            </div>
+        </div>
     </div>
 
 {% endblock %}
