@@ -87,6 +87,7 @@ class entityController extends Controller
         /**
          * Recuperation des salons
          */
+
         $em = $this->getDoctrine()->getManager();
         $session = $request->getSession();
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
@@ -142,6 +143,17 @@ class entityController extends Controller
         $categorie = (new Categories())->getById($em, $entity->id)->name;
 
         $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
+        $loan = $em->getRepository('EntityBundle:Borrow')->findOneBy([
+            'idOwner' =>$session->get('id'),
+            'idProduct' =>$entity->id,
+        ]);
+
+        $loans = $em->getRepository('EntityBundle:Borrow')->findBy([
+            'idProduct' => $entity->id,
+        ]);
+        if($loan != null){
+            $loan = $loan->getStatus();
+        }
         return $this->render('EntityBundle:entity:frontview.html.twig', array(
             "pages" => $pages_static,
             'entity' => $entity,
@@ -149,6 +161,8 @@ class entityController extends Controller
             'salons' => $salons,
             'membre' => $membre,
             'id_membre' => $session->get('id'),
+            'status' => $loan,
+            'loans' => $loans,
         ));
     }
 

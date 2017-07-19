@@ -4,6 +4,8 @@
     <script src="{{ asset('js/salons.js') }}"></script>
 
     <script>
+
+
         function refreshStars(idSalon, noteChosen) {
             window.location = "/salons/vote?idSalon=" + idSalon + "&noteChosen=" + noteChosen;
         }
@@ -37,8 +39,8 @@
 
         function historiqueSalon(idSalon) {
             window.location = "/salon/historique?idSalon=" + idSalon;
-        }</script>
-    {{ parent() }}
+        }
+    </script>
 
 {% endblock %}
 {% block title %}EntityBundle:entity:frontview{% endblock %}
@@ -67,101 +69,172 @@
                             <h4 id="nomSalon"></h4>
                             <div class="col s12 center">
                                 <div class="col s12 center">
-                                    <img src="{{ asset('images/star_white.png') }}" id="star_1"
-                                         class="star starNotSelected">
-                                    <img src="{{ asset('images/star_white.png') }}" id="star_2"
-                                         class="star starNotSelected">
-                                    <img src="{{ asset('images/star_white.png') }}" id="star_3"
-                                         class="star starNotSelected">
-                                    <img src="{{ asset('images/star_white.png') }}" id="star_4"
-                                         class="star starNotSelected">
+                                    <div class="col s12 center">
+                                        <img src="{{ asset('images/star_white.png') }}" id="star_1"
+                                             class="star starNotSelected">
+                                        <img src="{{ asset('images/star_white.png') }}" id="star_2"
+                                             class="star starNotSelected">
+                                        <img src="{{ asset('images/star_white.png') }}" id="star_3"
+                                             class="star starNotSelected">
+                                        <img src="{{ asset('images/star_white.png') }}" id="star_4"
+                                             class="star starNotSelected">
+                                    </div>
+                                </div>
+
+                                <div class="center">
+                                    <input type="button" class="btn btn-primary" id="rejoindreSalon" value="Rejoindre">
                                 </div>
                             </div>
-
-                            <div class="center">
-                                <input type="button" class="btn btn-primary" id="rejoindreSalon" value="Rejoindre">
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#"
+                               class="closeWindowRateAbook modal-action modal-close waves-effect waves-green btn-flat">Annuler</a>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <a href="#"
-                           class="closeWindowRateAbook modal-action modal-close waves-effect waves-green btn-flat">Annuler</a>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div id="salons" class="col s12 margin-top">
-                        <table class="listing table">
-                            <thead>
-                            <tr class="">
-                                <th>Titre</th>
-                                <th>Date Début</th>
-                                <th>Date Fin</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for salon in salons %}
-                                {% if "now"|date('Ymd') > salon.dateFin.date|date('Ymd') %}
-                                    {% set period = 'past' %}
-                                {% elseif "now"|date('Ymd') < salon.dateDebut.date|date('Ymd') %}
-                                    {% set period = 'next' %}
-                                {% else %}
-                                    {% set period = 'current' %}
-                                {% endif %}
-
-                                <tr class="{{ period }}">
-                                    <td>
-                                        {{ salon.titreSalon }}
-                                    </td>
-                                    <td>
-                                        <abbr title="{{ salon.dateDebut.date|date('d/m/Y') }}">
-                                            {{ salon.dateDebut.date|date('Y/m/d') }}
-                                        </abbr>
-                                    </td>
-                                    <td>
-                                        <abbr title="{{ salon.dateFin.date|date('d/m/Y') }}">
-                                            {{ salon.dateFin.date|date('Y/m/d') }}
-                                        </abbr>
-                                    </td>
-                                    <td>
-                                        <div class="col s12 input-field action no-margin">
-                                            <input type="hidden" value="{{ salon.id }}" name="idSalon">
-
-
-                                            {% if period == "past" %}
-                                                <input type="button" class="btn btn-primary historiqueSalon"
-                                                       value="Voir">
-                                            {% elseif period == "next" %}
-                                                <input type="button" class="btn btn-primary" value="Thème">
-                                            {% else %}
-                                                <input type="button" class="btn btn-primary" value="Thème">
-                                                <input type="button" class="btn btn-primary join" value="Rejoindre">
-                                            {% endif %}
-                                        </div>
-                                    </td>
+                    <div class="row">
+                        <div id="salons" class="col s12 margin-top">
+                            <table class="listing table">
+                                <thead>
+                                <tr class="">
+                                    <th>Titre</th>
+                                    <th>Date Début</th>
+                                    <th>Date Fin</th>
+                                    <th>Action</th>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                {% for salon in salons %}
+                                    {% if "now"|date('Ymd') > salon.dateFin.date|date('Ymd') %}
+                                        {% set period = 'past' %}
+                                    {% elseif "now"|date('Ymd') < salon.dateDebut.date|date('Ymd') %}
+                                        {% set period = 'next' %}
+                                    {% else %}
+                                        {% set period = 'current' %}
+                                    {% endif %}
+
+                                    <tr class="{{ period }}">
+                                        <td>
+                                            {{ salon.titreSalon }}
+                                        </td>
+                                        <td>
+                                            <abbr title="{{ salon.dateDebut.date|date('d/m/Y') }}">
+                                                {{ salon.dateDebut.date|date('Y/m/d') }}
+                                            </abbr>
+                                        </td>
+                                        <td>
+                                            <abbr title="{{ salon.dateFin.date|date('d/m/Y') }}">
+                                                {{ salon.dateFin.date|date('Y/m/d') }}
+                                            </abbr>
+                                        </td>
+                                        <td>
+                                            <div class="col s12 input-field action no-margin">
+                                                <input type="hidden" value="{{ salon.id }}" name="idSalon">
+
+
+                                                {% if period == "past" %}
+                                                    <input type="button" class="btn btn-primary historiqueSalon"
+                                                           value="Voir">
+                                                {% elseif period == "next" %}
+                                                    <input type="button" class="btn btn-primary" value="Thème">
+                                                {% else %}
+                                                    <input type="button" class="btn btn-primary" value="Thème">
+                                                    <input type="button" class="btn btn-primary join" value="Rejoindre">
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+                <input type="hidden" id="idSalon">
+                <input type="hidden" id="noteChosen">
             </div>
-            <input type="hidden" id="idSalon">
-            <input type="hidden" id="noteChosen">
-        </div>
-        <table>
-            <tbody>
-            {% for id, attribute in entity.data %}
-                {% if attribute.obligatory %}
+            <script>
+                function own() {
+                    $.ajax({
+                        url: '{{ path('loan_create') }}',
+                        type: 'POST',
+                        data: 'productid={{ entity.id }}',
+                        dataType: 'json', // On désire recevoir du HTML
+                        success: function (code_json, statut) { // code_html contient le HTML renvoyé
+                            $("#borrow-own").addClass("hidden");
+                            $("#borrow-loan").removeClass('hidden');
+                        }
+                    });
+
+                }
+                function loan() {
+                    $.ajax({
+                        url: '{{ path('loan_loan') }}',
+                        type: 'POST',
+                        data: 'productid={{ entity.id }}',
+                        dataType: 'json', // On désire recevoir du HTML
+                        success: function (code_json, statut) { // code_html contient le HTML renvoyé
+                            $("#borrow-loan").addClass("hidden");
+                            $("#borrow-loanable").removeClass('hidden');
+                        }
+                    });
+
+                }
+            </script>
+            <div class="borrow">
+                <button id="borrow-own" onclick="own()"
+                        class="waves-effect waves-light btn {% if status != null %}hidden{% endif %}">Je
+                    possede ce livre
+                </button>
+                 {{ dump(status) }}
+                <button id="borrow-loan" onclick="loan()"
+                        class="waves-effect waves-light btn {% if status is not defined or status != 7%}hidden{% endif %}">
+                    Je veux preter mon livre
+                </button>
+                <span id="borrow-loanable" class="{% if status is not defined or status != 1 %}hidden{% endif %}">Proposition de pret</span>
+                <span class="{% if status is not defined or status != 2 %}hidden{% endif %}">frfrf</span>
+                <span class="{% if status is not defined or status != 3 %}hidden{% endif %}">frfrf</span>
+                <span class="{% if status is not defined or status != 4 %}hidden{% endif %}">frfrf</span>
+                <span class="{% if status is not defined or status != 5 %}hidden{% endif %}">frfrf</span>
+                <span class="{% if status is not defined or status != 6 %}hidden{% endif %}">frfrf</span>
+
+
+                <table>
+                    <thead>
                     <tr>
-                        <td style="border: 1px solid black">{{ attribute.name }}</td>
-                        <td style="border: 1px solid black">{{ attribute.value }}</td>
+                        <th>Exemplaire</th>
+                        <th>Item Price</th>
                     </tr>
-                {% endif %}
-            {% endfor %}
-            </tbody>
-        </table>
-     </div>
-</div>
-    {% endblock %}
+                    </thead>
+
+                    <tbody>
+                    {% for loan in loans %}
+                        {% if loan.getStatus() == 1 %}
+                            <tr>
+                                <td>{{ loan.getId() }}</td>
+                                <td>
+                                    <a href="{{ path('loan_borrow') }}?loan={{ loan.getId() }}&entity={{ entity.id }}"
+                                       class="waves-effect waves-light btn">Empreinter</a></td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+
+            <table>
+                <tbody>
+                {% for id, attribute in entity.data %}
+                    {% if attribute.obligatory %}
+                        <tr>
+                            <td style="border: 1px solid black">{{ attribute.name }}</td>
+                            <td style="border: 1px solid black">{{ attribute.value }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

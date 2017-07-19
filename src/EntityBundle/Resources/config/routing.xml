@@ -57,4 +57,19 @@
   <route id="static_view" path="/static/view">
     <default key="_controller">EntityBundle:Static:view</default>
   </route>
+  <route id="loan_create" path="/loan/create">
+    <default key="_controller">EntityBundle:Loan:create</default>
+  </route>
+  <route id="loan_loan" path="/loan/loan">
+    <default key="_controller">EntityBundle:Loan:loan</default>
+  </route>
+  <route id="loan_borrow" path="/loan/borrow">
+    <default key="_controller">EntityBundle:Loan:borrow</default>
+  </route>
+  <route id="loan_validate" path="/loan/validate">
+    <default key="_controller">EntityBundle:Loan:validate</default>
+  </route>
+  <route id="loan_savevalidate" path="/loan/savevalidate">
+    <default key="_controller">EntityBundle:Loan:savevalidate</default>
+  </route>
 </routes>
