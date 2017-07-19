@@ -17,7 +17,11 @@ class CategorieController extends Controller
         $em = $this->get('doctrine')->getManager();
         $session = $request->getSession();
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
-
+        if ($membre->getStatut() != 1){
+            return $this->redirect(
+                sprintf('%s', $this->generateUrl("homepage"))
+            );
+        }
         $categories = (new Categories())->getAll($em);
         $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
 
@@ -34,6 +38,11 @@ class CategorieController extends Controller
         $em = $this->get('doctrine')->getManager();
         $session = $request->getSession();
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        if ($membre->getStatut() != 1){
+            return $this->redirect(
+                sprintf('%s', $this->generateUrl("homepage"))
+            );
+        }
         $categorie = (new Categories())->getById($em, $request->query->get('id', null));
         $categorie_products = $categorie->getProducts($em);
         $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();

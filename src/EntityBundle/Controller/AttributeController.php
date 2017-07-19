@@ -76,7 +76,7 @@ class AttributeController extends Controller
                     $em->flush();
                 }
 
-                $url = $this->generateUrl("attribute_view", array("id" => $attribute->getId()));
+                $url = $this->generateUrl("categorie_view", array("id" => $id));
                 return $this->redirect(
                     sprintf('%s', $url)
                 );
