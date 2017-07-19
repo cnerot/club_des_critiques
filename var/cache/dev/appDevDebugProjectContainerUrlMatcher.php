@@ -210,6 +210,34 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
+        if (0 === strpos($pathinfo, '/loan')) {
+            // loan_create
+            if ($pathinfo === '/loan/create') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\LoanController::createAction',  '_route' => 'loan_create',);
+            }
+
+            // loan_loan
+            if ($pathinfo === '/loan/loan') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\LoanController::loanAction',  '_route' => 'loan_loan',);
+            }
+
+            // loan_borrow
+            if ($pathinfo === '/loan/borrow') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\LoanController::borrowAction',  '_route' => 'loan_borrow',);
+            }
+
+            // loan_validate
+            if ($pathinfo === '/loan/validate') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\LoanController::validateAction',  '_route' => 'loan_validate',);
+            }
+
+            // loan_savevalidate
+            if ($pathinfo === '/loan/savevalidate') {
+                return array (  '_controller' => 'EntityBundle\\Controller\\LoanController::savevalidateAction',  '_route' => 'loan_savevalidate',);
+            }
+
+        }
+
         // administration_siteadmin
         if ($pathinfo === '/administration') {
             return array (  '_controller' => 'AppBundle\\Controller\\AdministrationController::siteadminAction',  '_route' => 'administration_siteadmin',);
