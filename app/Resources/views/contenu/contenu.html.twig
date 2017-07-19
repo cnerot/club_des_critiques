@@ -12,15 +12,25 @@
                 {% for categorie in categories %}
                     <div class="col l3 col m6">
                         <a href="{{ path("search", {"id":categorie.id}) }}">
-                            <div class="panel panel-primary">
+                            <div class="panel panel-primary teal lighten-2">
                                 <div class="panel-heading">
                                     <div class="row">
                                         <div class="col s5">
-                                            <i class="material-icons white-text medium">book</i>
+                                            {% if categorie.name=="CD" or categorie.name=="cds" or categorie.name=="cd" %}
+                                                <i class="material-icons white-text medium">album</i>
+                                            {% elseif categorie.name=="cinema" or categorie.name=="movies" or categorie.name=="movie" or categorie.name=="film" %}
+                                                <i class="material-icons white-text medium">movie</i>
+                                            {% elseif categorie.name=="livre" or categorie.name=="book" or categorie.name=="roman" %}
+                                                <i class="material-icons white-text medium">book</i>
+                                            {% elseif categorie.name=="jeu" %}
+                                                 <i class="material-icons white-text medium">Game</i>
+                                            {% else %}
+                                                <i class="material-icons white-text medium">book</i>
+                                            {% endif %}
                                         </div>
                                         <div class="col s7">
-                                            <div class="huge"> {{ categorie_products[categorie.id] | length }}</div>
-                                            <div>{{ categorie.name }}</div>
+                                            <div class="huge white-text"> <b>{{ categorie_products[categorie.id] | length }}</b></div>
+                                            <div class="white-text">{{ categorie.name }}</div>
                                         </div>
                                     </div>
                                 </div>
