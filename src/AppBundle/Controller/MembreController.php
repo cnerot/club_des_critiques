@@ -15,7 +15,7 @@ use AppBundle\Form\EditPwdForm;
 use EntityBundle\Service\Product;
 class MembreController extends Controller
 {
-    /** 
+    /**
      * @Route("/Administration", name="membre_admin")
      */
     public function adminAction(Request $request)
@@ -35,11 +35,11 @@ class MembreController extends Controller
 
         ]);
     }
-    /** 
+    /**
      * @Route("/all", name="membre_all")
      */
     public function peopleAction(Request $request)
-    {   
+    {
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $membres = $em->getRepository('AppBundle:Membre')->findAll();
@@ -54,12 +54,12 @@ class MembreController extends Controller
         $listAmis = array();
         if(isset($membre1)){
             foreach ($membre1 as $amis){
-                 $listAmis[] = $amis->getId_Membre2();  
+                 $listAmis[] = $amis->getId_Membre2();
             }
         }
         if(isset($membre2)){
             foreach ($membre2 as $amis){
-                 $listAmis[] = $amis->getId_Membre1();  
+                 $listAmis[] = $amis->getId_Membre1();
             }
         }
         $pages_static = $this->getDoctrine()->getRepository('EntityBundle:Staticpage')->findAll();
@@ -72,11 +72,11 @@ class MembreController extends Controller
 
         ]);
     }
-    /** 
+    /**
      * @Route("/profil/{id}", name="membre_profil")
      */
     public function profilAction($id, Request $request)
-    {   
+    {
         $em = $this->getDoctrine()->getManager();
         $session = $request->getSession();
         $membre = $em->getRepository('AppBundle:Membre')->findOneById($id);
@@ -120,8 +120,10 @@ class MembreController extends Controller
             $new = array();
             $new['id'] = $loan->getId();
             $new['status'] = $loan->getStatus();
-            $new['owner'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdLoan());
-            $new['loan'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdOwner());
+            if ($loan->getIdLoan() != null) {
+                $new['loan'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdLoan());
+            }
+            $new['owner'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdOwner());
             $new['product'] = (new Product())->getById($em,$loan->getIdProduct());
             $owner_loans[] = $new;
         }
@@ -131,8 +133,10 @@ class MembreController extends Controller
             $new = array();
             $new['id'] = $loan->getId();
             $new['status'] = $loan->getStatus();
-            $new['owner'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdLoan());
-            $new['loan'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdOwner());
+            if ($loan->getIdLoan() != null) {
+                $new['loan'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdLoan());
+            }
+            $new['owner'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdOwner());
             $new['product'] = (new Product())->getById($em,$loan->getIdProduct());
             $new_loans[] = $new;
         }
@@ -152,7 +156,7 @@ class MembreController extends Controller
     /**
      * @Route("/editinfo", name="membre_editinfo")
      */
-    
+
     public function editInfoAction(Request $request)
     {
         $session = $request->getSession();
@@ -166,13 +170,13 @@ class MembreController extends Controller
            $em->flush();
            $this->addFlash('success', "Vos informations personnelles sont à jour!");
         }
-        return $this->redirectToRoute('membre_profil', ['id'=>$session->get('id')]);      
-       
+        return $this->redirectToRoute('membre_profil', ['id'=>$session->get('id')]);
+
     }
     /**
      * @Route("/editPwd", name="membre_edit_pwd")
      */
-    
+
     public function editPwdAction(Request $request)
     {
         $uri = $_SERVER['REQUEST_URI'];
@@ -193,14 +197,14 @@ class MembreController extends Controller
                 }
             }
         }
-       
-           
-        return $this->redirectToRoute('membre_profil', ['id'=>$session->get('id'),'membre'=>$membre]);      
+
+
+        return $this->redirectToRoute('membre_profil', ['id'=>$session->get('id'),'membre'=>$membre]);
     }
     /**
      * @Route("/invite/{id}", name="membre_invite")
      */
-    
+
     public function inviteAction($id, Request $request)
     {
         $session = $request->getSession();
@@ -223,12 +227,12 @@ class MembreController extends Controller
             $em->flush();
             $this->addFlash('success', "Invitation envoyée");
         }
-        return $this->redirectToRoute('membre_all', ['id'=>$membre->getId(),'id_membre' => $session->get('id'),'membre'=>$membre,]);      
+        return $this->redirectToRoute('membre_all', ['id'=>$membre->getId(),'id_membre' => $session->get('id'),'membre'=>$membre,]);
     }
     /**
      * @Route("/alerteInvite/{id}", name="membre_alerteInvite")
      */
-    
+
     public function alerteInviteAction($id, Request $request)
     {
         $session = $request->getSession();
@@ -241,13 +245,13 @@ class MembreController extends Controller
         $em->persist($amis);
         $em->flush();
         $this->addFlash('success', "Invitation envoyée");
-       
-        return $this->redirectToRoute('membre_all', ['id'=>$membre->getId(),'id_membre' => $session->get('id'),'membre'=>$membre,]);      
+
+        return $this->redirectToRoute('membre_all', ['id'=>$membre->getId(),'id_membre' => $session->get('id'),'membre'=>$membre,]);
     }
     /**
      * @Route("/notificationInvit", name="membre_notificationInvit")
      */
-    
+
     public function notificationInvitAction(Request $request)
     {
         $session = $request->getSession();
@@ -258,12 +262,12 @@ class MembreController extends Controller
                     'accepter'  => 0,
                     'vu'  => 0
                 ));
-        return new JsonResponse($invitations);   
+        return new JsonResponse($invitations);
     }
     /**
      * @Route("/setInvitationToVu", name="membre_setInvitationToVu")
      */
-    
+
     public function setInvitationToVuAction(Request $request)
     {
         $session = $request->getSession();
@@ -281,17 +285,17 @@ class MembreController extends Controller
             $em->flush();
             $this->addFlash('success',"Vu");
         }
-        return new JsonResponse([]);   
+        return new JsonResponse([]);
     }
-  
+
     /**
      * @Route("/invitationList", name="membre_invitationList")
      */
-    
+
     public function invitationListAction(Request $request)
     {
         $session = $request->getSession();
-        
+
         $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
         // query for a single product matching the given name and price
         $invitations = $repository->findBy(
@@ -322,7 +326,7 @@ class MembreController extends Controller
     /**
      * @Route("/acceptInvitation/{id}", name="membre_acceptInvitation")
      */
-    
+
     public function acceptInvitationAction($id, Request $request)
     {
         $session = $request->getSession();
@@ -340,13 +344,13 @@ class MembreController extends Controller
         $em->persist($invitation);
         $em->flush();
         $this->addFlash('success', "Vous êtes devenu amis!");
-        return $this->redirectToRoute('membre_invitationList', ['id_membre' => $session->get('id')]);      
+        return $this->redirectToRoute('membre_invitationList', ['id_membre' => $session->get('id')]);
 
     }
     /**
      * @Route("/supprimerInvitation/{id}", name="membre_supprimerInvitation")
      */
-    
+
     public function supprimerInvitationAction($id, Request $request)
     {
         $session = $request->getSession();
@@ -362,17 +366,17 @@ class MembreController extends Controller
         $em->remove($invitation);
         $em->flush();
         $this->addFlash('success', "l'invitation a bien été supprimé");
-        return $this->redirectToRoute('membre_invitationList', ['id_membre' => $session->get('id')]);      
+        return $this->redirectToRoute('membre_invitationList', ['id_membre' => $session->get('id')]);
 
     }
     /**
      * @Route("/mesAmis", name="membre_mesAmis")
      */
-    
+
     public function mesAmisAction(Request $request)
     {
         $session = $request->getSession();
-        
+
         $repository = $this->getDoctrine()->getRepository('AppBundle:Amis');
         // query for a single product matching the given name and price
         $membre1 = $repository->findBy(
@@ -392,12 +396,12 @@ class MembreController extends Controller
         // query for a single product matching the given name and price
         $membres = $repository->find($amisId);
 
-        return $this->redirectToRoute('membre_profil', ['id_membre' => $session->get('id')]);      
+        return $this->redirectToRoute('membre_profil', ['id_membre' => $session->get('id')]);
     }
     /**
      * @Route("/editPicture", name="membre_picture")
      */
-    
+
     public function editpictureAction(Request $request)
     {
         $session = $request->getSession();
@@ -420,14 +424,14 @@ class MembreController extends Controller
                 } else {
                         echo "la taille de l'image dépasse la taille autorisé.";
                 }
-                    
+
             }
         return $this->redirectToRoute('membre_profil', [
             'membre'=>$membre,
             'id_membre' => $session->get('id'),
             'id' => $session->get('id'),
            // 'picture' => $membre->getPicture(),
-            ]);      
+            ]);
     }
     /**
      * @Route("/login", name="membre_login")
@@ -460,7 +464,7 @@ class MembreController extends Controller
                 $em->persist($visiteur);
                 $em->flush();
                 $this->addFlash('success', "visite");
-                
+
                 $session->set('id', $membre->getId());
                 $session->set('name', $membre->getNom());
                 $session->set('statut', $membre->getStatut());
@@ -475,11 +479,11 @@ class MembreController extends Controller
                     'id_membre' => $session->get('id'),
                     'id' => $session->get('id'),
                     'picture' => $membre->getPicture(),
-                    ]);  
+                    ]);
             }
-              
+
         }
-  
+
         return $this->render('membre/login.html.twig',[
             'membre' => $membre,
             'id_membre' => $session->get('id'),
