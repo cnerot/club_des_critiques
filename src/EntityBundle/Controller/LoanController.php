@@ -146,9 +146,15 @@ class LoanController extends Controller
             $new['product'] = (new Product())->getById($em,$loan->getIdProduct());
             $new_loans[] = $new;
         }
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+
         $url = $this->generateUrl("frontview")."?id=".$request->query->get('entity', null);
         return $this->render('EntityBundle:Borrow:admin.html.twig', array(
             'loans' => $new_loans,
+            "pages" => $pages_static,
+            'membre' => $membre,
+            'id_membre' => $session->get('id'),
         ));
     }
 }
