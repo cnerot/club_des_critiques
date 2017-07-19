@@ -26,9 +26,9 @@
                             {% endif %}
                             {% if membre.id == id_membre %}
                                 <hr>
-                                <form action="{{ path("membre_picture") }}" method="POST" enctype="multipart/form-data">
-                                    <div><input type="file" name="picture"></div>
-                                    <div><input type="submit" value="Upload"></div>
+                                <form action="{{ path("membre_picture")}}" method="POST" enctype="multipart/form-data">
+                                      <div><input type="file" name="picture"></div>
+                                      <div><input type="submit" value="Upload" class="waves-effect waves-light btn right"></div>
                                 </form>
                             {% endif %}
 

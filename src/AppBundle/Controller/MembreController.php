@@ -187,7 +187,8 @@ class MembreController extends Controller
         if($request->isMethod('POST')){
             if(isset($data['mdp']) && isset($data['confirm'])){
                if($data['mdp']==$data['confirm']){
-                    $membre->setMdp(crypt($data['mdp'],''));
+                    $hashed_password = 'RTBDSG907HGVB@@BGJGfgcgfVGHCDFVBHJhfhg0989';
+                    $membre->setMdp(crypt($data['mdp'],$hashed_password));
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($membre);
                     $em->flush();
@@ -446,8 +447,8 @@ class MembreController extends Controller
         if($form->isValid()){
             $repository = $this->getDoctrine()->getRepository('AppBundle:Membre');
             // query for a single product matching the given name and price
-            //$hashed_password = 'RTBDSG907HGVB@@BGJGfgcgfVGHCDFVBHJhfhg0989';
-           // $membre->setMdp(crypt($membre->getMdp(),$hashed_password));
+            $hashed_password = 'RTBDSG907HGVB@@BGJGfgcgfVGHCDFVBHJhfhg0989';
+            $membre->setMdp(crypt($membre->getMdp(),$hashed_password));
             $membre = $repository->findOneBy(
                 array('mail' => $membre->getMail(), 'mdp' => $membre->getMdp())
             );

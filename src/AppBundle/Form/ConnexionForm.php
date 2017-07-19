@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class ConnexionForm extends AbstractType{
     /**
@@ -22,7 +23,7 @@ class ConnexionForm extends AbstractType{
                  ->add('mail', TextType::class, [
                     'label'=>'E-mail'
                 ])
-                 ->add('mdp', TextType::class, [
+                 ->add('mdp', PasswordType::class, [
                     'label'=>'Mot de passe'
                 ]);
     }

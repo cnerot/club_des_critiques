@@ -7,9 +7,11 @@
 }
 
 #salons tr.current{
+	background: #e0f2f1 ;
 }
 
 #salons tr.past{
+	background: #efebe9;
 }
 
 .action input{
