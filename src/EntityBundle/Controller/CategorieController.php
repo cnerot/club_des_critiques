@@ -59,7 +59,11 @@ class CategorieController extends Controller
     {
         $em = $this->get('doctrine')->getManager();
         $session = $request->getSession();
-        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        if ($session->get('id') != null) {
+            $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        } else {
+            $membre = null;
+        }
         $categorie = (new Categories())->getById($em, $request->query->get('id', null));
         $categorie_products = $categorie->getProducts($em);
         $data = $request->request->all();

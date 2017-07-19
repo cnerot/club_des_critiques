@@ -51,9 +51,9 @@
 		
 	  </div>
 	  
-		<div class="row">
+		<div class="row margin-top">
 			<div class="col s12">
-				<h1>Salon : {{ salon.titreSalon|e }} - <span id="nbParticipants">{{ participants|length + 1 }}</span> participant(s)</h1>
+				<h1 class="titleS">Salon : {{ salon.titreSalon|e }} - <span id="nbParticipants">{{ participants|length + 1 }}</span> participant(s)</h1>
 			</div>
 			<div id="chat" class="col l8 m12 s12 margin-top">
 				<div id="posts" class="col s12 margin-top">
@@ -66,7 +66,7 @@
 								<span style="color: #0000ec">
 							{% endif %}
 							
-							{{ message.prenom_et_nom|e }}
+							<b>{{ message.prenom_et_nom|e }}</b>
 							
 							{% if message.idMembre == idMembre %}
 								</span>
@@ -214,7 +214,7 @@
 					<!-- Modal Trigger -->
 					<a id="joinSalon" class="waves-effect waves-light" href="#modal1">
 						Inviter un contact
-						<div title="Inviter un contact" class="btn-floating btn-small red lighten-1">
+						<div title="Inviter un contact" class="btn-floating btn-small teal lighten-3">
 							<i class="large material-icons">add</i>
 						</div>
 					</a>

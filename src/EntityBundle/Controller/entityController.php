@@ -94,11 +94,12 @@ class entityController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $session = $request->getSession();
-        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
-
+        if ($session->get('id') != null) {
+            $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        } else {
+            $membre = null;
+        }
         $salon = new Salon();
-        $session = $request->getSession();
-        $membre =  $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
 
         if(empty($membre)){
             $membre = new Membre();
@@ -144,7 +145,7 @@ class entityController extends Controller
 
         $em = $this->get('doctrine')->getManager();
         $entity = (new Product())->getById($em, $request->query->get('id', null));
-        $categorie = (new Categories())->getById($em, $entity->id)->name;
+        $categorie = (new Categories())->getById($em, $entity->category)->name;
 
         $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
         $loan = $em->getRepository('EntityBundle:Borrow')->findOneBy([

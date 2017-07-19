@@ -352,3 +352,6 @@ fieldset
     background-color: #d7ccc8;
     border-radius: 15px 50px;
 }
+footer.page-footer {
+    margin-top: 300px;
+}
