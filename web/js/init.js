@@ -59,3 +59,75 @@ $(".dropdown-button").dropdown();
 //       $('#form_login').css('width', '100%');
 //       $('#form_login').show();
 //  });
+function autoSerch(data){
+  $('input.autocomplete').autocomplete({
+    data: data,
+    limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+    onAutocomplete: function(val) {
+      // Callback function when value is autcompleted.
+    },
+    minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+  });
+}       
+function autoRefresch(data){
+  
+} 
+function nbVisite(){
+            month = document.getElementById('month').value;
+            $.ajax({
+                url : '/nbVisite', // La ressource ciblée
+                type : 'GET', // Le type de la requête HTTP.
+                data : 'mois=' + month
+            });
+        }
+function getRequested(url, callback) {
+		$.get(url, function(data) {
+			//data = $.parseJSON(data);
+			callback(data);
+		});
+}
+function notification(){
+	/*$.ajax({
+	    url: "/notificationInvit",
+	    method: "post",
+            data: {}
+	    }).done(function(data){
+                console.log(data);
+		notificationButton = document.getElementById('notification');
+                notificationButton.className = "material-icons red-text";
+                //alert(notificationButton);		
+	    });*/
+        getRequested("/notificationInvit", function(data) {
+                console.log("data");
+                newInvitation(data);
+	});
+}
+function newInvitation(data){
+    console.log(data.length);
+    InvitationBadge = document.getElementById('invitationBadge');
+    $('#invitationBadge').html('<span id="invitationBadge" class="new badge" >'+data.length+'</span>Invitation');
+    if(data.length !=0){
+        notificationButton = document.getElementById('notification');
+        notificationButton.className = "material-icons red-text";
+       
+        //alert(notificationButton);
+    }
+}
+function SetVu(){
+        notificationButton = document.getElementById('notification');
+        notificationButton.className = "material-icons red-white";
+        getRequested("/setInvitationToVu", function(data) {});
+}
+// changer par un setinterval
+setInterval(function(){
+		notification();
+	}, 9050);
+        
+ function changeRole(id){
+            statut = document.getElementById('statut').value;
+            $.ajax({
+                url : '/changeRole', // La ressource ciblée
+                type : 'GET', // Le type de la requête HTTP.
+                data : 'statut=' + statut +'&id='+ id
+            });
+        }

@@ -8,38 +8,73 @@
    
     <div class="container">
         <div class="row">
-            <h4><center>Administration</center></h4>
+            <h1 class="titleS"><center>Administration</center></h1>
             <ul class="collapsible popout" data-collapsible="accordion">
                 <li>
-                  <div class="collapsible-header">Page d'accueil</div>
-                  <div class="collapsible-body" style="padding:3%">
-                      <form method="post" action="{{path('administration_concept')}}">
+                  <div class="collapsible-header brown lighten-3">Page d'accueil</div>
+                  <div class="collapsible-body row" style="padding:3%">
+                      <form method="post" action="{{path('administration_siteadmin')}}">
                             <label for="">Le concept : </label>
                             <textarea name="concept" height="10rem" rows="40" cols="70">{{ concept }}</textarea>
                             <input type="submit" class="btn waves-effect waves-light" value="sauvgarder">
-                            <span></span>
+                            <span></span>                            
                       </form>
                   </div>
                 </li>
                 <li>
-                  <div class="collapsible-header">Contenus</div>
-                  <div class="collapsible-body"><span>A ajouter par charles</span></div>
+                    <div class="collapsible-header brown lighten-3 "><a href="/categorie/all" class="black-text">Contenus</a></div>
+                  <!--<div class="collapsible-body"><span>A ajouter par charles</span></div>-->
                 </li>
                 <li>
-                  <div class="collapsible-header">Contenus(2)</div>
-                  <div class="collapsible-body"><span>Ajouter par charles</span></div>
+                  <div class="collapsible-header brown lighten-3">Pages statiques</div>
+                  <div class="collapsible-body">
+                        <table class="table striped">
+                             
+                                {% if pages is defined %}
+                                   {% for page in pages %}
+                                       <tr>
+                                            <td class="center">
+                                                <a href="{{ path('static_edit', {'id': page.getId()}) }}" class="black-text"><i class="material-icons orange-text accent-2">edit</i>{{ page.getName() }}</a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('static_delete', {'id': page.getId()}) }}" ><i class="material-icons red-text">delete</i></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            <a href="/static/create" class="right btn waves-effect waves-light"><i class="material-icons">add</i></a>
+                        </table>
+                  </div>
                 </li>
                 <li>
-                  <div class="collapsible-header">Pages statiques</div>
-                  <div class="collapsible-body"><span>A ajouter par charles</span></div>
+                    <div class="collapsible-header brown lighten-3"><a href="{{ path('loan_validate') }}" class="black-text">Prets</a></div>
                 </li>
                 <li>
-                  <div class="collapsible-header">Salons</div>
-                  <div class="collapsible-body"><span>A ajouter par gaetan</span></div>
-                </li>
-                <li>
-                  <div class="collapsible-header">Membres</div>
-                  <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                  <div class="collapsible-header brown lighten-3">Membres</div>
+                  <div class="collapsible-body"  style="padding:3%">
+                      <table>
+                      {% for m in membres %}
+                          <tr>
+                              <td>{{m.prenom}} {{m.nom}}</td>
+                              <td>{{m.mail}}</td>
+                              <td>
+                                  <form action="#" method="GET">
+                                        <select class="browser-default" name="statut" id="statut" onchange="changeRole({{m.id}});">
+                                                <option value="1"  {%if m.statut == 1 %} selected {%endif%}>Administrateur</option>
+                                                <option value="0" {%if m.statut != 1 %} selected {%endif%} >Utilisateur</option>
+                                        </select>
+                                  </select>
+                              </td>
+                              <td>
+                                  <a href="{{ path("administration_deleteuser", {'id': m.id}) }}">
+                                      <i class="material-icons teal-text lighten-4">delete</i>
+                                  </a>
+                              </td>
+                          </tr>
+                      {% endfor %}
+                      </table>
+                      
+                  </div>
                 </li>
             </ul>
         </div>

@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Ajouter un salon
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<!-- Modal Trigger -->
+		  <a id="joinSalon" class="waves-effect waves-light btn hide" href="#modal1">Modal</a>
+
+		  <!-- Modal Structure -->
+		  <div id="modal1" class="modal">
+			<div class="modal-content">
+			  <div class="col s8 rateAbook left">
+				<h4 id="nomSalon"></h4>
+				
+				<!-- <div class="col s12 center">
+					Note 
+				</div> -->
+				
+				<div class="col s12 center">
+					<div class="col s12 center">
+						<img src="{{ asset('images/star_white.png') }}" id="star_1" class="star starNotSelected">
+						<img src="{{ asset('images/star_white.png') }}" id="star_2" class="star starNotSelected">
+						<img src="{{ asset('images/star_white.png') }}" id="star_3" class="star starNotSelected">
+						<img src="{{ asset('images/star_white.png') }}" id="star_4" class="star starNotSelected">
+					</div>
+				</div>
+				
+				<div class="center">
+					<input type="button" class="btn btn-primary" id="rejoindreSalon" value="Rejoindre">
+				</div>
+			</div>
+			</div>
+			<div class="modal-footer">
+			  <a href="#!" class="closeWindowRateAbook modal-action modal-close waves-effect waves-green btn-flat">Annuler</a>
+			</div>
+		  </div>
+		  		
+		<div class="row">		
+			<div class="col s12">
+				<h1>Nouveau Salon</h1>
+			</div>			
+		</div>
+		
+		<div class="row">
+			<div id="salons" class="col s12 margin-top">
+				Titre : <input type="text" id="nomNewSalon">
+				Description : <textarea id="descriptionNewSalon"></textarea>
+				Date de début : <input type="text" placeholder="jj/mm/aaaa" id="dateDebutNewSalon" class="datepicker">
+				Date de fin : <input type="text" placeholder="jj/mm/aaaa" id="dateFinNewSalon" class="datepicker">
+				
+				Article : 
+				<select id="idArticleNewSalon">
+					{% for article in articles %}
+						<option value="{{ article.id }}">{{ article.code }}</option>
+					{% endfor %}					
+				</select>
+				
+				<input type="button" class="btn btn-primary" id="ajouterSalon" value="valider">
+			</div>
+		</div>        
+    </div>        
+    <script>
+    function ajouterSalon(titre, description, dateDebut, dateFin, article){
+		$.ajax({
+			url: "{{ path('salons_ajouterVerif') }}",
+			method: "post",
+			data: {
+				titre: titre,
+				description: description,
+				dateDebut: dateDebut,
+				dateFin: dateFin,
+				article: article
+				}			
+		}).done(function(msg){
+			alert(msg);
+		});
+	}		
+	</script>
+{% endblock %}

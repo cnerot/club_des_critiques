@@ -7,17 +7,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Membre;
 use AppBundle\Entity\Concept;
+use Symfony\Component\Validator\Tests\Fixtures\Entity;
+use EntityBundle\Entity\Staticpage;
 class AdministrationController extends Controller
 {
     /** 
-     * @Route("/concept", name="administration_concept")
+     * @Route("/administration", name="administration_siteadmin")
      */
-    public function conceptAction(Request $request)
+    public function siteadminAction(Request $request)
     {
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        $membres = $em->getRepository('AppBundle:Membre')->findAll();
         $concept = $em->getRepository('AppBundle:Concept')->find(1);
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
+
+        if ($membre->getStatut() != 1){
+            return $this->redirect(
+                sprintf('%s', $this->generateUrl("homepage"))
+            );
+        }
         if(isset($_POST['concept'])){
             if($concept->getId() == null ){
                 $concept = new Concept();
@@ -33,7 +43,27 @@ class AdministrationController extends Controller
             'id_membre' => $session->get('id'),
             'membre'=>$membre,
             'concept'=>$concept->getConcept(),
+            'membres'=>$membres,
+            'pages'=>$pages_static,
         ]);
     }
+    /** 
+     * @Route("/delete/{id}", name="administration_deleteuser")
+     */
+    public function deleteuserAction(Request $request,$id)
+    {
+        $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $membre = $em->getRepository('AppBundle:Membre')->find($id);
+        $membre1 = $em->getRepository('AppBundle:Participant')->findBy(array("id_membre"=>$id));
+        if($membre!= null && $membre->getId() != $session->get('id')){
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($membre);
+            $em->flush();
+            $this->addFlash('success', "l'utilisateur a bien été supprimé");
+        }
+        return $this->redirectToRoute('administration_siteadmin', []);
 
+    }
+   
 }

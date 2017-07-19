@@ -38,10 +38,11 @@
 			</div>
 		  </div>
 		  		
-		<div class="row">		
+		<div class="row margin-top">		
 			<div class="col s12">
-				<h1>Salons</h1>
+				<h5>Liste des salons disponibles</h5>
 			</div>
+			<!--
 			<div id="cat" class="col l6 m6 s12 input-field margin-top">
 				<select class="browser-default">
 					<option disabled selected>Catégorie</option>
@@ -64,14 +65,15 @@
 			</div>
 			
 			<div id="containerTitleArtwork" class="col l6 m6 s12 input-field margin-top">
-				<input id="titleArtwork" class="validate" type="text"> <!-- autocomplétion -->
+				<input id="titleArtwork" class="validate" type="text">
 				<label for="titleArtwork">Titre</label>
 			</div>
 			
 			<div id="containerAuthorArtwork" class="col l6 m6 s12 input-field margin-top">
-				<input id="authorArtwork" type="text"> <!-- autocomplétion -->
+				<input id="authorArtwork" type="text">
 				<label for="authorArtwork">Auteur</label>
 			</div>
+			-->
 		</div>
 		
 		<div class="row">
@@ -112,17 +114,7 @@
 							  <td>
 									<div class="col s12 input-field action no-margin">
 										<input type="hidden" value="{{ salon.id }}" name="idSalon">
-										<select class="hide browser-default">
-											<option value="selected" disabled selected>Action</option>
-											{% if period == "past" %}
-												<option class="historiqueSalon">Voir</option>
-											{% elseif period == "next" %}
-												<option>Thème</option>
-											{% else %}
-												<option>Thème</option>
-												<option class="join">Rejoindre</option>
-											{% endif %}
-										</select>
+										
 										
 										{% if period == "past" %}
 											<input type="button" class="btn btn-primary historiqueSalon" value="Voir">
@@ -144,7 +136,7 @@
     <input type="hidden" id="idSalon">
     <input type="hidden" id="noteChosen">
     <script>
-    
+
     function refreshStars(idSalon, noteChosen){
 		window.location = "/salons/vote?idSalon="+idSalon+"&noteChosen="+noteChosen;
 		/*$.ajax({
@@ -166,7 +158,7 @@
 			data: {
 				idSalon: idSalon,
 				noteChosen: noteChosen,
-				}			
+				}
 		}).done(function(msg){
 			console.log("id : "+msg);
 			$('#idSalon').val(msg);

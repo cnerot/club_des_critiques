@@ -1,0 +1,32 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}EntityBundle:entity:view{% endblock %}
+
+{% block body %}
+    <div class="container margin-top">
+        <div class="row">
+            
+            <h5>Configuration de {{ categorie }}: {{ entity.name }}</h5>
+            <fieldset>
+                <form action="#" method="post"  enctype="multipart/form-data">
+
+                    <input type="hidden" name="product_id" value="{{ entity.id }}">
+                    {% for id, attribute in entity.data %}
+                            <div class="input-field col s6">
+                                {{ include('EntityBundle:Entity:attribute/input.html.twig',{
+                                    "attribute":attribute,}) }}
+                                {% if( attribute.name != 'image') %}
+                                <label for="{{ attribute.name }}">{{ attribute.name }}<label>
+                                {% endif %}
+                            </div>
+                    {% endfor %}
+                    <br>
+                     <div class="input-field col s3 right">
+                        <input type="submit" value="Sauvegarder" class="btn waves-effect waves-light">
+                     </div>
+
+                </form>
+           </fieldset>
+        </div>
+    </div>
+{% endblock %}

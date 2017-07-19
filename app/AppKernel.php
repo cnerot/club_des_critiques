@@ -17,6 +17,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
             //new Doctrine\Bundle\DataTables\DataTablesBundle(),
+            new EntityBundle\EntityBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
@@ -28,7 +29,13 @@ class AppKernel extends Kernel
 
         return $bundles;
     }
+    // Append this init function below
 
+    public function __construct($environment, $debug)
+    {
+        date_default_timezone_set( 'Europe/Paris' );
+        parent::__construct($environment, $debug);
+    }
     public function getRootDir()
     {
         return __DIR__;

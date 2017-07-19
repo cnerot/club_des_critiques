@@ -82,17 +82,17 @@
 	  
 		<div class="row">
 			<div class="col s12">
-				<h1>Salon : {{ salon.titreSalon }} - <span id="nbParticipants">6</span> participants</h1>
+				<h1>Salon : {{ salon.titreSalon|e }} - <span id="nbParticipants">6</span> participants</h1>
 			</div>
 			<div id="chat" class="col l12 m12 s12 margin-top">
 				<div id="posts" class="col s12 margin-top">
 					{% for chat in chats %}
 						<div class="post">
 							<span class="name">
-								{{ chat.prenom }} {{ chat.nom }}
+								{{ chat.prenom|e }} {{ chat.nom|e }}
 							</span>							
 							<div class="text">&nbsp;&nbsp;&nbsp; <!-- alinéa -->
-								{{ chat.msg }}
+								{{ chat.msg|e }}
 							</div>
 							<div class="date right">
 								{{ chat.date.date|date('d/m/Y H:i:s') }}

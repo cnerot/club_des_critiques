@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+  <route id="entity_homepage" path="/categorie">
+    <default key="_controller">EntityBundle:Default:index</default>
+  </route>
+  <route id="categorie_all" path="/categorie/all">
+    <default key="_controller">EntityBundle:Categorie:all</default>
+  </route>
+  <route id="categorie_view" path="/categorie/view">
+    <default key="_controller">EntityBundle:Categorie:view</default>
+  </route>
+  <route id="categorie_create" path="/categorie/create">
+    <default key="_controller">EntityBundle:Categorie:create</default>
+  </route>
+  <route id="categorie_remove" path="/categorie/remove">
+    <default key="_controller">EntityBundle:Categorie:remove</default>
+  </route>
+  <route id="attribute_all" path="/attribute/all">
+    <default key="_controller">EntityBundle:Attribute:all</default>
+  </route>
+  <route id="attribute_create" path="/attribute/create">
+    <default key="_controller">EntityBundle:Attribute:create</default>
+  </route>
+  <route id="attribute_view" path="/attribute/view">
+    <default key="_controller">EntityBundle:Attribute:view</default>
+  </route>
+  <route id="attribute_delete" path="/attribute/delete">
+    <default key="_controller">EntityBundle:Attribute:delete</default>
+  </route>
+  <route id="create" path="product/create">
+    <default key="_controller">EntityBundle:Entity:create</default>
+  </route>
+  <route id="create" path="/entity/create">
+    <default key="_controller">EntityBundle:entity:create</default>
+  </route>
+  <route id="view" path="/entity/view">
+    <default key="_controller">EntityBundle:entity:view</default>
+  </route>
+  <route id="frontview" path="/view">
+    <default key="_controller">EntityBundle:entity:frontview</default>
+  </route>
+  <route id="edit" path="/entity/edit">
+    <default key="_controller">EntityBundle:entity:edit</default>
+  </route>
+  <route id="search" path="/search">
+    <default key="_controller">EntityBundle:Categorie:search</default>
+  </route>
+  <route id="static_create" path="/static/create">
+    <default key="_controller">EntityBundle:Static:create</default>
+  </route>
+  <route id="static_edit" path="/static/edit">
+    <default key="_controller">EntityBundle:Static:edit</default>
+  </route>
+  <route id="static_delete" path="/static/delete">
+    <default key="_controller">EntityBundle:Static:delete</default>
+  </route>
+  <route id="static_view" path="/static/view">
+    <default key="_controller">EntityBundle:Static:view</default>
+  </route>
+  <route id="loan_create" path="/loan/create">
+    <default key="_controller">EntityBundle:Loan:create</default>
+  </route>
+  <route id="loan_loan" path="/loan/loan">
+    <default key="_controller">EntityBundle:Loan:loan</default>
+  </route>
+  <route id="loan_borrow" path="/loan/borrow">
+    <default key="_controller">EntityBundle:Loan:borrow</default>
+  </route>
+  <route id="loan_validate" path="/loan/validate">
+    <default key="_controller">EntityBundle:Loan:validate</default>
+  </route>
+  <route id="loan_savevalidate" path="/loan/savevalidate">
+    <default key="_controller">EntityBundle:Loan:savevalidate</default>
+  </route>
+</routes>

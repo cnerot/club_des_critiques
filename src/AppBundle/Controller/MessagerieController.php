@@ -28,6 +28,19 @@ class MessagerieController extends Controller
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $membres = $em->getRepository('AppBundle:Membre')->findAll();
+        
+        $message = new Messagerie();
+        $form = $this->createForm(mailForm::class, $message,
+                array(
+                     'action' => $this->generateUrl('messagerie_sendMessageAdmin'),
+                     'method' => 'POST',
+                ));
+        $form->handleRequest($request);
+        
+        $SenderIds = array();
+        foreach ($membres as $m){
+            $SenderIds[] = $m->getId();
+        }
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         $messagerieReceve = $em->getRepository('AppBundle:Messagerie')->findBy(array('id_recever' => $session->get('id')));
         $messagerieSent = $em->getRepository('AppBundle:Messagerie')->findBy(array('id_sender' => $session->get('id')));
@@ -36,7 +49,10 @@ class MessagerieController extends Controller
             'messagerie'=>$messagerieReceve,
             'membres' => $membres,
             'membre' => $membre,
-            'id_membre' => $session->get('id')
+            'id_membre' => $session->get('id'),
+            'SenderIds'=>$SenderIds,
+            'form' => $form->createView()
+               
             
         ]);
         
@@ -55,15 +71,18 @@ class MessagerieController extends Controller
            $em->flush();
            $this->addFlash('success', "Lu");
         }
-       // var_dump($message.getId());
-        //die;
         $membres = $em->getRepository('AppBundle:Membre')->findAll();
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        $SenderIds = array();
+        foreach ($membres as $m){
+            $SenderIds[] = $m->getId();
+        }
         return $this->render('mail\lireMail.html.twig', [
             'message'=>$message,
             'membres' => $membres,
             'membre' => $membre,
-            'id_membre' => $session->get('id')
+            'id_membre' => $session->get('id'),
+            'SenderIds' => $SenderIds
         ]);
         
     }
@@ -154,5 +173,39 @@ class MessagerieController extends Controller
             'id_membre' => $session->get('id'),
             'membreRecever' => $membreRecever,
         ]);
+    }
+     /**
+     * @Route("/sendMessageAdmin", name="messagerie_sendMessageAdmin")
+    */
+    public function sendMessageAdminAction(Request $request)
+    {
+        $message = new Messagerie();
+       
+        $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
+        $membreRecevers = $em->getRepository('AppBundle:Membre')->findAll();
+        var_dump($membreRecevers);
+       // die;
+        $data = $request->get('mail_form');
+        if($request->isMethod('POST')){
+            if(isset($data['objet']) && isset($data['message'])){
+                foreach($membreRecevers as $membreRecever){
+                        $message->setId_Sender($session->get('id'));
+                        $message->setId_Recever($membreRecever->getId());
+                        $message->setObjet($data['objet']);
+                        $message->setMessage($data['message']);
+                        $message->setVu(0);
+                        $date = new \DateTime(date('Y-m-d H:i:s'));
+                        $message->setDate($date);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($message);
+                        $em->flush();
+                }
+            }
+              
+        }
+       return $this->redirectToRoute('messagerie_reception', ['id'=>$session->get('id'),'membre'=>$membre]);      
+
     }
 }

@@ -36,9 +36,10 @@
 							</tr>
 						  </thead>
 						  <tbody class="">
-							
+
 						  </tbody>
 						</table>
+						<input type="hidden" id="listContactsToInvit" value="">
 						<input type="button" class="btn btn-primary" id="invitContact" value="Inviter">
 					</form>
 				</div>
@@ -52,12 +53,13 @@
 	  
 		<div class="row">
 			<div class="col s12">
-				<h1>Salon : {{ salon.titreSalon|e }} - <span id="nbParticipants">6</span> participants</h1>
+				<h1>Salon : {{ salon.titreSalon|e }} - <span id="nbParticipants">{{ participants|length + 1 }}</span> participant(s)</h1>
 			</div>
 			<div id="chat" class="col l8 m12 s12 margin-top">
 				<div id="posts" class="col s12 margin-top">
 				{% for message in messages %}
 					<div class="post">
+						<input type="hidden" value="{{ message.id }}" class="idMessage">
 						<input type="hidden" value="{{ message.idMembre }}" class="idMembreMessage">
 						<span class="name">
 							{% if message.idMembre == idMembre  %}
@@ -71,9 +73,15 @@
 							{% endif %}
 						</span>
 						{% if message.idMembre != idMembre %}
-							<span class="alertAbuse right">
-								Signaler un abus
-							</span>
+							{% if IamModerateur == 1 %}
+								<span class="deleteMessage right">
+									Supprimer le message
+								</span>
+							{% else %}
+								<span class="alertAbuse right">
+									Signaler un abus
+								</span>
+							{% endif %}
 						{% endif %}
 						<div class="clearfix"></div>
 						<div class="text">&nbsp;&nbsp;&nbsp; <!-- alinéa -->
@@ -89,10 +97,11 @@
 					<input type="hidden" value="{{ messages|last.id }}" id="lastIdMsg">
 				{% else %}
 					<input type="hidden" value="0" id="lastIdMsg">
-				{% endif %}
+				{% endif %}								
+				
 				</div>
 				<div id="message" class="col s12 margin-top">
-					<textarea id="msg"></textarea>
+					<textarea maxlength="2100" id="msg"></textarea>
 					
 					<button id="send" class="col s12 btn-large right darken-3">
 						Envoyer
@@ -107,18 +116,35 @@
 						<tr class="">
 						  <th>Participants</th>
 						  <th>Ajouter aux contact</th>
-						  <th>Signaler un abus</th>
+						  {% if IamModerateur == 1 %}
+							<th>Bannir</th>
+						  {% else %}
+						    <th>Signaler un abus</th>
+						  {% endif %}
 						</tr>
 					  </thead>
 					  <tbody class="">
-						  {% for participant in participants %}
-							  <input type="hidden" value="{{ participant.idMembre }}" class="idMembreParticipant">
+					  
+						  {% if participants is not empty %}
+							  <input type="hidden" value="{{ participants|last.id }}" id="lastIdParticipant">
+						  {% else %}
+							  <input type="hidden" value="0" id="lastIdParticipant">
+						  {% endif %}
+						  
+						  {% for participant in participants %}							  
 							  <tr>
+								  <input type="hidden" value="{{ participant.idMembre }}" class="idMembreParticipant">
 								  <td>
-									  <a href="#/{{ participant.idMembre }}" title="Voir le profil">{{ participant.nom|e }}</a>
+									  <a href="#/{{ participant.idMembre }}" title="Voir le profil">{{ participant.nom|e }}
+									  {% if participant.good == "diamant" %}
+										<img title="Très bon membre du site" src="{{ asset('images/diamant.png') }}">
+									  {% elseif participant.good == "couronne" %}
+										<img title="Excellent membre du site" src="{{ asset('images/Couronne.png') }}">
+									   {% endif %}
+									</a>
 									  <div>
-										  <span href="#/{{ participant.idMembre }}" title="Participant pertinent dans ses propos" class="thumb_up"><i class="tiny material-icons">thumb_up</i></span>
-										  <span title="Participant non pertinent dans ses propos" class="thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></span>
+										  <span style="cursor: pointer" title="Participant pertinent dans ses propos" class="goodMember thumb_up"><i class="tiny material-icons">thumb_up</i></span>
+										  <span style="cursor: pointer" title="Participant non pertinent dans ses propos" class="badMember thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></span>
 									  </div>
 								  </td>
 								  <td>
@@ -129,9 +155,15 @@
 									  </div>
 								  </td>
 								  <td>
-									  <div class="">
-										  <span title="Demande de bannissement" class="btn-floating btn-small red lighten-1 banFromSalon"><i class="large material-icons">block</i></span>
-									  </div>
+									  {% if IamModerateur == 1 %}
+										  <div class="">
+											  <span title="Bannir" class="btn-floating btn-small red lighten-1 banFromSalonDirectly"><i class="large material-icons">block</i></span>
+										  </div>
+									  {% else %}
+										  <div class="">
+											  <span title="Demande de bannissement" class="btn-floating btn-small red lighten-1 banFromSalon"><i class="large material-icons">block</i></span>
+										  </div>
+									  {% endif %}
 								  </td>
 							  </tr>
 						  {% endfor %}
@@ -213,16 +245,15 @@
 					idSalon: idSalon,
 					}			
 			}).done(function(msg){
-				console.log(msg);
 				var contacts = $.parseJSON(msg);
 				$("#myContacts tbody").html("");			
 				for(var i = 0; i<contacts.length; i++){
-					$("#myContacts tbody").append("<tr><td><p><input type='checkbox' id='contact_"+contacts[i]['id']+"' name='myContacts[]'><label for='contact_"+contacts[i]['id']+"'></label></p></td><td>"+htmlEntities(contacts[i]['nom'])+"</td></tr>");
+					$("#myContacts tbody").append("<tr><td><p><input type='checkbox' id='contact_"+contacts[i]['id']+"' class='myContacts' name='myContacts[]'><label for='contact_"+contacts[i]['id']+"'></label></p></td><td>"+htmlEntities(contacts[i]['nom'])+"</td></tr>");
 				}
 			});
 		}
 		
-		function invitContacts(idContacts){
+		/*function invitContacts(idContacts){
 			$.ajax({
 				url: "{{ path('salon_invitContacts') }}",
 				method: "post",
@@ -230,9 +261,9 @@
 					idSalon: idSalon,
 					}			
 			}).done(function(msg){
-				console.log("contacts invités");
+				//console.log("contacts invités");
 			});
-		}
+		}*/
 		
 		function sendMessage(idSalon, message){
 			$.ajax({
@@ -245,7 +276,6 @@
 			}).done(function(msg){
 				if(msg == "banni")
 					document.location.href = "/?ban=1";
-				console.log("Message enregistré en bdd");
 				$("#msg").val("");
 			});
 		}
@@ -268,6 +298,44 @@
 			});
 		}
 		
+		function goodMembre(idSalon, idMembreParticipant){
+			$.ajax({
+				url: "{{ path('salon_goodMembre') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					idMembreParticipant: idMembreParticipant,
+					note: 1
+					}			
+			}).done(function(msg){
+				if(msg == "ok"){
+					$("#nameAlert").html("Vous avez voté ce membre comme étant positif pour le site. Vous pouvez encore changer d'opinion en cliquant sur le pouce rouge.");					
+				}else{
+					$("#nameAlert").html("Vote impossible");
+				}
+				$("#alert").click();
+			});
+		}
+		
+		function badMembre(idSalon, idMembreParticipant){
+			$.ajax({
+				url: "{{ path('salon_goodMembre') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					idMembreParticipant: idMembreParticipant,
+					note: -1
+					}			
+			}).done(function(msg){
+				if(msg == "ok"){
+					$("#nameAlert").html("Vous avez voté ce membre comme étant négatif pour le site. Vous pouvez encore changer d'opinion en cliquant sur le pouce bleu.");
+				}else{
+					$("#nameAlert").html("Vote impossible");
+				}
+				$("#alert").click();
+			});
+		}
+		
 		function receiveLastMessages(idSalon, lastIdMsg){
 			$.ajax({
 				url: "{{ path('salon_recupererDerniersMessages') }}",
@@ -277,8 +345,13 @@
 					lastIdMsg: lastIdMsg,
 					}			
 			}).done(function(msg){
-				console.log(msg);
 				if(msg != "no changement"){
+					var posts = document.getElementById("posts");
+					var scroll = 0;
+					if(parseInt(posts.clientHeight+posts.scrollTop) === parseInt(posts.scrollHeight)){
+						scroll = 1;
+					}
+					
 					var message = $.parseJSON(msg);
 					var a;
 					for(var i = 0; i<message.length; i++){
@@ -309,10 +382,159 @@
 					}
 					
 					var lastIdMsg = message[message.length-1]['id'];
-					console.log(lastIdMsg);
 					
 					$("#lastIdMsg").val(lastIdMsg);
+					
+					if(scroll == 1){
+						posts.scrollTop = posts.scrollHeight;
+					}
 				}
+				
+				var listIdParticipant = [];
+				
+				for(var i = 0; i<$(".idMembreParticipant").length; i++){
+					listIdParticipant[i] = $(".idMembreParticipant").eq(i).val();
+				}
+				updateListeParticipants(idSalon, listIdParticipant);
+			});
+		}
+		
+		function deleteMessage(idMessage){
+			$.ajax({
+				url: "{{ path('salon_deleteMessage') }}",
+				method: "post",
+				data: {
+					idMessage: idMessage,
+					}			
+			}).done(function(msg){
+				enleverMessagesSupprimes(idMessage);
+			});
+		}
+		
+		function enleverMessagesSupprimes(listIdMessages){
+			$.ajax({
+				url: "{{ path('salon_enleverMessagesSupprimes') }}",
+				method: "post",
+				data: {
+					listIdMessages: listIdMessages,
+					}			
+			}).done(function(msg){
+				if(msg != "no changement"){
+					var split_msg = msg.split(",");
+					for(var i = 0; i<split_msg.length; i++){
+						for(var j = 0; j<$(".idMessage").length; j++){
+							if($(".idMessage").eq(j).val() == split_msg[i]){
+								$(".idMessage").eq(j).parent().remove();
+							}
+						}
+					}				
+				}				
+			});
+		}
+		
+		function banFromSalon(idSalon, idMembreParticipant){
+			$.ajax({
+				url: "{{ path('salon_banFromSalon') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					idMembreParticipant: idMembreParticipant,
+					}			
+			}).done(function(msg){
+				if(msg == "ok"){
+					$("#nameAlert").html("La personne a bien été bannie du salon");
+					$("#alert").click();
+				}
+			});
+		}
+		
+		function invitContacts(idSalon, listContactsToInvit){
+		alert(listContactsToInvit);
+			/*$.ajax({
+				url: "{{ path('salon_invitContacts') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					listContactsToInvit: listContactsToInvit,
+					}			
+			}).done(function(msg){
+				if(msg == "ok"){
+					$("#nameAlert").html("Nous venons d'inviter les contacts à participer au salon.");
+					$("#alert").click();
+				}
+			});*/
+		}
+		
+		function updateListeParticipants(idSalon, listIdParticipant){
+			var listIdMembresParticipants = listIdParticipant.join(',');
+			$.ajax({
+				url: "{{ path('salon_updateListeParticipants') }}",
+				method: "post",
+				data: {
+					idSalon: idSalon,
+					listIdParticipant: listIdMembresParticipants
+					}			
+			}).done(function(msg){
+				
+				if(msg != "no changement"){
+					var participant = $.parseJSON(msg);
+					var a;
+					for(var i = 0; i<participant.length; i++){						
+						a = '<tr>';
+						a += '<input type="hidden" value="'+participant[i]['idMembre']+'" class="idMembreParticipant">';
+						a += '<td><a href="#/'+participant[i]['idMembre']+'" title="Voir le profil">'+htmlEntities(participant[i]['nom']);
+									  if(participant[i]['good'] == "diamant"){
+										a += '<img title="Très bon membre du site" src="/images/diamant.png">';
+									  }
+									  else if(participant[i]['good'] == "couronne"){									  
+										a += '<img title="Excellent membre du site" src="/images/Couronne.png">';
+									  }
+						a += '</a>';
+						a += '<div>';
+						a += '<span style="cursor: pointer" title="Participant pertinent dans ses propos" class="goodMember thumb_up"><i class="tiny material-icons">thumb_up</i></span>';
+						a += '<span style="cursor: pointer" title="Participant non pertinent dans ses propos" class="badMember thumb_down"><i class="verticalMiddle tiny material-icons">thumb_down</i></span>';
+						a += '</div>';
+						a += '</td>';
+						a += '<td>';
+						a += '<div class="">';
+										if(participant[i]['ami'] == "false"){
+										  a += '<span title="Ajouter aux contact" class="btn-floating btn-small orange lighten-2 addToContacts" id="idMembre_'+participant[i]['idMembre']+'"><i class="large material-icons">add</i></span>';
+										}
+						a += '</div>';
+						a += '</td>';
+						a += '<td>';
+						a += '<div class="">';
+						a += '<span title="Demande de bannissement" class="btn-floating btn-small red lighten-1 banFromSalon"><i class="large material-icons">block</i></span>';
+						a += '</div>';
+						a += '</td>';
+						a += '</tr>';
+												
+						$("#participants tbody").append(a);
+					}
+				}
+				
+				// enlever participants non actifs
+				
+				$.ajax({
+					url: "{{ path('salon_enleverParticipantsNonActifs') }}",
+					method: "post",
+					data: {
+						idSalon: idSalon,
+						}			
+				}).done(function(msg){
+					
+					if(msg != "no changement"){
+					
+						var idAnePasInclure = msg.split(",");
+						for(var j = 0; j<idAnePasInclure.length; j++){
+							for(var i = 0; i<$(".idMembreParticipant").length; i++){
+								if($(".idMembreParticipant").eq(i).attr("value") == idAnePasInclure[j]){
+									$(".idMembreParticipant").eq(i).parent().remove();
+								}
+							}
+						}
+					}
+				});
 			});
 		}
     </script>

@@ -1,0 +1,25 @@
+{% extends "::entity.html.twig" %}
+
+{% block title %}EntityBundle:Categorie:create{% endblock %}
+
+{% block body %}
+    <div class="row margin-top">
+    <div class="container">
+        <form class="col s12" method="post" action="#">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input type="text" name="title" id="first_name"
+                           type="text" class="validate">
+                    <label for="first_name">Le nom de la categorie</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                   <a href="{{ path('categorie_all') }}" class="waves-effect waves-light btn left grey lighten-2">Retour</a>
+                    <input type="submit" value="Valider" class="waves-effect waves-light btn right">
+                </div>
+            </div>
+        </form>
+    </div>
+    </div>
+{% endblock %}

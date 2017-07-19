@@ -1,8 +1,37 @@
 $(document).ready(function(){
+	if(document.getElementById("posts") != null){
+		var posts = document.getElementById("posts");
+		posts.scrollTop = posts.scrollHeight;
+	}
+	
     // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
     $('.modal').modal();
     
-    $(".join").click(function(){
+    $(".selectAction").on("change", function(){
+		var idSalon = $(this).parent().find('[name=idSalon]').val();
+		$("#idSalon").val(idSalon);
+		if($(this).val() == "Rejoindre"){
+			$("#joinSalon").click();
+			popupRejoindre(idSalon);
+		}
+		else if($(this).val() == "Thème"){
+			
+		}
+		else if($(this).val() == "Voir"){
+			historiqueSalon(idSalon);
+		}
+	});
+    
+    $(document).on("click", "#ajouterSalon", function(){
+		var titre = $("#nomNewSalon").val();
+		var description = $("#descriptionNewSalon").val();
+		var dateDebut = $("#dateDebutNewSalon").val();
+		var dateFin = $("#dateFinNewSalon").val();
+		var article = $("#idArticleNewSalon").val();
+		ajouterSalon(titre, description, dateDebut, dateFin, article);
+	});
+    
+    $(".join").click(function(){		
 	  $("#joinSalon").click();
 	  var idSalon = $(this).parent().parent().find('[name=idSalon]').val();
 	  $("#idSalon").val(idSalon);
@@ -41,14 +70,15 @@ $(document).ready(function(){
 		}
 		
 		$('#noteChosen').val(idStar);
+		$("#rejoindreSalon").css("visibility", "visible");
 	});
 	
-	$(".addToContacts").click(function(){
+	$(".addToContacts").on("click", function(){
 		var idContact = $(this).attr("id").split("_")[1];
 		addtoContacts(idContact, $(this));		
 	});
 	
-	$("#invitContacts").click(function(){
+	$("#invitContacts").on("click", function(){
 		var idSalon = $("#idSalon").val();
 		popupInvitContacts(idSalon);	
 	});
@@ -65,16 +95,34 @@ $(document).ready(function(){
 		sendMessage(idSalon, msg);
 	});
 	
-	$(".banFromSalon").click(function(){
+	$(document).on("click", ".banFromSalon", function(){
 		var idSalon = $("#idSalon").val();
-		var idMembreParticipant = $(this).parent().parent().parent().parent().find(".idMembreParticipant").val();
+		var idMembreParticipant = $(this).parent().parent().parent().find(".idMembreParticipant").val();
 		wantBanFromSalon(idSalon, idMembreParticipant);
 	});
 	
-	$(".alertAbuse").click(function(){
+	$(document).on("click", ".alertAbuse", function(){
 		var idSalon = $("#idSalon").val();
 		var idMembreParticipant = $(this).parent().find(".idMembreMessage").val();
 		wantBanFromSalon(idSalon, idMembreParticipant);
+	});
+	
+	$(document).on("click", ".goodMember", function(){
+		var idSalon = $("#idSalon").val();
+		var idMembreParticipant = $(this).parent().parent().parent().find(".idMembreParticipant").val();
+		goodMembre(idSalon, idMembreParticipant);
+	});
+	
+	$(document).on("click", ".badMember", function(){
+		var idSalon = $("#idSalon").val();
+		var idMembreParticipant = $(this).parent().parent().parent().find(".idMembreParticipant").val();
+		badMembre(idSalon, idMembreParticipant);
+	});
+	
+	$(document).on("click", ".banFromSalonDirectly", function(){
+		var idSalon = $("#idSalon").val();
+		var idMembreParticipant = $(this).parent().parent().parent().find(".idMembreParticipant").val();
+		banFromSalon(idSalon, idMembreParticipant);
 	});
 	
 	// changer par un setinterval
@@ -82,10 +130,31 @@ $(document).ready(function(){
 		var idSalon = $("#idSalon").val();
 		var lastIdMsg = $("#lastIdMsg").val();
 		receiveLastMessages(idSalon, lastIdMsg);
-	}, 4000);
-	
-	$(".alertAbuse").click(function(){
 		
+		// récupère les idMessage
+		
+		var listIdMessages = "";
+		
+		for(var i = 0; i<$(".idMessage").length; i++){
+			listIdMessages += $(".idMessage").eq(i).val()+",";
+		}				
+		
+		// supprime dernière virgule
+		
+		var listIdMessages_ = "";
+		
+		if(listIdMessages.lastIndexOf(",") == listIdMessages.length - 1 && listIdMessages.length != 0){
+			for(var i = 0; i<listIdMessages.length - 1; i++){
+				listIdMessages_ += listIdMessages[i];
+			}
+		}
+				
+		enleverMessagesSupprimes(listIdMessages_);
+	}, 4000);		
+	
+	$(document).on("click", ".deleteMessage", function(){
+		var idMessage = $(this).parent().find(".idMessage").val();
+		deleteMessage(idMessage);
 	});
 	
 	var datatable = $('.listing');

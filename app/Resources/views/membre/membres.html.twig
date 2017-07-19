@@ -2,30 +2,50 @@
 
 {% block body %}
   
-    <h3><center> Tous les utilisateurs</center></h3>
+    
     <div class="container">
+                    
+            
+        <div class="row top">    
+            <div class="col s8">
+                <p> Tous les utilisateurs </p>
+                <a href="{{path('membre_invitationList')}}">Afficher les invitations envoyées</a>
+            </div>
+            <div class="col s4 right">
+                <form>
+                     <div class="input-field col s12">
+                        <i class="material-icons prefix">search</i>
+                        <input type="text" id="autocomplete-input" class="autocomplete">
+                        <label for="autocomplete-input">Chercher un utilisateur</label>
+                      </div>
+                </form>
+            </div>
+        </div>
         <div class="row">
             <div class="card">
                 {% for m in membres %}
-                 <div class="card-content">
-                     <table>
-                         <tr>
-                             <td>
-                                 <a href="{{ path("membre_profil", {'id': m.id})}}">
-                                    {% if m.picture != null %}
-                                        <div><img width="50" class="centerer" src="../ressource/profil/{{m.picture}}" alt="photo de profil"></div>
-                                    {% else %}
-                                        <div><img width="50" class="centerer" src="../ressource/profil/profil.png" alt="default"></div>
-                                    {% endif %}
-                                </a>
-                             </td>
-                             <td> <a href="{{ path("membre_profil", {'id': m.id})}}" class="marg-left padd-left black-text left-align"><b>{{ m.prenom|upper }} {{m.nom|upper}}</b></a></td>
-                             <td width="5"> <a href="{{ path("messagerie_send", {'id': m.id})}}" class="btn waves-effect waves-light right">Message</a></td>
-                             <td width="5"> <a href="{{ path("membre_invite", {'id': m.id})}}" class="btn waves-effect waves-light right">Inviter</a></td>
-                         </tr>
-                     </table>  
-                </div>
-                <hr>
+                    <div class="card-content">
+                        <table>
+                            <tr>
+                                <td class="col s3">
+                                    <a href="{{ path("membre_profil", {'id': m.id})}}">
+                                       {% if m.picture != null %}
+                                           <div><img width="50" class="centerer" src="../ressource/profil/{{m.picture}}" alt="photo de profil"></div>
+                                       {% else %}
+                                           <div><img width="50" class="centerer" src="../ressource/profil/profil.png" alt="default"></div>
+                                       {% endif %}
+                                   </a>
+                                </td>
+                                <td> <a href="{{ path("membre_profil", {'id': m.id})}}" class="marg-left padd-left black-text left-align"><b>{{ m.prenom|upper }} {{m.nom|upper}}</b></a></td>
+                                <td width="5"> <a href="{{ path("messagerie_send", {'id': m.id})}}" class="btn waves-effect waves-light right">Message</a></td>
+                             
+                                {% if  m.id not in listAmis  and m.id != id_membre%}
+                                <td width="5"><a href="{{ path("membre_invite", {'id': m.id})}}" class="btn waves-effect waves-light right">Inviter</a></td>
+                                {% endif %}
+                           </tr>
+                        </table>  
+                   </div>
+                   <hr>
                 {% endfor %}
             </div>
         </div>
