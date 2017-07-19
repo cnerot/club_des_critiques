@@ -12,6 +12,7 @@ use AppBundle\Entity\Visiteur;
 use AppBundle\Form\MembreForm;
 use AppBundle\Form\ConnexionForm;
 use AppBundle\Form\EditPwdForm;
+use EntityBundle\Service\Product;
 class MembreController extends Controller
 {
     /** 
@@ -111,6 +112,31 @@ class MembreController extends Controller
             $membres_amis[] =  $em->getRepository('AppBundle:Membre')->find($id);
         }
         $pages_static = $this->getDoctrine()->getRepository('EntityBundle:Staticpage')->findAll();
+
+
+        $loans = $em->getRepository('EntityBundle:Borrow')->findBy(["idOwner"=>$session->get('id')]);
+        $owner_loans = array();
+        foreach ($loans as $loan){
+            $new = array();
+            $new['id'] = $loan->getId();
+            $new['status'] = $loan->getStatus();
+            $new['owner'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdLoan());
+            $new['loan'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdOwner());
+            $new['product'] = (new Product())->getById($em,$loan->getIdProduct());
+            $owner_loans[] = $new;
+        }
+        $loans = $em->getRepository('EntityBundle:Borrow')->findBy(["idLoan"=>$session->get('id')]);
+        $new_loans = array();
+        foreach ($loans as $loan){
+            $new = array();
+            $new['id'] = $loan->getId();
+            $new['status'] = $loan->getStatus();
+            $new['owner'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdLoan());
+            $new['loan'] = $em->getRepository('AppBundle:Membre')->find($loan->getIdOwner());
+            $new['product'] = (new Product())->getById($em,$loan->getIdProduct());
+            $new_loans[] = $new;
+        }
+
         return $this->render('membre\profil.html.twig', [
             'membre'=>$membre,
             'amis'=>$membres_amis,
@@ -118,7 +144,9 @@ class MembreController extends Controller
             'id_membre' => $session->get('id'),
             'editPwdForm'=>$editPwdForm->createView(),
             'editInfoForm'=>$editInfoForm->createView(),
-            'pages'=>$pages_static
+            'pages'=>$pages_static,
+            'owner_loans'=>$owner_loans,
+            'loan_loans'=>$new_loans,
         ]);
     }
     /**
