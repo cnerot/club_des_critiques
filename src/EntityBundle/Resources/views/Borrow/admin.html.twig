@@ -1,0 +1,39 @@
+{% extends "::base.html.twig" %}
+{% block body %}
+    <table>
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Element</th>
+            <th>Proprietaire</th>
+            <th>Empreinteur</th>
+            <th>Status</th>
+            <th>Valider</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for loan in loans %}
+            {% if loan.status == 2 or loan.status == 3 %}
+                <tr>
+                    <td>{{ loan.id }}</td>
+                    <td>{{ loan.product.name }}</td>
+                    <td>{{ loan.owner.getMail() }}</td>
+                    <td>{{ loan.loan.getMail() }}</td>
+                    {% if loan.status == 2 %}
+                        <td>A validé</td>
+
+                    {% else %}
+                        <td>Validé</td>
+
+                    {% endif %}
+                    <td><a href="{{ path("loan_savevalidate") }}?loan={{ loan.id }}"
+                           class="waves-effect waves-light btn">valider</a>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
