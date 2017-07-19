@@ -67,7 +67,7 @@
             <div class="card">
                 <div class="card-content">
                     <div>
-                        <a href="#modal3">Modifier mes information</a>
+                        <a href="#modal3" class="brown-text lighten-3"><b>Modifier mes information</b></a>
                         <div id="modal3" class="modal">
                             <div class="modal-content">
                                 {{ form_start(editInfoForm) }}
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                     <div>
-                        <a href="#modal2">Modifier mon mot de passe</a>
+                        <a href="#modal2" class="brown-text lighten-3"><b>Modifier mon mot de passe</b></a>
                         <div id="modal2" class="modal">
                             <div class="modal-content">
                                 {{ form_start(editPwdForm) }}
@@ -98,7 +98,7 @@
                     </div>
                     <div>
                         <!-- Modal Trigger -->
-                        <a class="" href="#modalAmis">mes amis</a>
+                        <a href="#modalAmis" class="brown-text lighten-3"><b>mes amis</b></a>
 
                         <!-- Modal Structure -->
                         <div id="modalAmis" class="modal bottom-sheet">
@@ -144,27 +144,31 @@
     </div>
     </div>
     <div class="row">
-        <p><b>Pour échanger :</b></p>
-        <p>Mes livres a preter</p>
-
-        {% for loan in owner_loans %}
-            <div class="col m2">
-                {{ include('EntityBundle:Entity:card.html.twig',{
-                    "product":loan.product,
-                }) }}
+        <p style="margin-left:2%"><b>Pour échanger :</b></p>
+        <div class="row">
+            <p class="myContainer"><b>Mes livres a preter</b></p>
+            <div class="container">
+                {% for loan in owner_loans %}
+                    <div class="col m4">
+                        {{ include('EntityBundle:Entity:card.html.twig',{
+                            "product":loan.product,
+                        }) }}
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
-    </div>
+        </div>
     <div class="row">
-        <p>Mes livres Empreinté</p>
-        {% for loan in loan_loans %}
-            <div class="col m2">
-                {{ include('EntityBundle:Entity:card.html.twig',{
-                    "product":loan.product,
-                }) }}
-            </div>
-        {% endfor %}
-
+        <p class="myContainer"><b>Mes livres Empreinté</b></p>
+        <div class="container">
+            {% for loan in loan_loans %}
+                <div class="col m4">
+                    {{ include('EntityBundle:Entity:card.html.twig',{
+                        "product":loan.product,
+                    }) }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
     </div>
 
 {% endblock %}
