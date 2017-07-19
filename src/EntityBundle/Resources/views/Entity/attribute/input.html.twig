@@ -24,7 +24,7 @@
 {% endif %}
 {% if attribute.type == "image" %}
     {% if attribute.value is defined and  attribute.value != "" %}
-        <img height="100px" src="{{ attribute.value }}">
+       <img class="materialboxed" data-caption="A picture of a way with a group of trees in a park" height="100px" src="{{ attribute.value }}">
     {% endif %}
      <div class="file-field input-field">
      <div class="btn black">

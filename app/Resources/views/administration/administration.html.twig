@@ -19,12 +19,6 @@
                             <input type="submit" class="btn waves-effect waves-light" value="sauvgarder">
                             <span></span>                            
                       </form>
-                      <div class="col m12">
-                          <br><br>
-                          <div class="col m2"></div>
-                            <div class="col m3"><a href="#"><img src="http://www.freeiconspng.com/uploads/add-icon--line-iconset--iconsmind-29.png"  class="responsive-img"></a></div>
-                            <div class="col m3"> <img src="http://www.lecture-academy.com/wp-content/uploads/couvertures/logo_267308-500x796.jpg" class="responsive-img" ></img></div>
-                      </div>
                   </div>
                 </li>
                 <li>
@@ -67,15 +61,16 @@
                               <td>{{m.prenom}} {{m.nom}}</td>
                               <td>{{m.mail}}</td>
                               <td>
-                                  {%if m.statut == 1 %}
-                                      Admin
-                                  {%else%}
-                                      Utilisateur
-                                  {%endif%}
+                                  <form action="#" method="GET">
+                                        <select class="browser-default" name="statut" id="statut" onchange="changeRole({{m.id}});">
+                                                <option value="1"  {%if m.statut == 1 %} selected {%endif%}>Administrateur</option>
+                                                <option value="0" {%if m.statut != 1 %} selected {%endif%} >Utilisateur</option>
+                                        </select>
+                                  </select>
                               </td>
                               <td>
                                   <a href="{{ path("administration_deleteuser", {'id': m.id}) }}">
-                                      <i class="material-icons">delete</i>
+                                      <i class="material-icons teal-text lighten-4">delete</i>
                                   </a>
                               </td>
                           </tr>

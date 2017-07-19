@@ -48,13 +48,13 @@
 			<div id="salons" class="col s12 margin-top">
 				Titre : <input type="text" id="nomNewSalon">
 				Description : <textarea id="descriptionNewSalon"></textarea>
-				Date de début : <input type="text" placeholder="jj/mm/aaaa" id="dateDebutNewSalon">
-				Date de fin : <input type="text" placeholder="jj/mm/aaaa" id="dateFinNewSalon">
+				Date de début : <input type="text" placeholder="jj/mm/aaaa" id="dateDebutNewSalon" class="datepicker">
+				Date de fin : <input type="text" placeholder="jj/mm/aaaa" id="dateFinNewSalon" class="datepicker">
 				
 				Article : 
 				<select id="idArticleNewSalon">
 					{% for article in articles %}
-						<option value="{{ article.id }}">{{ article.titre }}</option>
+						<option value="{{ article.id }}">{{ article.code }}</option>
 					{% endfor %}					
 				</select>
 				

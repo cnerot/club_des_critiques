@@ -90,6 +90,7 @@ class AttributeController extends Controller
         return $this->render('EntityBundle:Attribute:create.html.twig', array(
             "pages" => $pages_static,
             'membre' => $membre,
+            'id_membre' => $session->get('id'),
             'id' => $id,
             "categories" => $categories,
         ));

@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Membre;
+use AppBundle\Entity\Salon;
 use AppBundle\Entity\Messagerie;
 use AppBundle\Form\MembreForm;
 use AppBundle\Form\ConnexionForm;
@@ -22,6 +23,18 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->get('doctrine')->getManager();
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
+	$query = $em->createQuery(
+		        "SELECT s
+			FROM AppBundle:Salon s
+			WHERE s.date_debut >= :date"
+	   )->setParameter('date', new \DateTime());
+        
+	$NextSalon = $query->getResult();
+        if($NextSalon){
+            $NextSalon = $query->getSingleResult();
+        }
+
         $frontpage_product = (new Product())->getByAttribute($em, "front",1);
 
         $membre = new Membre();
@@ -111,6 +124,8 @@ class DefaultController extends Controller
             'mailExist'=>$erreur,
             'form'=>$contactForm->createView(),
              'productsTop' => $frontpage_product,
+             'pages' => $pages_static,
+             'nextSalon' => $NextSalon,
         ]);
     }
     /**
@@ -119,8 +134,9 @@ class DefaultController extends Controller
     public function contenuAction(Request $request)
     {
         $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
         if($session->get('id')!=null){
-            $em = $this->getDoctrine()->getManager();
             $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         }else{
             $membre = new Membre();
@@ -128,6 +144,7 @@ class DefaultController extends Controller
         return $this->render('contenu/contenu.html.twig',[
             'membre' => $membre,
             'id_membre' => $session->get('id'),
+            'pages' => $pages_static
              
         ]);
     }

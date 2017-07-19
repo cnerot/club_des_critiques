@@ -24,11 +24,14 @@ class MembreController extends Controller
         $membre = $em->getRepository('AppBundle:Membre')->find($session->get('id'));
         $concept = $em->getRepository('AppBundle:Concept')->find(1);
         $membres = $em->getRepository('AppBundle:Membre')->findAll();
+        $pages_static = $this->getDoctrine()->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('administration\administration.html.twig', [
             'id_membre' => $session->get('id'),
             'membre'=>$membre,
             'concept'=>$concept->getConcept(),
-            'membres'=>$membres
+            'membres'=>$membres,
+            'pages'=>$pages_static
+
         ]);
     }
     /** 
@@ -58,11 +61,13 @@ class MembreController extends Controller
                  $listAmis[] = $amis->getId_Membre1();  
             }
         }
+        $pages_static = $this->getDoctrine()->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('membre\membres.html.twig', [
             'membres'=>$membres,
             'id_membre' => $session->get('id'),
             'membre'=>$membre,
-            'listAmis'=> $listAmis
+            'listAmis'=> $listAmis,
+            'pages'=>$pages_static
 
         ]);
     }
@@ -105,6 +110,7 @@ class MembreController extends Controller
         foreach ($amisId as $id){
             $membres_amis[] =  $em->getRepository('AppBundle:Membre')->find($id);
         }
+        $pages_static = $this->getDoctrine()->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('membre\profil.html.twig', [
             'membre'=>$membre,
             'amis'=>$membres_amis,
@@ -112,6 +118,7 @@ class MembreController extends Controller
             'id_membre' => $session->get('id'),
             'editPwdForm'=>$editPwdForm->createView(),
             'editInfoForm'=>$editInfoForm->createView(),
+            'pages'=>$pages_static
         ]);
     }
     /**
@@ -141,7 +148,6 @@ class MembreController extends Controller
     public function editPwdAction(Request $request)
     {
         $uri = $_SERVER['REQUEST_URI'];
-        var_dump($uri);
         $session = $request->getSession();
         $em = $this->getDoctrine()->getManager();
         $membre = $em->getRepository('AppBundle:Membre')->findOneById($session->get('id'));
@@ -276,10 +282,12 @@ class MembreController extends Controller
             }
         }
         $membre = $this->getDoctrine()->getRepository('AppBundle:Membre')->find($session->get('id'));
+        $pages_static = $this->getDoctrine()->getRepository('EntityBundle:Staticpage')->findAll();
         return $this->render('membre/invitationList.html.twig',[
             'membre' => $membre,
             'id_membre' => $session->get('id'),
             'inviters' => $inviter,
+            'pages' => $pages_static,
         ]);
     }
     /**
@@ -401,6 +409,8 @@ class MembreController extends Controller
         $form = $this->createForm(ConnexionForm::class, $membre);
         $form->handleRequest($request);
         $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $pages_static = $em->getRepository('EntityBundle:Staticpage')->findAll();
         if($form->isValid()){
             $repository = $this->getDoctrine()->getRepository('AppBundle:Membre');
             // query for a single product matching the given name and price
@@ -445,7 +455,25 @@ class MembreController extends Controller
             'membre' => $membre,
             'id_membre' => $session->get('id'),
             'form' => $form->createView(),
+            'pages'=>$pages_static,
+
         ]);
+    }
+    /**
+     * @Route("/changeRole", name="membre_changeRole")
+    */
+    public function changeRoleAction(Request $request)
+    {
+        $session = $request->getSession();
+        if(isset($_GET['statut']) && isset($_GET['id'])){
+            $em = $this->getDoctrine()->getManager();
+            $membre = $em->getRepository('AppBundle:Membre')->find($_GET['id']);
+            $membre->setStatut($_GET['statut']);
+            $em->persist($membre);
+            $em->flush();
+
+        }
+        return $this->redirectToRoute('administration_siteadmin', []);
     }
     /**
      * @Route("/logout", name="membre_logout")

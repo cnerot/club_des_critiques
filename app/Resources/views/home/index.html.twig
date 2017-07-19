@@ -3,7 +3,7 @@
 {% block body %}
 
 
-    <div class="row">
+    <div class="row margin-top">
         <div>
         <div class="col s8">
            <div class="myContainer justify">
@@ -14,7 +14,7 @@
                 </div>
            </div>
         </div>
-        <div  class="col s4 right-align">
+        <div  class="col s4 right">
             {% if id_membre == null %}
                 <div class="card">
                     <div class="card-content">
@@ -34,20 +34,31 @@
                 </div>
                  <div class="card">
                      <div class="card-content">
-                            #menu flotant
-                            <br>
-                            prochain salon :
-                            <br> A ajouter par gaetan
+                            {% if nextSalon is defined and nextSalon!=null%}
+                                    prochain salon : {{nextSalon.TitreSalon}}
+                             {% else %}
+                                 <p>Aucun salon n'est organisé</p>
+                            {% endif %} 
+                            {% if nextSalon is defined and nextSalon!=null%}
+                                Le prochain salon aura lieu le {{nextSalon.dateDebut}} et il termine le {{ nextSalon.dateFin}}
+                            {% endif %}
                        </div>
                     </div>
             {% else %}
                 <div  class="col s12">
-                            <div class="card">
-                                <div class="card-content">
-                                   #menu flotant
-                                   <br>
-                                   prochain salon :
-                                   <br> A ajouter par gaetan
+                            <div class="card brown lighten-4">
+                                <div class="card-content center-align">
+                                    <span class="material-icons large teal-text">alarm_on</span>
+                                    <br>
+                                    {% if nextSalon is defined and nextSalon!=null%}
+                                        Prochain salon : <b>{{nextSalon.TitreSalon}}</b>
+                                        <br>
+                                    {% else %}
+                                        <p>Aucun salon n'est organisé</p>
+                                    {% endif %}
+                                    {% if nextSalon is defined and nextSalon!=null%}
+                                        Le prochain salon aura lieu le <b>{{nextSalon.dateDebut|date("m/d/Y à H:m")}} </b> et il termine le <b>{{ nextSalon.dateFin|date("m/d/Y à H:m")}}</b>
+                                    {% endif %}
                                 </div>
                             </div>
                 </div>
@@ -56,7 +67,7 @@
 
         </div>
         <div class="col s12">
-            <hr>
+            <hr class="style">
         </div>
         <div class="col s12">
             <p><b>A la une :</b></p>
@@ -69,7 +80,7 @@
             {% endfor %}
         </div>
         <div class="col s12">
-            <hr>
+            <hr class="style">
         </div>
         <div class="col s12">
             <p><b>Nous Contactez :</b></p>
