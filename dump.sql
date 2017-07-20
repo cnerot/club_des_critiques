@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Client :  127.0.0.1
--- Généré le :  Mer 19 Juillet 2017 à 06:25
+-- Généré le :  Jeu 20 Juillet 2017 à 12:22
 -- Version du serveur :  5.7.14
 -- Version de PHP :  5.6.25
 
@@ -39,10 +39,11 @@ CREATE TABLE `amis` (
 --
 
 INSERT INTO `amis` (`id`, `id_membre1`, `id_membre2`, `accepter`, `vu`) VALUES
-(1, 5, 8, 0, 1),
+(1, 5, 8, 1, 1),
 (5, 5, 10, 0, 0),
 (7, 8, 16, 0, 0),
-(10, 10, 8, 0, 1);
+(10, 10, 8, 0, 1),
+(11, 8, 15, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -182,7 +183,7 @@ CREATE TABLE `borrow` (
 --
 
 INSERT INTO `borrow` (`id`, `id_owner`, `id_loan`, `id_product`, `status`) VALUES
-(12, 8, NULL, 3, 1),
+(12, 8, 8, 3, 2),
 (13, 8, 8, 2, 2);
 
 -- --------------------------------------------------------
@@ -204,11 +205,11 @@ INSERT INTO `categorie` (`id`, `titre`) VALUES
 (1, 'book'),
 (2, 'movies'),
 (3, 'cds'),
-(4, 'test'),
-(5, 'tettt'),
-(6, 'test_sanae'),
-(7, 'testing'),
-(8, 'betgbtzvfzrvdf');
+(4, 'cinema'),
+(5, 'télévision'),
+(6, 'jeu'),
+(7, 'sport'),
+(8, 'roman');
 
 -- --------------------------------------------------------
 
@@ -375,7 +376,7 @@ INSERT INTO `messagerie` (`id`, `objet`, `message`, `date`, `id_sender`, `id_rec
 (22, 'test objjs', 'hfsdhgdjsdq', '2017-06-29 08:53:07', 8, 5, 0),
 (23, 'tatat', 'vgnvnxb', '2017-06-29 10:19:22', 8, 5, 0),
 (24, 'test', 'test', '2017-07-01 14:59:48', 16, 8, 0),
-(25, 'Test votre site', 'Je suis nouveau je veux tester ce site', '2017-07-15 18:35:42', 17, 8, 0),
+(25, 'Test votre site', 'Je suis nouveau je veux tester ce site', '2017-07-15 18:35:42', 17, 8, 1),
 (26, 'Message Administrative', 'vhgvggv', '2017-07-18 23:10:37', 8, 17, 0),
 (27, 'Message Administrative 1', 'test test ', '2017-07-18 23:20:57', 8, 17, 0),
 (28, 'tesGFFG 1', 'dfcgvhbjnk,l;', '2017-07-18 23:24:20', 8, 17, 0),
@@ -623,6 +624,28 @@ INSERT INTO `valuetext` (`id`, `id_attribute`, `id_entity`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `visitecategorie`
+--
+
+CREATE TABLE `visitecategorie` (
+  `id` int(11) NOT NULL,
+  `nb_visite` int(11) NOT NULL,
+  `id_categorie` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `visitecategorie`
+--
+
+INSERT INTO `visitecategorie` (`id`, `nb_visite`, `id_categorie`) VALUES
+(1, 1, 4),
+(2, 6, 1),
+(3, 8, 3),
+(4, 4, 5);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `visiteur`
 --
 
@@ -638,7 +661,7 @@ CREATE TABLE `visiteur` (
 --
 
 INSERT INTO `visiteur` (`id`, `nb_visite`, `date_visite`, `id_membre`) VALUES
-(1, 1, '2017-07-09 15:04:35', 8),
+(1, 5, '2017-07-09 15:04:35', 8),
 (2, 1, '2017-07-09 17:39:54', 8),
 (3, 1, '2017-07-10 22:04:38', 8),
 (4, 1, '2017-07-11 22:34:17', 8),
@@ -661,7 +684,11 @@ INSERT INTO `visiteur` (`id`, `nb_visite`, `date_visite`, `id_membre`) VALUES
 (21, 1, '2017-07-19 01:45:30', 8),
 (22, 1, '2017-07-19 05:00:55', 8),
 (23, 1, '2017-07-19 07:18:29', 8),
-(24, 1, '2017-07-19 07:23:23', 8);
+(24, 1, '2017-07-19 07:23:23', 8),
+(25, 1, '2017-07-19 12:09:55', 8),
+(26, 1, '2017-07-19 23:20:25', 8),
+(27, 1, '2017-07-20 09:34:42', 8),
+(28, 1, '2017-07-20 12:58:43', 8);
 
 --
 -- Index pour les tables exportées
@@ -807,6 +834,12 @@ ALTER TABLE `valuetext`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `visitecategorie`
+--
+ALTER TABLE `visitecategorie`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `visiteur`
 --
 ALTER TABLE `visiteur`
@@ -822,7 +855,7 @@ ALTER TABLE `visiteur`
 -- AUTO_INCREMENT pour la table `amis`
 --
 ALTER TABLE `amis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT pour la table `article`
 --
@@ -924,10 +957,15 @@ ALTER TABLE `valueinteger`
 ALTER TABLE `valuetext`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
+-- AUTO_INCREMENT pour la table `visitecategorie`
+--
+ALTER TABLE `visitecategorie`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
 -- AUTO_INCREMENT pour la table `visiteur`
 --
 ALTER TABLE `visiteur`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 --
 -- Contraintes pour les tables exportées
 --

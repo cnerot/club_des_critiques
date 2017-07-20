@@ -520,9 +520,19 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
+        // statistiques_visiteCategorie
+        if ($pathinfo === '/visiteCategorie') {
+            return array (  '_controller' => 'AppBundle\\Controller\\StatistiquesController::visiteCategorieAction',  '_route' => 'statistiques_visiteCategorie',);
+        }
+
         // statistiques_articleStat
         if ($pathinfo === '/articleStat') {
             return array (  '_controller' => 'AppBundle\\Controller\\StatistiquesController::ArticleByCategoryAction',  '_route' => 'statistiques_articleStat',);
+        }
+
+        // statistiques_echangeStat
+        if ($pathinfo === '/echangeStat') {
+            return array (  '_controller' => 'AppBundle\\Controller\\StatistiquesController::echangeStatAction',  '_route' => 'statistiques_echangeStat',);
         }
 
         // statistiques_nbVisite
